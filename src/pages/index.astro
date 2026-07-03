@@ -1,7 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
-import FeaturedSpotlight from '../components/FeaturedSpotlight.astro';
 import Footer from '../components/Footer.astro';
 import ProjectCatalog from '../components/ProjectCatalog';
 import projects from '../data/projects.json';
@@ -21,9 +20,8 @@ const categories = [...new Set(projectList.map((p) => p.category))];
       heroDescription={site.heroDescription}
       tagline={site.tagline}
       projectCount={projectList.length}
+      projects={projectList}
     />
-
-    <FeaturedSpotlight projects={projectList} />
 
     <div class="container-main pb-20">
       <ProjectCatalog projects={projectList} categories={categories} client:load />
