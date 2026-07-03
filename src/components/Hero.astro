@@ -1,0 +1,43 @@
+---
+interface Props {
+  title: string;
+  eyebrow: string;
+  heroTitle: string;
+  heroDescription: string;
+  tagline: string;
+  projectCount: number;
+}
+
+const { title, eyebrow, heroTitle, heroDescription, tagline, projectCount } = Astro.props;
+---
+
+<section class="container-main pt-20 sm:pt-28 pb-8">
+  <div class="max-w-2xl space-y-8">
+    <p class="text-sm text-zinc-500">
+      {title} · {tagline}
+    </p>
+
+    <div class="space-y-5">
+      <p class="text-xs font-medium tracking-wide text-zinc-400 dark:text-zinc-500">
+        {eyebrow}
+      </p>
+
+      <h1 class="text-3xl sm:text-4xl md:text-[2.75rem] font-semibold leading-[1.25] tracking-tight text-zinc-900 dark:text-zinc-50 whitespace-pre-line">
+        {heroTitle}
+      </h1>
+
+      <p class="text-base text-zinc-500 leading-relaxed">
+        {heroDescription}
+      </p>
+    </div>
+
+    <div class="flex flex-wrap gap-3">
+      <span class="pill-muted">
+        共 <strong class="font-medium text-zinc-800 dark:text-zinc-200 tabular-nums">{projectCount}</strong> 个项目
+      </span>
+      <!-- <span class="pill-muted">
+        纯静态 · 本地优先 · 打开即用
+      </span> -->
+    </div>
+  </div>
+</section>

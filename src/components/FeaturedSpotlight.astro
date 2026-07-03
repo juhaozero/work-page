@@ -1,0 +1,45 @@
+---
+import type { Project } from '../types/project';
+
+interface Props {
+  projects: Project[];
+}
+
+const { projects } = Astro.props;
+const featured = projects.find((p) => p.featured) ?? projects[0];
+---
+
+{featured && (
+  <section class="container-main pb-8" aria-label="q">
+    <a
+      href={featured.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="glass-card card-hover group flex flex-col sm:flex-row sm:items-center gap-6 p-6 sm:p-8 cursor-pointer"
+    >
+      <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-zinc-100/80 text-2xl dark:bg-zinc-800/60">
+        <span role="img" aria-label={featured.name}>{featured.emoji}</span>
+      </div>
+
+      <div class="flex-1 min-w-0 space-y-2">
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="tag-muted">{featured.category}</span>
+          <span class="text-xs text-zinc-400 dark:text-zinc-500">精选推荐</span>
+        </div>
+        <h2 class="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100 group-hover:text-zinc-700 dark:group-hover:text-zinc-300 transition-all duration-300 ease-in-out">
+          {featured.name}
+        </h2>
+        <p class="text-sm text-zinc-500 leading-relaxed line-clamp-2">
+          {featured.description}
+        </p>
+      </div>
+
+      <span class="inline-flex items-center gap-1.5 shrink-0 text-sm font-medium text-zinc-600 dark:text-zinc-400 group-hover:gap-2 transition-all duration-300 ease-in-out">
+        前往体验
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 12h14M12 5l7 7-7 7" />
+        </svg>
+      </span>
+    </a>
+  </section>
+)}

@@ -1,0 +1,12 @@
+[
+  {
+    "id": "1",
+    "name": "浏览器工具箱",
+    "emoji": "🏷️",
+    "category": "工具",
+    "description": "纯前端浏览器工具箱,一些常用的浏览器工具合集",
+    "url": "https://app.juhaozero.com/browser/",
+    "featured": true
+  }
+
+]
