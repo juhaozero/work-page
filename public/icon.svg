@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none" role="img" aria-label="yî¼Ñ¤">
+  <defs>
+    <style>
+      .bg { fill: #f4f4f5; stroke: #e4e4e7; }
+      .flask { fill: #52525b; }
+      .dots { fill: #a1a1aa; }
+      .spark { fill: #71717a; }
+      @media (prefers-color-scheme: dark) {
+        .bg { fill: #18181b; stroke: #3f3f46; }
+        .flask { fill: #e4e4e7; }
+        .dots { fill: #71717a; }
+        .spark { fill: #a1a1aa; }
+      }
+    </style>
+  </defs>
+
+  <rect class="bg" x="8" y="8" width="112" height="112" rx="28" stroke-width="2" />
+
+  <rect class="flask" x="52" y="30" width="24" height="14" rx="5" />
+  <path
+    class="flask"
+    d="M53 44h22v5c0 0 8.8 15.2 8.8 27.2a13.6 13.6 0 0 1-27.2 0c0-12 8.8-27.2 8.8-27.2v-5Z"
+  />
+
+  <path
+    class="spark"
+    d="M84.8 35.2 87.2 40l4.8 2.4-4.8 2.4-2.4 4.8-2.4-4.8-4.8-2.4 4.8-2.4 2.4-4.8Z"
+  />
+
+  <circle class="dots" cx="90" cy="90" r="5.4" />
+  <circle class="dots" cx="102" cy="90" r="5.4" />
+  <circle class="dots" cx="90" cy="102" r="5.4" />
+</svg>

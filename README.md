@@ -102,12 +102,6 @@ npm run build
 # 将 dist/ 目录部署，或直接关联 Git 仓库自动部署
 ```
 
-## 文档
-
-- [产品需求文档（PRD）](./docs/portfolio-prd.md)
-- [开发任务拆解](./docs/cursor-astro-portfolio-task.md)
-- [开发指南](./docs/development.md)
-
 ## License
 
 MIT

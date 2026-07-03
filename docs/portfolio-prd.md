@@ -26,9 +26,6 @@ Personal Project Hub
 - TypeScript
 - JSON 数据源
 
-部署：
-- Vercel / Cloudflare Pages
-
 ---
 
 ## 3. 信息架构

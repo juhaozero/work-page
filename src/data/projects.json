@@ -7,6 +7,15 @@
     "description": "纯前端浏览器工具箱,一些常用的浏览器工具合集",
     "url": "https://app.juhaozero.com/browser/",
     "featured": true
+  },
+  {
+    "id": "2",
+    "name": "P4G面具合成查询器",
+    "emoji": "🎮",
+    "category": "游戏",
+    "description": "P4G面具合成查询器,可以查询面具的合成配方",
+    "url": "https://app.juhaozero.com/persona/",
+    "featured": false
   }
 
 ]
