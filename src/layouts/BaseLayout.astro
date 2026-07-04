@@ -73,7 +73,7 @@ const jsonLd = {
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Sans+Mono:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
     <title>{title}</title>
@@ -88,10 +88,16 @@ const jsonLd = {
       })();
     </script>
   </head>
-  <body class="min-h-screen flex flex-col font-sans">
-    <div class="fixed top-5 right-5 z-50 opacity-50 hover:opacity-100 transition-opacity duration-300">
-      <ThemeToggle client:load />
-    </div>
+  <body class="min-h-screen flex flex-col font-mono">
+    <header class="fixed top-0 left-0 right-0 z-50 border-b border-[var(--crt-border-dim)] bg-[var(--crt-bg)]/95 backdrop-blur-sm">
+      <div class="container-main flex items-center justify-between py-3">
+        <div class="flex items-center gap-3 min-w-0">
+          <span class="status-online shrink-0" aria-hidden="true">◉ 在线</span>
+          <span class="truncate hidden sm:inline" style="color: var(--crt-text-muted);">{site.title}</span>
+        </div>
+        <ThemeToggle client:load />
+      </div>
+    </header>
     <slot />
   </body>
 </html>

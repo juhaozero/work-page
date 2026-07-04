@@ -16,6 +16,14 @@
     "description": "P4G面具合成查询器,可以查询面具的合成配方",
     "url": "https://app.juhaozero.com/persona/",
     "featured": false
+  },
+  {
+    "id": "3",
+    "name": "Ins拼图生成器",
+    "emoji": "🖼️",
+    "category": "图片",
+    "description": "Ins拼图生成器,可以生成Ins风格的拼图",
+    "url": "https://app.juhaozero.com/images/",
+    "featured": false
   }
-
 ]

@@ -3,7 +3,42 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-sans: "Plus Jakarta Sans", "Noto Sans SC", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Noto Sans Mono", "Noto Sans SC", ui-monospace, monospace;
+}
+
+/* ── CRT 主题变量 ── */
+:root {
+  --crt-bg: #f0f4ef;
+  --crt-surface: #e4ebe2;
+  --crt-surface-2: #d8e4d6;
+  --crt-text: #1a3d1e;
+  --crt-text-muted: #4a6b4e;
+  --crt-text-dim: #6b8a6f;
+  --crt-border: #a8c4ac;
+  --crt-border-dim: #c8dcc8;
+  --crt-accent: #1f6b28;
+  --crt-accent-dim: #2d8a38;
+  --crt-glow: rgba(31, 107, 40, 0.08);
+  --crt-scanline: rgba(26, 61, 30, 0.03);
+  --crt-selection-bg: rgba(31, 107, 40, 0.18);
+  --crt-selection-text: #0f2a12;
+}
+
+html.dark {
+  --crt-bg: #080d08;
+  --crt-surface: #0f160f;
+  --crt-surface-2: #141f14;
+  --crt-text: #5fe66a;
+  --crt-text-muted: #4a9a52;
+  --crt-text-dim: #2d6a34;
+  --crt-border: #1e4a22;
+  --crt-border-dim: #142e18;
+  --crt-accent: #5fe66a;
+  --crt-accent-dim: #3dcc48;
+  --crt-glow: rgba(95, 230, 106, 0.06);
+  --crt-scanline: rgba(95, 230, 106, 0.025);
+  --crt-selection-bg: rgba(95, 230, 106, 0.2);
+  --crt-selection-text: #5fe66a;
 }
 
 html {
@@ -24,70 +59,157 @@ html {
 }
 
 body {
-  @apply bg-zinc-50 text-zinc-900 antialiased transition-colors duration-300 ease-in-out;
-  font-feature-settings: "kern" 1, "liga" 1;
+  background-color: var(--crt-bg);
+  color: var(--crt-text);
+  font-family: var(--font-mono);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  position: relative;
 }
 
-html.dark body {
-  @apply bg-zinc-950 text-zinc-100;
+/* 静态扫描线纹理 */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    var(--crt-scanline) 2px,
+    var(--crt-scanline) 4px
+  );
 }
 
 ::selection {
-  @apply bg-zinc-300/50 text-zinc-900;
-}
-
-html.dark ::selection {
-  @apply bg-zinc-700/50 text-zinc-100;
+  background: var(--crt-selection-bg);
+  color: var(--crt-selection-text);
 }
 
 @utility container-main {
   @apply max-w-[1200px] mx-auto px-6 sm:px-8;
 }
 
-@utility glass-card {
-  @apply rounded-2xl bg-white/50 backdrop-blur-sm border border-zinc-200/60 shadow-sm transition-all duration-300 ease-in-out;
+/* ── 终端区块分隔线 ── */
+@utility terminal-divider {
+  color: var(--crt-text-dim);
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  overflow: hidden;
+  white-space: nowrap;
+  user-select: none;
 }
 
-html.dark .glass-card {
-  @apply bg-zinc-900/50 border-zinc-800/60 shadow-sm;
+@utility terminal-prompt {
+  color: var(--crt-text-muted);
+  font-size: 0.8125rem;
 }
 
-@utility card-hover {
-  @apply hover:-translate-y-0.5 hover:shadow-md;
+@utility terminal-prompt-accent {
+  color: var(--crt-accent);
 }
 
-@utility tag-muted {
-  @apply inline-flex items-center rounded-full bg-zinc-100/80 px-2.5 py-0.5 text-xs font-medium text-zinc-600;
+@utility terminal-section-title {
+  color: var(--crt-text);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
-html.dark .tag-muted {
-  @apply bg-zinc-800/60 text-zinc-400;
+@utility terminal-label {
+  color: var(--crt-text-dim);
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
-@utility pill-muted {
-  @apply inline-flex items-center gap-2 rounded-full border border-zinc-200/60 bg-white/50 backdrop-blur-sm px-3.5 py-1.5 text-sm text-zinc-600 shadow-sm;
+/* ── 终端卡片 ── */
+@utility terminal-card {
+  background-color: var(--crt-surface);
+  border: 1px solid var(--crt-border);
+  border-radius: 0;
+  box-shadow: inset 0 0 0 1px var(--crt-border-dim);
+  transition: border-color 0.15s ease, background-color 0.15s ease;
 }
 
-html.dark .pill-muted {
-  @apply border-zinc-800/60 bg-zinc-900/40 text-zinc-400;
+@utility terminal-card-hover {
+  &:hover {
+    border-color: var(--crt-accent);
+    background-color: var(--crt-surface-2);
+  }
+}
+
+@utility tag-terminal {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.6875rem;
+  letter-spacing: 0.06em;
+  color: var(--crt-text-muted);
+  border: 1px solid var(--crt-border-dim);
+  background-color: var(--crt-bg);
+}
+
+@utility pill-terminal {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.625rem;
+  font-size: 0.8125rem;
+  color: var(--crt-text-muted);
+  border: 1px solid var(--crt-border-dim);
+  background-color: var(--crt-surface);
 }
 
 @utility btn-filter {
-  @apply px-3.5 py-1.5 rounded-full text-sm cursor-pointer transition-all duration-300 ease-in-out;
+  padding: 0.25rem 0.625rem;
+  font-size: 0.8125rem;
+  cursor: pointer;
+  border: 1px solid var(--crt-border-dim);
+  background-color: var(--crt-surface);
+  color: var(--crt-text-muted);
+  transition: border-color 0.15s ease, color 0.15s ease, background-color 0.15s ease;
 }
 
 @utility btn-filter-active {
-  @apply bg-zinc-800 text-zinc-50 font-medium shadow-sm;
-}
-
-html.dark .btn-filter-active {
-  @apply bg-zinc-100 text-zinc-900;
+  border-color: var(--crt-accent);
+  color: var(--crt-accent);
+  background-color: var(--crt-glow);
+  font-weight: 600;
 }
 
 @utility btn-filter-inactive {
-  @apply text-zinc-600 border border-zinc-200/60 bg-white/50 backdrop-blur-sm hover:-translate-y-0.5 hover:shadow-md hover:text-zinc-800;
+  &:hover {
+    border-color: var(--crt-accent-dim);
+    color: var(--crt-text);
+  }
 }
 
-html.dark .btn-filter-inactive {
-  @apply text-zinc-400 border-zinc-800/60 bg-zinc-900/40 hover:text-zinc-200;
+@utility btn-terminal {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.875rem;
+  font-size: 0.8125rem;
+  cursor: pointer;
+  border: 1px solid var(--crt-border);
+  color: var(--crt-text);
+  background-color: var(--crt-surface);
+  transition: border-color 0.15s ease, color 0.15s ease, background-color 0.15s ease;
+
+  &:hover {
+    border-color: var(--crt-accent);
+    color: var(--crt-accent);
+    background-color: var(--crt-glow);
+  }
+}
+
+@utility status-online {
+  color: var(--crt-accent);
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
 }

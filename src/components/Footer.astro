@@ -9,32 +9,38 @@ interface Props {
 
 const { title, domain, tagline, email, github } = Astro.props;
 const year = new Date().getFullYear();
+const divider = '';
 ---
 
 <footer class="mt-auto container-main py-12">
-  <div class="flex flex-col sm:flex-row items-center justify-between gap-6 text-sm text-zinc-500 border-t border-zinc-200/60 dark:border-zinc-800/60 pt-8">
-    <p class="leading-relaxed">
-      <span class="text-zinc-700 dark:text-zinc-300">{title}</span>
-      <span class="hidden sm:inline"> · {tagline}</span>
-      <span> · © {year}{domain ? ` ${domain}` : ''}</span>
-    </p>
-    <div class="flex items-center gap-6">
+  <p class="terminal-divider mb-6">{divider}</p>
+
+  <div
+    class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 text-xs pt-6"
+    style="border-top: 1px solid var(--crt-border-dim); color: var(--crt-text-muted);"
+  >
+    <div class="space-y-2">
+      <p class="leading-relaxed">
+        <span style="color: var(--crt-text);">{title}</span>
+        <span class="hidden sm:inline"> · {tagline}</span>
+        <span> · © {year}{domain ? ` ${domain}` : ''}</span>
+      </p>
+    </div>
+
+    <div class="flex items-center gap-4">
       <a
         href={`mailto:${email}`}
-        class="hover:text-zinc-800 dark:hover:text-zinc-200 transition-all duration-300 ease-in-out cursor-pointer"
+        class="btn-terminal text-xs"
       >
-        联系
+        ◆ 联系
       </a>
       <a
         href={github}
         target="_blank"
         rel="noopener noreferrer"
-        class="inline-flex items-center gap-1 hover:text-zinc-800 dark:hover:text-zinc-200 transition-all duration-300 ease-in-out cursor-pointer"
+        class="btn-terminal text-xs"
       >
-        GitHub
-        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M7 17 17 7M7 7h10v10" />
-        </svg>
+        ▶ GitHub
       </a>
     </div>
   </div>
