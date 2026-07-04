@@ -11,7 +11,7 @@ const projectList = projects as Project[];
 const categories = [...new Set(projectList.map((p) => p.category))];
 ---
 
-<BaseLayout title={site.title} description={site.heroDescription}>
+<BaseLayout>
   <main class="flex-1 w-full space-y-8">
     <Hero
       title={site.title}

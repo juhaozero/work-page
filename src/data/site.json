@@ -1,10 +1,20 @@
 {
   "title": "项目炼金室",
-  "domain": "blog.juhaozero.com",
-  "eyebrow": "项目合集",
+  "domain": "work.juhaozero.com",
+  "url": "https://work.juhaozero.com",
+  "eyebrow": "零散项目合集",
   "heroTitle": "加一点毒蘑菇\n再加点旧鞋跟",
-  "heroDescription": "一些零散的项目合集，每件独立运行、打开即用。",
+  "heroDescription": "一些零散的项目合集,打开即用。",
   "tagline": "瞎搞日常",
   "email": "hahw5588@gmail.com",
-  "github": "https://github.com/juhaozero"
+  "github": "https://github.com/juhaozero",
+  "seo": {
+    "description": "一些零散的项目合集,打开即用。集中展示个人开发的 Web 工具与小项目。",
+    "keywords": ["个人项目", "工具合集", "开源", "Web 应用", "项目展示"],
+    "author": "juhaozero",
+    "locale": "zh_CN",
+    "robots": "index, follow",
+    "ogImage": "/og-image.png",
+    "sitemap": "/sitemap-index.xml"
+  }
 }
