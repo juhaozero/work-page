@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import Footer from '../components/Footer.astro';
 import ProjectCatalog from '../components/ProjectCatalog';
+import ProjectHealthInit from '../components/ProjectHealthInit';
 import projects from '../data/projects.json';
 import site from '../data/site.json';
 import type { Project } from '../types/project';
@@ -12,6 +13,7 @@ const categories = [...new Set(projectList.map((p) => p.category))];
 ---
 
 <BaseLayout>
+  <ProjectHealthInit projects={projectList} client:load />
   <main class="flex-1 w-full space-y-4">
     <Hero
       title={site.title}

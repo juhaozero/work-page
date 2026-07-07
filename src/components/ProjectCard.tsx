@@ -1,4 +1,6 @@
 import type { Project } from '../types/project';
+import FeaturedPin from './FeaturedPin';
+import ProjectStatus from './ProjectStatus';
 
 interface ProjectCardProps {
   project: Project;
@@ -14,8 +16,12 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
         href={project.url}
         target="_blank"
         rel="noopener noreferrer"
-        className="terminal-card terminal-card-hover relative flex h-full flex-col p-5 cursor-pointer"
+        className={[
+          'terminal-card terminal-card-hover relative flex h-full flex-col p-5 cursor-pointer',
+          project.featured && 'pl-8',
+        ].filter(Boolean).join(' ')}
       >
+        {project.featured && <FeaturedPin />}
         <div className="flex flex-col h-full">
           <div className="flex items-start justify-between gap-3 mb-4">
             <div
@@ -29,9 +35,7 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
 
           <div className="flex flex-wrap items-center gap-2 mb-3">
             <span className="tag-terminal">{project.category}</span>
-            {project.featured && (
-              <span className="terminal-label">精选</span>
-            )}
+            <ProjectStatus projectId={project.id} />
           </div>
 
           <h3 className="text-sm font-semibold tracking-tight mb-2 group-hover:opacity-80 transition-opacity duration-150">

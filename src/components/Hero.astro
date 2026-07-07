@@ -1,4 +1,5 @@
 ---
+import FeaturedProjects from './FeaturedProjects';
 import type { Project } from '../types/project';
 
 interface Props {
@@ -48,49 +49,7 @@ const divider = '';
     </div>
 
     {featuredProjects.length > 0 && (
-      <div class="space-y-4" aria-label="精选项目">
-        <p class="terminal-label">精选项目</p>
-
-        <div class="space-y-3">
-          {featuredProjects.map((project, i) => (
-            <a
-              href={project.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="terminal-card terminal-card-hover group flex items-center gap-4 p-4 sm:p-5 cursor-pointer"
-            >
-              <div
-                class="flex h-12 w-12 shrink-0 items-center justify-center text-xl"
-                style="border: 1px solid var(--crt-border-dim); background: var(--crt-bg);"
-              >
-                <span role="img" aria-label={project.name}>{project.emoji}</span>
-              </div>
-
-              <div class="flex-1 min-w-0">
-                <div class="flex items-center gap-2 mb-1">
-                  <span class="tag-terminal">项目 {String(i + 1).padStart(2, '0')}</span>
-                  <span class="tag-terminal">{project.category}</span>
-                  <span class="terminal-label">精选</span>
-                </div>
-                <h2 class="font-semibold tracking-tight truncate group-hover:opacity-80 transition-opacity duration-150">
-                  {project.name}
-                </h2>
-                <p class="text-xs leading-relaxed line-clamp-1 mt-0.5" style="color: var(--crt-text-muted);">
-                  {project.description}
-                </p>
-              </div>
-
-              <span
-                class="shrink-0 text-xs opacity-60 group-hover:opacity-100 transition-opacity duration-150"
-                style="color: var(--crt-accent);"
-                aria-hidden="true"
-              >
-                前往
-              </span>
-            </a>
-          ))}
-        </div>
-      </div>
+      <FeaturedProjects projects={featuredProjects} client:load />
     )}
   </div>
 </section>

@@ -213,3 +213,50 @@ body::before {
   font-size: 0.6875rem;
   letter-spacing: 0.1em;
 }
+
+@utility status-offline {
+  color: #b54a4a;
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+
+  @variant dark {
+    color: #e87070;
+  }
+}
+
+@utility status-checking {
+  color: var(--crt-text-dim);
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  animation: status-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes status-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+
+@utility featured-pin {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.625rem;
+  height: 1.625rem;
+  color: var(--crt-accent);
+  background-color: var(--crt-surface-2);
+  border-right: 1px solid var(--crt-border-dim);
+  border-bottom: 1px solid var(--crt-border-dim);
+  box-shadow: 1px 1px 0 var(--crt-border-dim);
+  pointer-events: none;
+  transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+}
+
+@utility featured-pin-icon {
+  width: 0.75rem;
+  height: 0.75rem;
+  transform: rotate(-45deg);
+}
