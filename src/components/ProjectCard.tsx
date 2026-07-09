@@ -1,13 +1,16 @@
 import type { Project } from '../types/project';
+import type { UITranslations } from '../i18n/ui';
+import { t as format } from '../i18n/ui';
 import FeaturedPin from './FeaturedPin';
 import ProjectStatus from './ProjectStatus';
 
 interface ProjectCardProps {
   project: Project;
   index: number;
+  t: UITranslations;
 }
 
-export default function ProjectCard({ project, index }: ProjectCardProps) {
+export default function ProjectCard({ project, index, t }: ProjectCardProps) {
   const paddedIndex = String(index + 1).padStart(2, '0');
 
   return (
@@ -21,7 +24,7 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
           project.featured && 'pl-8',
         ].filter(Boolean).join(' ')}
       >
-        {project.featured && <FeaturedPin />}
+        {project.featured && <FeaturedPin label={t.featured.pinLabel} />}
         <div className="flex flex-col h-full">
           <div className="flex items-start justify-between gap-3 mb-4">
             <div
@@ -30,12 +33,14 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
             >
               <span role="img" aria-label={project.name}>{project.emoji}</span>
             </div>
-            <span className="tag-terminal tabular-nums">项目 {paddedIndex}</span>
+            <span className="tag-terminal tabular-nums">
+              {format(t.project.indexLabel, { index: paddedIndex })}
+            </span>
           </div>
 
           <div className="flex flex-wrap items-center gap-2 mb-3">
             <span className="tag-terminal">{project.category}</span>
-            <ProjectStatus projectId={project.id} />
+            <ProjectStatus projectId={project.id} labels={t.status} />
           </div>
 
           <h3 className="text-sm font-semibold tracking-tight mb-2 group-hover:opacity-80 transition-opacity duration-150">
@@ -53,7 +58,7 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
             className="inline-flex items-center gap-1.5 text-xs mt-auto transition-opacity duration-150 group-hover:opacity-80"
             style={{ color: 'var(--crt-accent)' }}
           >
-            打开项目 →
+            {t.project.openLabel}
           </span>
         </div>
       </a>

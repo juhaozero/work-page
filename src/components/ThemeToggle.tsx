@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react';
+import type { UITranslations } from '../i18n/ui';
 
 type Theme = 'light' | 'dark';
+
+interface ThemeToggleProps {
+  labels: UITranslations['theme'];
+}
 
 function getInitialTheme(): Theme {
   if (typeof window === 'undefined') return 'light';
@@ -9,7 +14,7 @@ function getInitialTheme(): Theme {
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 }
 
-export default function ThemeToggle() {
+export default function ThemeToggle({ labels }: ThemeToggleProps) {
   const [theme, setTheme] = useState<Theme>('light');
 
   useEffect(() => {
@@ -27,10 +32,10 @@ export default function ThemeToggle() {
     <button
       type="button"
       onClick={toggle}
-      aria-label={theme === 'dark' ? '切换为亮色模式' : '切换为暗色模式'}
+      aria-label={theme === 'dark' ? labels.toLight : labels.toDark}
       className="btn-filter focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--crt-accent)]"
     >
-      {theme === 'dark' ? '[ 亮色 ]' : '[ 暗色 ]'}
+      {theme === 'dark' ? labels.light : labels.dark}
     </button>
   );
 }

@@ -1,6 +1,10 @@
-export default function FeaturedPin() {
+interface FeaturedPinProps {
+  label: string;
+}
+
+export default function FeaturedPin({ label }: FeaturedPinProps) {
   return (
-    <span className="featured-pin" aria-label="精选项目" title="精选项目">
+    <span className="featured-pin" aria-label={label} title={label}>
       <svg
         viewBox="0 0 16 16"
         fill="currentColor"

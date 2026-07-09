@@ -1,9 +1,15 @@
 ---
 import '../styles/global.css';
 import ThemeToggle from '../components/ThemeToggle';
+import LanguageSwitcher from '../components/LanguageSwitcher';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { locales, localeHtmlLang, localeOgLocale, type Locale } from '../i18n/config';
+import type { UITranslations } from '../i18n/ui';
 import site from '../data/site.json';
 
 interface Props {
+  locale: Locale;
+  t: UITranslations;
   title?: string;
   description?: string;
   canonical?: string;
@@ -11,31 +17,38 @@ interface Props {
 }
 
 const siteUrl = site.url ?? `https://${site.domain}`;
-const seo = site.seo;
 
-const {
-  title = site.title,
-  description = seo?.description ?? site.heroDescription,
-  canonical,
-  noindex = false,
-} = Astro.props;
+const { locale, t, title, description, canonical, noindex = false } = Astro.props;
 
+const pageTitle = title ?? t.site.title;
+const pageDescription = description ?? t.site.seo.description;
 const pageUrl = canonical ?? new URL(Astro.url.pathname, siteUrl).href;
-const ogImage = seo?.ogImage ? new URL(seo.ogImage, siteUrl).href : undefined;
-const keywords = seo?.keywords?.join(', ');
-const robots = noindex ? 'noindex, nofollow' : (seo?.robots ?? 'index, follow');
-const locale = seo?.locale ?? 'zh_CN';
+const ogImage = site.seo?.ogImage ? new URL(site.seo.ogImage, siteUrl).href : undefined;
+const keywords = t.site.seo.keywords.join(', ');
+const robots = noindex ? 'noindex, nofollow' : (site.seo?.robots ?? 'index, follow');
+const htmlLang = localeHtmlLang[locale];
+const ogLocale = localeOgLocale[locale];
+
+const langLinks = locales.map((loc) => ({
+  locale: loc,
+  url: getRelativeLocaleUrl(loc, '/'),
+}));
+
+const hreflangLinks = locales.map((loc) => ({
+  locale: loc,
+  url: new URL(getRelativeLocaleUrl(loc, '/'), siteUrl).href,
+}));
 
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  name: site.title,
-  description,
-  url: siteUrl,
-  inLanguage: locale.replace('_', '-'),
+  name: t.site.title,
+  description: pageDescription,
+  url: pageUrl,
+  inLanguage: htmlLang,
   author: {
     '@type': 'Person',
-    name: seo?.author ?? site.title,
+    name: t.site.seo.author,
     email: site.email,
     url: site.github,
   },
@@ -43,28 +56,32 @@ const jsonLd = {
 ---
 
 <!doctype html>
-<html lang="zh-CN">
+<html lang={htmlLang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content={description} />
+    <meta name="description" content={pageDescription} />
     {keywords && <meta name="keywords" content={keywords} />}
-    {seo?.author && <meta name="author" content={seo.author} />}
+    {t.site.seo.author && <meta name="author" content={t.site.seo.author} />}
     <meta name="robots" content={robots} />
     <meta name="generator" content={Astro.generator} />
     <link rel="canonical" href={pageUrl} />
+    {hreflangLinks.map(({ locale: loc, url }) => (
+      <link rel="alternate" hreflang={localeHtmlLang[loc]} href={url} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href={new URL(getRelativeLocaleUrl('zh', '/'), siteUrl).href} />
 
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content={site.title} />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
+    <meta property="og:site_name" content={t.site.title} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
     <meta property="og:url" content={pageUrl} />
-    <meta property="og:locale" content={locale} />
+    <meta property="og:locale" content={ogLocale} />
     {ogImage && <meta property="og:image" content={ogImage} />}
 
     <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDescription} />
     {ogImage && <meta name="twitter:image" content={ogImage} />}
 
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
@@ -76,7 +93,7 @@ const jsonLd = {
       href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Sans+Mono:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
-    <title>{title}</title>
+    <title>{pageTitle}</title>
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
     <script is:inline>
       (function () {
@@ -92,10 +109,18 @@ const jsonLd = {
     <header class="fixed top-0 left-0 right-0 z-50 border-b border-[var(--crt-border-dim)] bg-[var(--crt-bg)]/95 backdrop-blur-sm">
       <div class="container-main flex items-center justify-between py-3">
         <div class="flex items-center gap-3 min-w-0">
-          <span class="status-online shrink-0" aria-hidden="true">◉ 在线</span>
-          <span class="truncate hidden sm:inline" style="color: var(--crt-text-muted);">{site.title}</span>
+          <span class="status-online shrink-0" aria-hidden="true">{t.nav.online}</span>
+          <span class="truncate hidden sm:inline" style="color: var(--crt-text-muted);">{t.site.title}</span>
         </div>
-        <ThemeToggle client:load />
+        <div class="flex items-center gap-2 shrink-0">
+          <LanguageSwitcher
+            locale={locale}
+            ariaLabel={t.langSwitcher.ariaLabel}
+            links={langLinks}
+            client:load
+          />
+          <ThemeToggle labels={t.theme} client:load />
+        </div>
       </div>
     </header>
     <slot />

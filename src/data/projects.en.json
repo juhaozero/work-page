@@ -1,0 +1,38 @@
+[
+  {
+    "id": "1",
+    "name": "Browser Toolbox",
+    "emoji": "🏷️",
+    "category": "Tools",
+    "description": "A pure frontend browser toolbox with commonly used utilities.",
+    "url": "https://app.juhaozero.com/browser/",
+    "featured": true
+  },
+  {
+    "id": "2",
+    "name": "P4G Persona Fusion Finder",
+    "emoji": "🎮",
+    "category": "Games",
+    "description": "Look up Persona fusion recipes in Persona 4 Golden.",
+    "url": "https://app.juhaozero.com/persona/",
+    "featured": false
+  },
+  {
+    "id": "3",
+    "name": "Instagram Collage Maker",
+    "emoji": "🖼️",
+    "category": "Images",
+    "description": "Generate Instagram-style photo collages.",
+    "url": "https://app.juhaozero.com/images/",
+    "featured": false
+  },
+  {
+    "id": "4",
+    "name": "Video Downloader",
+    "emoji": "🔨",
+    "category": "Tools",
+    "description": "Video link parsing, one-click get video download.",
+    "url": "https://app.juhaozero.com/watermark/",
+    "featured": true
+  }
+]

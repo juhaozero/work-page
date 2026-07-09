@@ -9,6 +9,14 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://work.juhaozero.com',
 
+  i18n: {
+    defaultLocale: 'zh',
+    locales: ['zh', 'en'],
+    routing: {
+      prefixDefaultLocale: false,
+    },
+  },
+
   vite: {
     plugins: [tailwindcss()],
   },
@@ -19,6 +27,13 @@ export default defineConfig({
       changefreq: 'weekly',
       priority: 0.7,
       lastmod: new Date(),
+      i18n: {
+        defaultLocale: 'zh',
+        locales: {
+          zh: 'zh-CN',
+          en: 'en-US',
+        },
+      },
     }),
   ],
 });

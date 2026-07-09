@@ -1,15 +1,11 @@
 import { useProjectHealth, type HealthStatus } from '../lib/projectHealthStore';
+import type { UITranslations } from '../i18n/ui';
 
 interface ProjectStatusProps {
   projectId: string;
+  labels: UITranslations['status'];
   className?: string;
 }
-
-const STATUS_LABEL: Record<HealthStatus, string> = {
-  checking: '◌ 检测中',
-  online: '◉ 在线',
-  offline: '◯ 离线',
-};
 
 const STATUS_CLASS: Record<HealthStatus, string> = {
   checking: 'status-checking',
@@ -17,15 +13,27 @@ const STATUS_CLASS: Record<HealthStatus, string> = {
   offline: 'status-offline',
 };
 
-export default function ProjectStatus({ projectId, className = '' }: ProjectStatusProps) {
+export default function ProjectStatus({ projectId, labels, className = '' }: ProjectStatusProps) {
   const status = useProjectHealth(projectId);
+
+  const statusLabel: Record<HealthStatus, string> = {
+    checking: labels.checking,
+    online: labels.online,
+    offline: labels.offline,
+  };
+
+  const ariaLabel: Record<HealthStatus, string> = {
+    checking: labels.ariaChecking,
+    online: labels.ariaOnline,
+    offline: labels.ariaOffline,
+  };
 
   return (
     <span
       className={`${STATUS_CLASS[status]} shrink-0 ${className}`}
-      aria-label={`服务${status === 'online' ? '在线' : status === 'offline' ? '离线' : '检测中'}`}
+      aria-label={ariaLabel[status]}
     >
-      {STATUS_LABEL[status]}
+      {statusLabel[status]}
     </span>
   );
 }

@@ -25,5 +25,14 @@
     "description": "Ins拼图生成器,可以生成Ins风格的拼图",
     "url": "https://app.juhaozero.com/images/",
     "featured": false
+  },
+  {
+    "id": "4",
+    "name": "无水印视频下载",
+    "emoji": "🔨",
+    "category": "工具",
+    "description": "视频链接解析，一键获取无水印视频下载",
+    "url": "https://app.juhaozero.com/watermark/",
+    "featured": true
   }
 ]

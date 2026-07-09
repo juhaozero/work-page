@@ -1,18 +1,16 @@
 ---
 import FeaturedProjects from './FeaturedProjects';
 import type { Project } from '../types/project';
+import type { UITranslations } from '../i18n/ui';
+import { t as format } from '../i18n/ui';
 
 interface Props {
-  title: string;
-  eyebrow: string;
-  heroTitle: string;
-  heroDescription: string;
-  tagline: string;
+  t: UITranslations;
   projectCount: number;
   projects: Project[];
 }
 
-const { eyebrow, heroTitle, heroDescription, tagline, projectCount, projects } = Astro.props;
+const { t, projectCount, projects } = Astro.props;
 const featuredProjects = projects.filter((p) => p.featured);
 const divider = '';
 ---
@@ -23,33 +21,33 @@ const divider = '';
   <div class={`grid gap-10 lg:gap-16 items-start ${featuredProjects.length > 0 ? 'lg:grid-cols-2' : ''}`}>
     <div class="space-y-6">
       <div class="space-y-5">
-        <p class="terminal-label">{eyebrow}</p>
+        <p class="terminal-label">{t.site.eyebrow}</p>
 
         <h1 class="text-2xl sm:text-3xl md:text-4xl font-semibold leading-snug tracking-tight whitespace-pre-line">
-          {heroTitle}
+          {t.site.heroTitle}
         </h1>
 
         <p class="text-sm leading-relaxed max-w-lg" style="color: var(--crt-text-muted);">
-          {heroDescription}
+          {t.site.heroDescription}
         </p>
 
-        <p class="text-sm" style="color: var(--crt-text-dim);">{tagline}</p>
+        <p class="text-sm" style="color: var(--crt-text-dim);">{t.site.tagline}</p>
       </div>
 
       <div class="flex flex-wrap gap-2 pt-1">
         <span class="pill-terminal">
-          共 <strong class="font-semibold tabular-nums" style="color: var(--crt-text);">{projectCount}</strong> 个项目
+          {format(t.hero.projectsTotal, { count: projectCount })}
         </span>
         {featuredProjects.length > 0 && (
           <span class="pill-terminal">
-            <strong class="font-semibold tabular-nums" style="color: var(--crt-text);">{featuredProjects.length}</strong> 个精选
+            {format(t.hero.featuredCount, { count: featuredProjects.length })}
           </span>
         )}
       </div>
     </div>
 
     {featuredProjects.length > 0 && (
-      <FeaturedProjects projects={featuredProjects} client:load />
+      <FeaturedProjects projects={featuredProjects} t={t} client:load />
     )}
   </div>
 </section>

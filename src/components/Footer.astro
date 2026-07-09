@@ -1,13 +1,14 @@
 ---
+import type { UITranslations } from '../i18n/ui';
+
 interface Props {
-  title: string;
+  t: UITranslations;
   domain: string;
-  tagline: string;
   email: string;
   github: string;
 }
 
-const { title, domain, tagline, email, github } = Astro.props;
+const { t, domain, email, github } = Astro.props;
 const year = new Date().getFullYear();
 const divider = '';
 ---
@@ -21,8 +22,8 @@ const divider = '';
   >
     <div class="space-y-2">
       <p class="leading-relaxed">
-        <span style="color: var(--crt-text);">{title}</span>
-        <span class="hidden sm:inline"> · {tagline}</span>
+        <span style="color: var(--crt-text);">{t.site.title}</span>
+        <span class="hidden sm:inline"> · {t.site.tagline}</span>
         <span> · © {year}{domain ? ` ${domain}` : ''}</span>
       </p>
     </div>
@@ -32,7 +33,7 @@ const divider = '';
         href={`mailto:${email}`}
         class="btn-terminal text-xs"
       >
-        ◆ 联系
+        {t.footer.contact}
       </a>
       <a
         href={github}
@@ -40,7 +41,7 @@ const divider = '';
         rel="noopener noreferrer"
         class="btn-terminal text-xs"
       >
-        ▶ GitHub
+        {t.footer.github}
       </a>
     </div>
   </div>
