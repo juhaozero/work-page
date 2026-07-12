@@ -1,4 +1,4 @@
-import { localeLabels, locales, type Locale } from '../i18n/config';
+import { localeLabels, type Locale } from '../i18n/config';
 
 interface LanguageLink {
   locale: Locale;
@@ -12,30 +12,28 @@ interface LanguageSwitcherProps {
 }
 
 export default function LanguageSwitcher({ locale, ariaLabel, links }: LanguageSwitcherProps) {
-  return (
-    <nav className="flex items-center gap-1" aria-label={ariaLabel}>
-      {links.map(({ locale: code, url }) => {
-        const isActive = code === locale;
+  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const nextLocale = event.target.value as Locale;
+    const target = links.find((link) => link.locale === nextLocale);
+    if (target && target.locale !== locale) {
+      window.location.assign(target.url);
+    }
+  };
 
-        return (
-          <a
-            key={code}
-            href={url}
-            hrefLang={code}
-            lang={code}
-            aria-current={isActive ? 'page' : undefined}
-            className={[
-              'btn-filter text-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--crt-accent)]',
-              isActive ? 'btn-filter-active' : 'btn-filter-inactive',
-            ].join(' ')}
-          >
-            [{localeLabels[code]}]
-          </a>
-        );
-      })}
-    </nav>
+  return (
+    <select
+      value={locale}
+      onChange={handleChange}
+      aria-label={ariaLabel}
+      className="select-terminal text-xs"
+    >
+      {links.map(({ locale: code }) => (
+        <option key={code} value={code}>
+          {localeLabels[code]}
+        </option>
+      ))}
+    </select>
   );
 }
 
-export { locales };
 export type { LanguageLink };
