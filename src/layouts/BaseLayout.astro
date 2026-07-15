@@ -4,6 +4,7 @@ import ThemeToggle from '../components/ThemeToggle';
 import LanguageSwitcher from '../components/LanguageSwitcher';
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import { locales, localeHtmlLang, localeOgLocale, type Locale } from '../i18n/config';
+import { aboutPath, homePath } from '../i18n/paths';
 import type { UITranslations } from '../i18n/ui';
 import site from '../data/site.json';
 
@@ -14,16 +15,33 @@ interface Props {
   description?: string;
   canonical?: string;
   noindex?: boolean;
+  /** 去掉语言前缀后的路径，供语言切换与 hreflang，如 `/`、`/about`、`/projects/foo` */
+  path?: string;
+  ogImage?: string;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
 }
 
 const siteUrl = site.url ?? `https://${site.domain}`;
 
-const { locale, t, title, description, canonical, noindex = false } = Astro.props;
+const {
+  locale,
+  t,
+  title,
+  description,
+  canonical,
+  noindex = false,
+  path = '/',
+  ogImage: ogImageProp,
+  jsonLd: jsonLdProp,
+} = Astro.props;
 
 const pageTitle = title ?? t.site.title;
 const pageDescription = description ?? t.site.seo.description;
 const pageUrl = canonical ?? new URL(Astro.url.pathname, siteUrl).href;
-const ogImage = site.seo?.ogImage ? new URL(site.seo.ogImage, siteUrl).href : undefined;
+const defaultOg = site.seo?.ogImage ? new URL(site.seo.ogImage, siteUrl).href : undefined;
+const ogImage = ogImageProp
+  ? new URL(ogImageProp, siteUrl).href
+  : defaultOg;
 const keywords = t.site.seo.keywords.join(', ');
 const robots = noindex ? 'noindex, nofollow' : (site.seo?.robots ?? 'index, follow');
 const htmlLang = localeHtmlLang[locale];
@@ -31,15 +49,15 @@ const ogLocale = localeOgLocale[locale];
 
 const langLinks = locales.map((loc) => ({
   locale: loc,
-  url: getRelativeLocaleUrl(loc, '/'),
+  url: getRelativeLocaleUrl(loc, path),
 }));
 
 const hreflangLinks = locales.map((loc) => ({
   locale: loc,
-  url: new URL(getRelativeLocaleUrl(loc, '/'), siteUrl).href,
+  url: new URL(getRelativeLocaleUrl(loc, path), siteUrl).href,
 }));
 
-const jsonLd = {
+const jsonLd = jsonLdProp ?? {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
   name: t.site.title,
@@ -53,6 +71,9 @@ const jsonLd = {
     url: site.github,
   },
 };
+
+const homeHref = homePath(locale);
+const aboutHref = aboutPath(locale);
 ---
 
 <!doctype html>
@@ -69,7 +90,7 @@ const jsonLd = {
     {hreflangLinks.map(({ locale: loc, url }) => (
       <link rel="alternate" hreflang={localeHtmlLang[loc]} href={url} />
     ))}
-    <link rel="alternate" hreflang="x-default" href={new URL(getRelativeLocaleUrl('zh', '/'), siteUrl).href} />
+    <link rel="alternate" hreflang="x-default" href={new URL(getRelativeLocaleUrl('zh', path), siteUrl).href} />
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={t.site.title} />
@@ -110,7 +131,16 @@ const jsonLd = {
       <div class="container-main flex items-center justify-between py-3">
         <div class="flex items-center gap-3 min-w-0">
           <span class="status-online shrink-0" aria-hidden="true">{t.nav.online}</span>
-          <span class="truncate hidden sm:inline" style="color: var(--crt-text-muted);">{t.site.title}</span>
+          <a href={homeHref} class="truncate hidden sm:inline hover:opacity-80 transition-opacity" style="color: var(--crt-text-muted);">
+            {t.site.title}
+          </a>
+          <a
+            href={aboutHref}
+            class="text-xs shrink-0 hover:opacity-80 transition-opacity"
+            style="color: var(--crt-text-dim);"
+          >
+            [{t.nav.about}]
+          </a>
         </div>
         <div class="flex items-center gap-2 shrink-0">
           <LanguageSwitcher

@@ -1,4 +1,5 @@
 import type { Locale } from './config';
+import type { ProjectLifecycle, ProbeReason } from '../types/project';
 
 export interface SiteTranslations {
   title: string;
@@ -17,6 +18,8 @@ export interface UITranslations {
   site: SiteTranslations;
   nav: {
     online: string;
+    home: string;
+    about: string;
   };
   hero: {
     projectsTotal: string;
@@ -42,6 +45,17 @@ export interface UITranslations {
   project: {
     indexLabel: string;
     openLabel: string;
+    detailsLabel: string;
+    backToCatalog: string;
+    techLabel: string;
+    linksLabel: string;
+    demo: string;
+    docs: string;
+    changelog: string;
+    repo: string;
+    createdAt: string;
+    lifecycle: Record<ProjectLifecycle, string>;
+    coverAlt: string;
   };
   status: {
     checking: string;
@@ -50,10 +64,24 @@ export interface UITranslations {
     ariaChecking: string;
     ariaOnline: string;
     ariaOffline: string;
+    checkedAt: string;
+    reason: Record<ProbeReason, string>;
+  };
+  about: {
+    title: string;
+    seoDescription: string;
+    introTitle: string;
+    introBody: string;
+    stackTitle: string;
+    stackBody: string;
+    nowTitle: string;
+    nowItems: string[];
+    backHome: string;
   };
   footer: {
     contact: string;
     github: string;
+    about: string;
   };
   theme: {
     toLight: string;
@@ -65,7 +93,6 @@ export interface UITranslations {
     ariaLabel: string;
   };
 }
-/** 多语言配置 */
 
 const ui: Record<Locale, UITranslations> = {
   zh: {
@@ -74,7 +101,7 @@ const ui: Record<Locale, UITranslations> = {
       eyebrow: '零散项目合集',
       heroTitle: '加一点毒蘑菇\n再加点旧鞋跟',
       heroDescription: '一些零散的项目合集,打开即用。',
-      tagline: '瞎搞日常',
+      tagline: '',
       seo: {
         description: '一些零散的项目合集,打开即用。集中展示个人开发的 Web 工具与小项目。',
         keywords: ['个人项目', '工具合集', '开源', 'Web 应用', '项目展示'],
@@ -83,6 +110,8 @@ const ui: Record<Locale, UITranslations> = {
     },
     nav: {
       online: '◉ 在线',
+      home: '首页',
+      about: '关于',
     },
     hero: {
       projectsTotal: '共 {count} 个项目',
@@ -92,7 +121,7 @@ const ui: Record<Locale, UITranslations> = {
       label: '精选项目',
       ariaLabel: '精选项目',
       pinLabel: '精选项目',
-      goTo: '前往',
+      goTo: '详情',
     },
     catalog: {
       divider: '-- 项目目录 ----------------------------------------------',
@@ -108,6 +137,21 @@ const ui: Record<Locale, UITranslations> = {
     project: {
       indexLabel: '项目 {index}',
       openLabel: '打开项目 →',
+      detailsLabel: '查看详情 →',
+      backToCatalog: '← 返回目录',
+      techLabel: '技术栈',
+      linksLabel: '相关链接',
+      demo: '演示',
+      docs: '文档',
+      changelog: '更新日志',
+      repo: '仓库',
+      createdAt: '创建于 {date}',
+      lifecycle: {
+        active: '运行中',
+        maintenance: '维护中',
+        archived: '已归档',
+      },
+      coverAlt: '{name} 封面',
     },
     status: {
       checking: '◌ 检测中',
@@ -116,10 +160,34 @@ const ui: Record<Locale, UITranslations> = {
       ariaChecking: '服务检测中',
       ariaOnline: '服务在线',
       ariaOffline: '服务离线',
+      checkedAt: '最近检测：{time}',
+      reason: {
+        ok: '可达',
+        http_error: 'HTTP 错误',
+        timeout: '超时',
+        network_error: '网络错误',
+        unknown: '未知',
+      },
+    },
+    about: {
+      title: '关于炼金室',
+      seoDescription: '项目炼金室的设定',
+      introTitle: '这是什么',
+      introBody:
+        '个人作品的索引站,收纳一些个人的小项目',
+      stackTitle: '怎么做的',
+      stackBody:
+        'Astro 静态生成 + React 交互岛屿，Tailwind 驱动 CRT 终端视觉；中英文由一份 projects.source.json 生成，构建与 CI 会校验数据并写入健康状态。',
+      nowTitle: '最近动态',
+      nowItems: [
+        '新增了无水印下载工具',
+      ],
+      backHome: '← 返回首页',
     },
     footer: {
       contact: '◆ 联系',
       github: '▶ GitHub',
+      about: '◇ 关于',
     },
     theme: {
       toLight: '切换为亮色模式',
@@ -137,7 +205,7 @@ const ui: Record<Locale, UITranslations> = {
       eyebrow: 'Misc project collection',
       heroTitle: 'A pinch of poison mushroom\nAnd a dash of old shoe heel',
       heroDescription: 'A collection of small projects — open and use instantly.',
-      tagline: 'Daily tinkering',
+      tagline: '',
       seo: {
         description:
           'A collection of small projects — open and use instantly. Showcasing personal Web tools and side projects.',
@@ -147,6 +215,8 @@ const ui: Record<Locale, UITranslations> = {
     },
     nav: {
       online: '◉ Online',
+      home: 'Home',
+      about: 'About',
     },
     hero: {
       projectsTotal: '{count} projects total',
@@ -156,7 +226,7 @@ const ui: Record<Locale, UITranslations> = {
       label: 'Featured',
       ariaLabel: 'Featured projects',
       pinLabel: 'Featured project',
-      goTo: 'Open',
+      goTo: 'Details',
     },
     catalog: {
       divider: '-- Project catalog ----------------------------------------',
@@ -172,6 +242,21 @@ const ui: Record<Locale, UITranslations> = {
     project: {
       indexLabel: 'Project {index}',
       openLabel: 'Open project →',
+      detailsLabel: 'View details →',
+      backToCatalog: '← Back to catalog',
+      techLabel: 'Tech stack',
+      linksLabel: 'Links',
+      demo: 'Demo',
+      docs: 'Docs',
+      changelog: 'Changelog',
+      repo: 'Repository',
+      createdAt: 'Created {date}',
+      lifecycle: {
+        active: 'Active',
+        maintenance: 'Maintenance',
+        archived: 'Archived',
+      },
+      coverAlt: 'Cover for {name}',
     },
     status: {
       checking: '◌ Checking',
@@ -180,10 +265,34 @@ const ui: Record<Locale, UITranslations> = {
       ariaChecking: 'Service checking',
       ariaOnline: 'Service online',
       ariaOffline: 'Service offline',
+      checkedAt: 'Last checked: {time}',
+      reason: {
+        ok: 'Reachable',
+        http_error: 'HTTP error',
+        timeout: 'Timeout',
+        network_error: 'Network error',
+        unknown: 'Unknown',
+      },
+    },
+    about: {
+      title: 'About the Lab',
+      seoDescription: 'What Project Alchemy Lab is, how it is built, and what is new.',
+      introTitle: 'What this is',
+      introBody:
+        'A personal project index: collect some small projects.',
+      stackTitle: 'How it is built',
+      stackBody:
+        'Astro SSG with React islands and a CRT terminal look via Tailwind. zh/en project files are generated from projects.source.json; CI validates data and writes health status.',
+      nowTitle: 'Recent dynamic',
+      nowItems: [
+        'Added a watermark video download tool',
+      ],
+      backHome: '← Back home',
     },
     footer: {
       contact: '◆ Contact',
       github: '▶ GitHub',
+      about: '◇ About',
     },
     theme: {
       toLight: 'Switch to light mode',

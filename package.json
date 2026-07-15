@@ -7,9 +7,15 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "predev": "npm run generate:projects",
+    "build": "npm run prepare:content && astro build",
+    "prepare:content": "npm run validate:projects && npm run generate:projects && npm run probe:health && npm run generate:og",
     "preview": "astro preview",
     "astro": "astro",
+    "generate:projects": "node scripts/generate-projects.mjs",
+    "validate:projects": "node scripts/validate-projects.mjs",
+    "probe:health": "node scripts/probe-health.mjs",
+    "generate:og": "node scripts/generate-og.mjs",
     "generate:favicon": "node scripts/generate-favicon.mjs"
   },
   "dependencies": {

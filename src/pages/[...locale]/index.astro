@@ -4,10 +4,13 @@ import Hero from '../../components/Hero.astro';
 import Footer from '../../components/Footer.astro';
 import ProjectCatalog from '../../components/ProjectCatalog';
 import ProjectHealthInit from '../../components/ProjectHealthInit';
-import { locales, defaultLocale, getLocaleParam, type Locale } from '../../i18n/config';
+import { locales, getLocaleParam, type Locale, localeHtmlLang } from '../../i18n/config';
 import { getTranslations } from '../../i18n/ui';
 import { getProjects } from '../../i18n/projects';
+import { projectDetailPath } from '../../i18n/paths';
 import site from '../../data/site.json';
+import healthReport from '../../data/status.json';
+import type { HealthReport } from '../../types/project';
 
 export function getStaticPaths() {
   return locales.map((locale) => ({
@@ -20,13 +23,46 @@ const { locale } = Astro.props as { locale: Locale };
 const t = getTranslations(locale);
 const projectList = getProjects(locale);
 const categories = [...new Set(projectList.map((p) => p.category))];
+const siteUrl = site.url ?? `https://${site.domain}`;
+const report = healthReport as HealthReport;
+
+const itemListJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: t.site.title,
+  description: t.site.seo.description,
+  numberOfItems: projectList.length,
+  itemListElement: projectList.map((project, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    name: project.name,
+    url: new URL(projectDetailPath(locale, project.slug), siteUrl).href,
+    description: project.description,
+  })),
+};
+
+const websiteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: t.site.title,
+  description: t.site.seo.description,
+  url: new URL(locale === 'zh' ? '/' : `/${locale}/`, siteUrl).href,
+  inLanguage: localeHtmlLang[locale],
+  author: {
+    '@type': 'Person',
+    name: t.site.seo.author,
+    email: site.email,
+    url: site.github,
+  },
+};
 ---
 
-<BaseLayout locale={locale} t={t}>
-  <ProjectHealthInit projects={projectList} client:load />
+<BaseLayout locale={locale} t={t} path="/" jsonLd={[websiteJsonLd, itemListJsonLd]}>
+  <ProjectHealthInit projects={projectList} initialReport={report} client:load />
   <main class="flex-1 w-full space-y-4">
     <Hero
       t={t}
+      locale={locale}
       projectCount={projectList.length}
       projects={projectList}
     />
@@ -35,6 +71,7 @@ const categories = [...new Set(projectList.map((p) => p.category))];
       <ProjectCatalog
         projects={projectList}
         categories={categories}
+        locale={locale}
         t={t}
         client:load
       />
@@ -43,6 +80,7 @@ const categories = [...new Set(projectList.map((p) => p.category))];
 
   <Footer
     t={t}
+    locale={locale}
     domain={site.domain}
     email={site.email}
     github={site.github}

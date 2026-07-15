@@ -1,0 +1,181 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Footer from '../../../components/Footer.astro';
+import ProjectHealthInit from '../../../components/ProjectHealthInit';
+import { locales, getLocaleParam, localeHtmlLang, type Locale } from '../../../i18n/config';
+import { getTranslations, t as format } from '../../../i18n/ui';
+import { getProjects } from '../../../i18n/projects';
+import { homePath, projectDetailPath } from '../../../i18n/paths';
+import site from '../../../data/site.json';
+import healthReport from '../../../data/status.json';
+import type { HealthReport, Project } from '../../../types/project';
+
+export function getStaticPaths() {
+  return locales.flatMap((locale) => {
+    const projects = getProjects(locale);
+    return projects.map((project) => ({
+      params: {
+        locale: getLocaleParam(locale),
+        slug: project.slug,
+      },
+      props: { locale, project },
+    }));
+  });
+}
+
+const { locale, project } = Astro.props as { locale: Locale; project: Project };
+const t = getTranslations(locale);
+const siteUrl = site.url ?? `https://${site.domain}`;
+const report = healthReport as HealthReport;
+const health = report.projects[project.id];
+const homeHref = homePath(locale);
+const pagePath = `/projects/${project.slug}`;
+const pageUrl = new URL(projectDetailPath(locale, project.slug), siteUrl).href;
+const ogImage = project.cover ?? `/og/projects/${project.slug}.png`;
+const longCopy = project.longDescription ?? project.description;
+
+const links = [
+  { href: project.url, label: t.project.openLabel },
+  project.demo && project.demo !== project.url
+    ? { href: project.demo, label: t.project.demo }
+    : null,
+  project.docs ? { href: project.docs, label: t.project.docs } : null,
+  project.changelog ? { href: project.changelog, label: t.project.changelog } : null,
+  project.repo ? { href: project.repo, label: t.project.repo } : null,
+].filter(Boolean) as { href: string; label: string }[];
+
+const softwareJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: project.name,
+  description: longCopy,
+  url: pageUrl,
+  applicationCategory: project.category,
+  operatingSystem: 'Web',
+  inLanguage: localeHtmlLang[locale],
+  image: new URL(ogImage, siteUrl).href,
+  ...(project.createdAt ? { dateCreated: project.createdAt } : {}),
+  ...(project.tech?.length ? { keywords: project.tech.join(', ') } : {}),
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'CNY',
+  },
+  author: {
+    '@type': 'Person',
+    name: t.site.seo.author,
+    url: site.github,
+  },
+};
+
+const healthLabel = health
+  ? health.online
+    ? t.status.online
+    : t.status.offline
+  : t.status.checking;
+const healthClass = health
+  ? health.online
+    ? 'status-online'
+    : 'status-offline'
+  : 'status-checking';
+const reasonLabel = health ? t.status.reason[health.reason] : null;
+const checkedAtLabel =
+  report.checkedAt && report.checkedAt !== '1970-01-01T00:00:00.000Z'
+    ? format(t.status.checkedAt, {
+        time: new Date(report.checkedAt).toLocaleString(locale === 'zh' ? 'zh-CN' : 'en-US'),
+      })
+    : null;
+---
+
+<BaseLayout
+  locale={locale}
+  t={t}
+  path={pagePath}
+  title={`${project.name} · ${t.site.title}`}
+  description={project.description}
+  ogImage={ogImage}
+  jsonLd={softwareJsonLd}
+>
+  <ProjectHealthInit projects={[project]} initialReport={report} client:load />
+
+  <main class="flex-1 w-full">
+    <article class="container-main pt-24 sm:pt-28 pb-20 max-w-3xl">
+      <a href={homeHref} class="text-xs mb-8 inline-block hover:opacity-80" style="color: var(--crt-accent);">
+        {t.project.backToCatalog}
+      </a>
+
+      <div class="flex items-start gap-4 mb-8">
+        <div
+          class="flex h-14 w-14 items-center justify-center text-2xl shrink-0"
+          style="border: 1px solid var(--crt-border-dim); background: var(--crt-bg);"
+        >
+          <span role="img" aria-label={project.name}>{project.emoji}</span>
+        </div>
+        <div class="min-w-0 space-y-3">
+          <h1 class="text-2xl sm:text-3xl font-semibold tracking-tight">{project.name}</h1>
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="tag-terminal">{project.category}</span>
+            {project.lifecycle && (
+              <span class="tag-terminal">{t.project.lifecycle[project.lifecycle]}</span>
+            )}
+            <span class={healthClass}>{healthLabel}</span>
+          </div>
+        </div>
+      </div>
+
+      {(checkedAtLabel || reasonLabel || health?.httpStatus != null) && (
+        <p class="text-xs mb-8 space-x-3" style="color: var(--crt-text-dim);">
+          {checkedAtLabel && <span>{checkedAtLabel}</span>}
+          {reasonLabel && <span>· {reasonLabel}</span>}
+          {health?.httpStatus != null && <span>· HTTP {health.httpStatus}</span>}
+          {health?.error && !health.online && <span>· {health.error}</span>}
+        </p>
+      )}
+
+      <p class="text-sm leading-relaxed mb-10" style="color: var(--crt-text-muted);">
+        {longCopy}
+      </p>
+
+      {project.tech && project.tech.length > 0 && (
+        <section class="mb-10 space-y-3">
+          <h2 class="terminal-section-title">{t.project.techLabel}</h2>
+          <div class="flex flex-wrap gap-2">
+            {project.tech.map((tech) => (
+              <span class="tag-terminal">{tech}</span>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {project.createdAt && (
+        <p class="text-xs mb-10" style="color: var(--crt-text-dim);">
+          {format(t.project.createdAt, { date: project.createdAt })}
+        </p>
+      )}
+
+      <section class="space-y-3">
+        <h2 class="terminal-section-title">{t.project.linksLabel}</h2>
+        <div class="flex flex-wrap gap-3">
+          {links.map((link) => (
+            <a
+              href={link.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn-terminal text-xs"
+            >
+              {link.label}
+            </a>
+          ))}
+        </div>
+      </section>
+    </article>
+  </main>
+
+  <Footer
+    t={t}
+    locale={locale}
+    domain={site.domain}
+    email={site.email}
+    github={site.github}
+  />
+</BaseLayout>

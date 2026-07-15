@@ -5,6 +5,9 @@ on:
     branches:
       - main
   workflow_dispatch:
+  # 定时重建以刷新构建期健康探测结果
+  schedule:
+    - cron: '0 2 * * *'
 
 jobs:
   build-and-deploy:
@@ -22,6 +25,9 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Validate project source
+        run: npm run validate:projects
 
       - name: Build
         run: npm run build

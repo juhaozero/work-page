@@ -1,38 +1,71 @@
 [
   {
     "id": "1",
-    "name": "浏览器工具箱",
+    "slug": "browser-toolbox",
     "emoji": "🏷️",
-    "category": "工具",
-    "description": "纯前端浏览器工具箱,一些常用的浏览器工具合集",
     "url": "https://app.juhaozero.com/browser/",
-    "featured": false
+    "featured": false,
+    "tech": [
+      "HTML",
+      "CSS",
+      "JavaScript"
+    ],
+    "createdAt": "2024-06-01",
+    "lifecycle": "active",
+    "name": "浏览器工具箱",
+    "category": "工具",
+    "description": "纯前端浏览器工具箱，一些常用的浏览器工具合集。",
+    "longDescription": "把日常开发与排查里常用的小工具收进同一个纯前端页面：打开即用，无需安装。适合随手测量、转换和调试。"
   },
   {
     "id": "2",
-    "name": "P4G面具合成查询器",
+    "slug": "p4g-persona-fusion",
     "emoji": "🎮",
-    "category": "游戏",
-    "description": "P4G面具合成查询器,可以查询面具的合成配方",
     "url": "https://app.juhaozero.com/persona/",
-    "featured": false
+    "featured": false,
+    "tech": [
+      "TypeScript",
+      "React"
+    ],
+    "createdAt": "2024-08-15",
+    "lifecycle": "active",
+    "name": "P4G面具合成查询器",
+    "category": "游戏",
+    "description": "P4G面具合成查询器，可以查询面具的合成配方。",
+    "longDescription": "面向《女神异闻录4 黄金版》的面具合成查询工具：按目标面具或素材反向查找配方，少翻攻略表。"
   },
   {
     "id": "3",
-    "name": "Ins拼图生成器",
+    "slug": "ins-collage",
     "emoji": "🖼️",
-    "category": "图片",
-    "description": "Ins拼图生成器,可以生成Ins风格的拼图",
     "url": "https://app.juhaozero.com/images/",
-    "featured": false
+    "featured": false,
+    "tech": [
+      "Canvas",
+      "JavaScript"
+    ],
+    "createdAt": "2024-10-01",
+    "lifecycle": "active",
+    "name": "Ins拼图生成器",
+    "category": "图片",
+    "description": "Ins拼图生成器，可以生成Ins风格的拼图。",
+    "longDescription": "在浏览器里拼出 Instagram 风格拼图：排版、导出一气呵成，适合分享前快速出图。"
   },
   {
     "id": "4",
-    "name": "无水印视频下载",
+    "slug": "watermark-video",
     "emoji": "🔨",
-    "category": "工具",
-    "description": "视频链接解析，一键获取无水印视频下载",
     "url": "https://app.juhaozero.com/watermark/",
-    "featured": true
+    "featured": true,
+    "tech": [
+      "TypeScript",
+      "Node"
+    ],
+    "createdAt": "2025-01-20",
+    "lifecycle": "active",
+    "name": "无水印视频下载",
+    "category": "工具",
+    "description": "视频链接解析，一键获取无水印视频下载。",
+    "longDescription": "粘贴视频链接即可解析可下载地址，尽量拿到无水印资源。适合备份与二次剪辑前的素材收集。"
   }
 ]

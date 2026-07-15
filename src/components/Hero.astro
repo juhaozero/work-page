@@ -1,16 +1,18 @@
 ---
 import FeaturedProjects from './FeaturedProjects';
 import type { Project } from '../types/project';
+import type { Locale } from '../i18n/config';
 import type { UITranslations } from '../i18n/ui';
 import { t as format } from '../i18n/ui';
 
 interface Props {
   t: UITranslations;
+  locale: Locale;
   projectCount: number;
   projects: Project[];
 }
 
-const { t, projectCount, projects } = Astro.props;
+const { t, locale, projectCount, projects } = Astro.props;
 const featuredProjects = projects.filter((p) => p.featured);
 const divider = '';
 ---
@@ -47,7 +49,7 @@ const divider = '';
     </div>
 
     {featuredProjects.length > 0 && (
-      <FeaturedProjects projects={featuredProjects} t={t} client:load />
+      <FeaturedProjects projects={featuredProjects} locale={locale} t={t} client:load />
     )}
   </div>
 </section>

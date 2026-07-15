@@ -1,38 +1,71 @@
 [
   {
     "id": "1",
-    "name": "Browser Toolbox",
+    "slug": "browser-toolbox",
     "emoji": "🏷️",
+    "url": "https://app.juhaozero.com/browser/",
+    "featured": false,
+    "tech": [
+      "HTML",
+      "CSS",
+      "JavaScript"
+    ],
+    "createdAt": "2024-06-01",
+    "lifecycle": "active",
+    "name": "Browser Toolbox",
     "category": "Tools",
     "description": "A pure frontend browser toolbox with commonly used utilities.",
-    "url": "https://app.juhaozero.com/browser/",
-    "featured": false
+    "longDescription": "A single-page collection of everyday browser utilities — open and use instantly, no install required. Handy for quick measuring, converting, and debugging."
   },
   {
     "id": "2",
-    "name": "P4G Persona Fusion Finder",
+    "slug": "p4g-persona-fusion",
     "emoji": "🎮",
+    "url": "https://app.juhaozero.com/persona/",
+    "featured": false,
+    "tech": [
+      "TypeScript",
+      "React"
+    ],
+    "createdAt": "2024-08-15",
+    "lifecycle": "active",
+    "name": "P4G Persona Fusion Finder",
     "category": "Games",
     "description": "Look up Persona fusion recipes in Persona 4 Golden.",
-    "url": "https://app.juhaozero.com/persona/",
-    "featured": false
+    "longDescription": "A Persona 4 Golden fusion helper: search by target Persona or materials and find recipes without digging through guide spreadsheets."
   },
   {
     "id": "3",
-    "name": "Instagram Collage Maker",
+    "slug": "ins-collage",
     "emoji": "🖼️",
+    "url": "https://app.juhaozero.com/images/",
+    "featured": false,
+    "tech": [
+      "Canvas",
+      "JavaScript"
+    ],
+    "createdAt": "2024-10-01",
+    "lifecycle": "active",
+    "name": "Instagram Collage Maker",
     "category": "Images",
     "description": "Generate Instagram-style photo collages.",
-    "url": "https://app.juhaozero.com/images/",
-    "featured": false
+    "longDescription": "Build Instagram-style collages in the browser — layout and export in one place, ready to share."
   },
   {
     "id": "4",
-    "name": "Video Downloader",
+    "slug": "watermark-video",
     "emoji": "🔨",
-    "category": "Tools",
-    "description": "Video link parsing, one-click get video download.",
     "url": "https://app.juhaozero.com/watermark/",
-    "featured": true
+    "featured": true,
+    "tech": [
+      "TypeScript",
+      "Node"
+    ],
+    "createdAt": "2025-01-20",
+    "lifecycle": "active",
+    "name": "Video Downloader",
+    "category": "Tools",
+    "description": "Parse a video link and download without watermark when possible.",
+    "longDescription": "Paste a video URL to resolve a downloadable source, preferring watermark-free media when available — handy for archiving or editing."
   }
 ]

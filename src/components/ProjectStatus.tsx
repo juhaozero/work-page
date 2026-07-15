@@ -32,6 +32,7 @@ export default function ProjectStatus({ projectId, labels, className = '' }: Pro
     <span
       className={`${STATUS_CLASS[status]} shrink-0 ${className}`}
       aria-label={ariaLabel[status]}
+      title={statusLabel[status]}
     >
       {statusLabel[status]}
     </span>

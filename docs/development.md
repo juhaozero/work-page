@@ -3,169 +3,191 @@
 ## 架构概览
 
 ```text
+pages/[...locale]/
+├── index.astro                   # 首页目录
+├── about.astro                   # 关于 / Now
+└── projects/[slug].astro         # 项目详情
+
 index.astro
-├── BaseLayout.astro        # HTML 骨架、meta、主题初始化脚本
-│   └── ThemeToggle.tsx     # 右上角暗黑模式按钮
-├── Header.astro            # 标题 + 副标题
-├── FilterBar.tsx           # 分类筛选（React 客户端组件）
-├── ProjectCard.astro × N   # 项目卡片（静态渲染）
-└── Footer.astro            # 邮箱 + GitHub 链接
+├── BaseLayout.astro              # HTML 骨架、SEO、顶栏
+├── ProjectHealthInit.tsx         # 注入构建期 status.json
+├── Hero.astro + FeaturedProjects
+├── ProjectCatalog + ProjectCard
+└── Footer.astro
 ```
 
 站点采用 **Astro SSG + React Islands** 混合架构：
 
-- 页面主体由 Astro 在构建时静态生成，首屏加载极快
-- 仅筛选栏和主题切换按钮以 React 组件形式在客户端激活（`client:load`）
-- 项目数据来自 JSON 文件，构建时注入页面
+- 页面外壳与详情 / About 由 Astro 静态生成
+- 筛选、精选、主题、语言、健康角标以 React 岛屿 `client:load` 激活
+- **唯一内容源**：`src/data/projects.source.json` → 生成中英文 `projects*.json`
+- **构建期健康探测**：`scripts/probe-health.mjs` → `src/data/status.json` + `public/status.json`
+
+### 路由与多语言
+
+| URL | 说明 |
+|-----|------|
+| `/` · `/en/` | 首页 |
+| `/about` · `/en/about/` | 关于 |
+| `/projects/:slug` · `/en/projects/:slug/` | 项目详情 |
+
+配置见 `astro.config.mjs` 的 `i18n`（`prefixDefaultLocale: false`）与 `src/i18n/config.ts`。路径助手：`src/i18n/paths.ts`。
 
 ## 数据流
 
 ```text
-projects.json ──→ index.astro ──→ ProjectCard.astro（静态 HTML）
-site.json     ──→ index.astro ──→ Header / Footer
-                └──→ FilterBar.tsx（categories 数组作为 props）
+projects.source.json
+        │  validate + generate
+        ▼
+projects.json / projects.en.json
+        │
+        ├── probe:health ──→ status.json
+        ├── generate:og  ──→ public/og/projects/*.png
+        ▼
+getProjects(locale)
+        ├── 首页 ItemList JSON-LD + Catalog（链到详情）
+        ├── 详情 SoftwareApplication JSON-LD
+        └── ProjectHealthInit(initialReport)
 ```
 
-### 类型定义
+### 类型与数据文件
 
-`src/types/project.ts` 中定义了 `Project` 和 `SiteConfig` 接口，修改 JSON 结构时需同步更新类型。
+| 文件 | 用途 |
+|------|------|
+| `src/types/project.ts` | `Project` / `HealthReport` 等 |
+| `src/data/projects.source.json` | **唯一编辑入口**（含 `i18n.zh` / `i18n.en`） |
+| `src/data/projects.json` | 生成物（中文），请勿手改 |
+| `src/data/projects.en.json` | 生成物（英文），请勿手改 |
+| `src/data/status.json` | 构建期探测结果 |
+| `src/data/site.json` | 域名、联系方式、默认 OG |
+| `src/i18n/ui.ts` | 界面与 About 文案 |
 
-## 组件说明
+`Project` 主要字段：`id`、`slug`、`name`、`emoji`、`category`、`description`、`longDescription?`、`url`、`featured?`、`repo?`、`tech?`、`createdAt?`、`lifecycle?`、`demo?`、`docs?`、`changelog?`、`cover?`、`screenshots?`。
+
+生命周期 `lifecycle`：`active` | `maintenance` | `archived`（与在线探测状态分离）。
+
+## npm 脚本
+
+| 脚本 | 作用 |
+|------|------|
+| `npm run validate:projects` | 校验源数据（必填、唯一、URL、双语） |
+| `npm run generate:projects` | 从 source 生成中英文 JSON |
+| `npm run probe:health` | 构建期探测，写 status.json |
+| `npm run generate:og` | 按项目生成 OG PNG |
+| `npm run prepare:content` | 上述四步串联 |
+| `npm run build` | `prepare:content` + `astro build` |
+| `npm run dev` | 先 `generate:projects` 再启动开发服 |
+
+## 组件说明（要点）
 
 ### BaseLayout.astro
 
-基础 HTML 布局，负责：
+- SEO：canonical、hreflang、OG/Twitter、可注入 `jsonLd`
+- `path` prop：当前路径（无语言前缀），供语言切换与 hreflang
+- 顶栏：标题链首页、About 链、`LanguageSwitcher`、`ThemeToggle`
 
-- 引入全局样式 `global.css`
-- 设置 `lang="zh-CN"` 与 SEO meta 标签
-- 内联脚本：在页面渲染前读取 localStorage / 系统偏好，避免主题闪烁（FOUC）
-- 固定定位的 `ThemeToggle` 按钮
+### 首页卡片 / 精选
 
-### Header.astro
+卡片与精选跳转**详情页**（非直接外链）；详情页再提供打开 / 仓库等链接。
 
-接收 `title` 和 `subtitle` props，居中展示站点标题与描述。
+### 健康状态
 
-### FilterBar.tsx
+- 默认使用构建期 `status.json`，避免客户端 CORS 误判
+- 详情页展示最近检测时间、`reason`、HTTP 状态
+- `ProjectHealthInit` 可选 `liveRefresh`（默认 `false`）
 
-React 客户端组件，功能：
-
-1. 接收 `categories` 数组，自动添加「全部」选项
-2. 点击按钮时通过 `data-category` 属性显示/隐藏对应 `.project-card` 元素
-3. 当前选中分类高亮为蓝色（`bg-primary`）
-
-> 筛选逻辑直接操作 DOM，避免将整个卡片列表转为 React 组件，保持 Astro 静态渲染的优势。
-
-### ProjectCard.astro
-
-单个项目卡片，包含：
-
-- 序号（No.01、No.02…）
-- emoji 图标、分类标签、项目名称
-- 描述文字
-- 「打开 →」外链按钮（`target="_blank"`）
-- 可选「精选」角标（`featured: true`）
-- hover 时上浮 + 阴影增强
-
-### ThemeToggle.tsx
-
-暗黑模式切换按钮：
-
-- 初始化时读取 `localStorage.getItem('theme')`，无记录则跟随 `prefers-color-scheme`
-- 切换时在 `<html>` 上添加/移除 `dark` class
-- 偏好写入 localStorage 持久化
+相关：`scripts/probe-health.mjs`、`src/lib/projectHealthStore.ts`、`ProjectStatus`。
 
 ### Footer.astro
 
-展示版权年份、邮箱（`mailto:` 链接）和 GitHub 外链。
+版权、About、邮箱、GitHub。
 
 ## 样式系统
 
-使用 **Tailwind CSS v4**，配置位于 `src/styles/global.css`：
+使用 **Tailwind CSS v4**（`src/styles/global.css`）：
 
-```css
-@custom-variant dark (&:where(.dark, .dark *));
+- 暗黑模式：`html.dark` + `--crt-*` CRT 终端变量
+- 字体系列：`JetBrains Mono` + `Noto Sans Mono` / `Noto Sans SC`
 
-@theme {
-  --color-primary: #3b82f6;
-}
-```
-
-- 暗黑模式通过 `html.dark` class 切换（非 `prefers-color-scheme` 媒体查询）
-- 主题色 `--color-primary` 对应 PRD 中的 Accent Blue `#3b82f6`
-- 在组件中使用 `text-primary`、`bg-primary` 等工具类
-
-### 响应式断点
+### 响应式断点（项目网格）
 
 | 断点 | 列数 | Tailwind 前缀 |
 |------|------|---------------|
-| 默认（< 768px） | 1 列 | — |
-| md（≥ 768px） | 2 列 | `md:grid-cols-2` |
+| 默认（< 640px） | 1 列 | — |
+| sm（≥ 640px） | 2 列 | `sm:grid-cols-2` |
 | lg（≥ 1024px） | 3 列 | `lg:grid-cols-3` |
 
 ## 常见开发任务
 
-### 新增一个项目
+### 新增 / 修改项目
 
-1. 打开 `src/data/projects.json`
-2. 在数组末尾添加新对象，确保 `id` 唯一
-3. 保存后开发服务器会自动热更新
+1. **只编辑** `src/data/projects.source.json`
+2. 运行 `npm run validate:projects && npm run generate:projects`（或直接 `npm run dev` / `build`）
+3. 源条目示例结构：
 
-### 新增一个分类
+```json
+{
+  "id": "5",
+  "slug": "my-tool",
+  "emoji": "🧪",
+  "url": "https://example.com/",
+  "featured": false,
+  "tech": ["TypeScript"],
+  "createdAt": "2026-07-15",
+  "lifecycle": "active",
+  "repo": "https://github.com/…",
+  "i18n": {
+    "zh": {
+      "name": "…",
+      "category": "工具",
+      "description": "短描述",
+      "longDescription": "详情长描述"
+    },
+    "en": {
+      "name": "…",
+      "category": "Tools",
+      "description": "…",
+      "longDescription": "…"
+    }
+  }
+}
+```
 
-无需额外配置。在 `projects.json` 中使用新的 `category` 值，筛选栏会自动提取并显示。
+`slug` 需为 kebab-case，且全局唯一。
+
+### 新增分类
+
+在 source 的 `i18n.*.category` 使用新值即可，筛选栏自动提取。
+
+### 修改界面 / About 文案
+
+编辑 `src/i18n/ui.ts`；域名与默认 OG 改 `src/data/site.json`。
 
 ### 修改主题色
 
-编辑 `src/styles/global.css` 中的 `--color-primary` 值即可全局生效。
+改 `global.css` 中 `:root` / `html.dark` 的 `--crt-*`。
 
-### 添加新页面
+### 添加多语言新页
 
-在 `src/pages/` 下创建 `.astro` 文件，Astro 会按文件名自动生成路由。新页面可复用 `BaseLayout.astro`：
+在 `src/pages/[...locale]/` 下新建，并实现与首页相同的 `getStaticPaths`；`BaseLayout` 传入对应 `path`。
 
-```astro
----
-import BaseLayout from '../layouts/BaseLayout.astro';
----
+### 部署
 
-<BaseLayout title="关于">
-  <main>页面内容</main>
-</BaseLayout>
-```
+`.github/workflows/deploy-cos.yml`：
 
-## 性能与 SEO
+- `main` 推送、手动触发，以及 **每天 02:00 UTC** 定时构建（刷新健康状态）
+- CI 先 `validate:projects`，再 `npm run build`（内含探测与 OG 生成）
+- 将 `dist/` 同步到腾讯云 COS
 
-- 全站静态输出，无服务端运行时
-- 仅 2 个 React Islands（FilterBar + ThemeToggle），JS 体积极小
-- `<html lang="zh-CN">`、语义化标签、`aria-label` 无障碍属性
-- Google Fonts 使用 `preconnect` 优化加载
+## 后续拓展方向
 
-目标指标（PRD）：
+### 已完成（原 1–5）
 
-- Lighthouse 各维度 > 90
-- 首屏加载 < 1s（静态托管 + CDN）
+| 项 | 现状 |
+|----|------|
+| 加深内容模型 | `slug` / 长描述 / tech / lifecycle / 多链接等；详情页已上线 |
+| 服务检测可靠化 | 构建期探测 + status.json；详情展示时间与原因；CI 定时重建 |
+| 发现与 SEO | 详情路由、按项目 OG、ItemList / SoftwareApplication |
+| 产品叙事页 | `/about`（含 Now 列表） |
+| 工程工作流 | source 生成双语 JSON + validate 脚本挂 CI |
 
-## 扩展方向
-
-以下功能可在当前架构上渐进添加：
-
-| 功能 | 建议方案 |
-|------|----------|
-| 项目详情页 | `src/pages/projects/[id].astro` 动态路由 |
-| MDX 内容 | `@astrojs/mdx` + Content Collections |
-| 搜索功能 | 客户端 Fuse.js 或 Pagefind |
-| CMS 接入 | Sanity / Contentful，构建时拉取数据 |
-| 多语言 | Astro i18n 路由 |
-
-## 故障排查
-
-### 主题切换后页面闪烁
-
-确保 `BaseLayout.astro` 中的内联 `<script is:inline>` 未被移除，它负责在 CSS 加载前设置 `dark` class。
-
-### 筛选按钮无反应
-
-检查 `ProjectCard.astro` 的根元素是否包含 `class="project-card"` 和 `data-category` 属性。
-
-### 样式未生效
-
-确认 `global.css` 已在 `BaseLayout.astro` 中 `import`，且 `astro.config.mjs` 包含 `@tailwindcss/vite` 插件。

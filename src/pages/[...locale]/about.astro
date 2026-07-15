@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Footer from '../../components/Footer.astro';
+import { locales, getLocaleParam, type Locale } from '../../i18n/config';
+import { getTranslations } from '../../i18n/ui';
+import { homePath } from '../../i18n/paths';
+import site from '../../data/site.json';
+
+export function getStaticPaths() {
+  return locales.map((locale) => ({
+    params: { locale: getLocaleParam(locale) },
+    props: { locale },
+  }));
+}
+
+const { locale } = Astro.props as { locale: Locale };
+const t = getTranslations(locale);
+const homeHref = homePath(locale);
+---
+
+<BaseLayout
+  locale={locale}
+  t={t}
+  path="/about"
+  title={`${t.about.title} · ${t.site.title}`}
+  description={t.about.seoDescription}
+>
+  <main class="flex-1 w-full">
+    <section class="container-main pt-24 sm:pt-28 pb-20 max-w-3xl">
+      <a href={homeHref} class="text-xs mb-8 inline-block hover:opacity-80" style="color: var(--crt-accent);">
+        {t.about.backHome}
+      </a>
+
+      <p class="terminal-label mb-3">{t.nav.about}</p>
+      <h1 class="text-2xl sm:text-3xl font-semibold tracking-tight mb-10">{t.about.title}</h1>
+
+      <div class="space-y-10 text-sm leading-relaxed">
+        <section class="space-y-3">
+          <h2 class="terminal-section-title">{t.about.introTitle}</h2>
+          <p style="color: var(--crt-text-muted);">{t.about.introBody}</p>
+        </section>
+
+        <section class="space-y-3">
+          <h2 class="terminal-section-title">{t.about.stackTitle}</h2>
+          <p style="color: var(--crt-text-muted);">{t.about.stackBody}</p>
+        </section>
+
+        <section class="space-y-3">
+          <h2 class="terminal-section-title">{t.about.nowTitle}</h2>
+          <ul class="space-y-2" style="color: var(--crt-text-muted);">
+            {t.about.nowItems.map((item) => (
+              <li class="flex gap-2">
+                <span style="color: var(--crt-accent);" aria-hidden="true">▸</span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <Footer
+    t={t}
+    locale={locale}
+    domain={site.domain}
+    email={site.email}
+    github={site.github}
+  />
+</BaseLayout>

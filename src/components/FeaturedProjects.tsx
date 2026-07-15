@@ -1,15 +1,18 @@
 import type { Project } from '../types/project';
+import type { Locale } from '../i18n/config';
 import type { UITranslations } from '../i18n/ui';
 import { t as format } from '../i18n/ui';
+import { projectDetailPath } from '../i18n/paths';
 import FeaturedPin from './FeaturedPin';
 import ProjectStatus from './ProjectStatus';
 
 interface FeaturedProjectsProps {
   projects: Project[];
+  locale: Locale;
   t: UITranslations;
 }
 
-export default function FeaturedProjects({ projects, t }: FeaturedProjectsProps) {
+export default function FeaturedProjects({ projects, locale, t }: FeaturedProjectsProps) {
   if (projects.length === 0) return null;
 
   return (
@@ -20,9 +23,7 @@ export default function FeaturedProjects({ projects, t }: FeaturedProjectsProps)
         {projects.map((project, i) => (
           <a
             key={project.id}
-            href={project.url}
-            target="_blank"
-            rel="noopener noreferrer"
+            href={projectDetailPath(locale, project.slug)}
             className="terminal-card terminal-card-hover group relative flex items-center gap-4 p-4 sm:p-5 pl-8 cursor-pointer"
           >
             <FeaturedPin label={t.featured.pinLabel} />
@@ -30,7 +31,9 @@ export default function FeaturedProjects({ projects, t }: FeaturedProjectsProps)
               className="flex h-12 w-12 shrink-0 items-center justify-center text-xl"
               style={{ border: '1px solid var(--crt-border-dim)', background: 'var(--crt-bg)' }}
             >
-              <span role="img" aria-label={project.name}>{project.emoji}</span>
+              <span role="img" aria-label={project.name}>
+                {project.emoji}
+              </span>
             </div>
 
             <div className="flex-1 min-w-0">
