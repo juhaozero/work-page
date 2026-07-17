@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
   # 定时重建以刷新构建期健康探测结果
   schedule:
-    - cron: '0 2 * * *'
+    - cron: '0 9 * * 1'
 
 jobs:
   build-and-deploy:
