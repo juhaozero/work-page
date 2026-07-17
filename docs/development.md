@@ -171,23 +171,3 @@ getProjects(locale)
 
 在 `src/pages/[...locale]/` 下新建，并实现与首页相同的 `getStaticPaths`；`BaseLayout` 传入对应 `path`。
 
-### 部署
-
-`.github/workflows/deploy-cos.yml`：
-
-- `main` 推送、手动触发，以及 **每天 02:00 UTC** 定时构建（刷新健康状态）
-- CI 先 `validate:projects`，再 `npm run build`（内含探测与 OG 生成）
-- 将 `dist/` 同步到腾讯云 COS
-
-## 后续拓展方向
-
-### 已完成（原 1–5）
-
-| 项 | 现状 |
-|----|------|
-| 加深内容模型 | `slug` / 长描述 / tech / lifecycle / 多链接等；详情页已上线 |
-| 服务检测可靠化 | 构建期探测 + status.json；详情展示时间与原因；CI 定时重建 |
-| 发现与 SEO | 详情路由、按项目 OG、ItemList / SoftwareApplication |
-| 产品叙事页 | `/about`（含 Now 列表） |
-| 工程工作流 | source 生成双语 JSON + validate 脚本挂 CI |
-
