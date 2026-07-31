@@ -68,20 +68,21 @@ body {
   position: relative;
 }
 
-/* 静态扫描线纹理 */
+/* 静态扫描线纹理 — 极轻，保持扁平感 */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: 9999;
+  z-index: 50;
   background: repeating-linear-gradient(
     0deg,
     transparent,
-    transparent 2px,
-    var(--crt-scanline) 2px,
+    transparent 3px,
+    var(--crt-scanline) 3px,
     var(--crt-scanline) 4px
   );
+  opacity: 0.45;
 }
 
 ::selection {
@@ -129,17 +130,15 @@ body::before {
 
 /* ── 终端卡片 ── */
 @utility terminal-card {
-  background-color: var(--crt-surface);
-  border: 1px solid var(--crt-border);
+  background-color: transparent;
+  border: 1px solid var(--crt-border-dim);
   border-radius: 0;
-  box-shadow: inset 0 0 0 1px var(--crt-border-dim);
-  transition: border-color 0.15s ease, background-color 0.15s ease;
+  transition: border-color 0.15s ease, opacity 0.15s ease;
 }
 
 @utility terminal-card-hover {
   &:hover {
-    border-color: var(--crt-accent);
-    background-color: var(--crt-surface-2);
+    border-color: var(--crt-border);
   }
 }
 
@@ -166,25 +165,22 @@ body::before {
 }
 
 @utility btn-filter {
-  padding: 0.25rem 0.625rem;
-  font-size: 0.8125rem;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.75rem;
   cursor: pointer;
-  border: 1px solid var(--crt-border-dim);
-  background-color: var(--crt-surface);
-  color: var(--crt-text-muted);
-  transition: border-color 0.15s ease, color 0.15s ease, background-color 0.15s ease;
+  border: none;
+  background-color: transparent;
+  color: var(--crt-text-dim);
+  transition: color 0.15s ease, opacity 0.15s ease;
 }
 
 @utility btn-filter-active {
-  border-color: var(--crt-accent);
   color: var(--crt-accent);
-  background-color: var(--crt-glow);
   font-weight: 600;
 }
 
 @utility btn-filter-inactive {
   &:hover {
-    border-color: var(--crt-accent-dim);
     color: var(--crt-text);
   }
 }

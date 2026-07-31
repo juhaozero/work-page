@@ -1,55 +1,64 @@
 ---
-import FeaturedProjects from './FeaturedProjects';
-import type { Project } from '../types/project';
 import type { Locale } from '../i18n/config';
 import type { UITranslations } from '../i18n/ui';
-import { t as format } from '../i18n/ui';
+import { aboutPath } from '../i18n/paths';
+import site from '../data/site.json';
 
 interface Props {
   t: UITranslations;
   locale: Locale;
-  projectCount: number;
-  projects: Project[];
 }
 
-const { t, locale, projectCount, projects } = Astro.props;
-const featuredProjects = projects.filter((p) => p.featured);
-const divider = '';
+const { t, locale } = Astro.props;
+
+const githubDisplay = site.github.replace(/^https?:\/\//, '');
+const portals = [
+  {
+    label: t.portal.github,
+    href: site.github,
+    display: githubDisplay,
+    external: true,
+  },
+  {
+    label: t.portal.email,
+    href: `mailto:${site.email}`,
+    display: site.email,
+    external: false,
+  },
+  {
+    label: t.portal.about,
+    href: aboutPath(locale),
+    display: t.nav.about,
+    external: false,
+  },
+];
 ---
 
-<section class="container-main pt-24 sm:pt-28 pb-12">
-  <p class="terminal-divider mb-6">{divider}</p>
+<section class="container-main pt-24 sm:pt-28 pb-4" aria-labelledby="portal-heading">
+  <h2 id="portal-heading" class="text-lg font-medium mb-4">
+    {t.portal.title}
+  </h2>
 
-  <div class={`grid gap-10 lg:gap-16 items-start ${featuredProjects.length > 0 ? 'lg:grid-cols-2' : ''}`}>
-    <div class="space-y-6">
-      <div class="space-y-5">
-        <p class="terminal-label">{t.site.eyebrow}</p>
-
-        <h1 class="text-2xl sm:text-3xl md:text-4xl font-semibold leading-snug tracking-tight whitespace-pre-line">
-          {t.site.heroTitle}
-        </h1>
-
-        <p class="text-sm leading-relaxed max-w-lg" style="color: var(--crt-text-muted);">
-          {t.site.heroDescription}
-        </p>
-
-        <p class="text-sm" style="color: var(--crt-text-dim);">{t.site.tagline}</p>
-      </div>
-
-      <div class="flex flex-wrap gap-2 pt-1">
-        <span class="pill-terminal">
-          {format(t.hero.projectsTotal, { count: projectCount })}
+  <ul class="space-y-3">
+    {portals.map((item) => (
+      <li class="flex flex-wrap items-baseline gap-x-4 gap-y-1 sm:gap-x-0">
+        <span
+          class="shrink-0 text-sm sm:w-[12em] sm:pr-4"
+          style="color: var(--crt-text-muted);"
+        >
+          {item.label}
         </span>
-        {featuredProjects.length > 0 && (
-          <span class="pill-terminal">
-            {format(t.hero.featuredCount, { count: featuredProjects.length })}
-          </span>
-        )}
-      </div>
-    </div>
-
-    {featuredProjects.length > 0 && (
-      <FeaturedProjects projects={featuredProjects} locale={locale} t={t} client:load />
-    )}
-  </div>
+        <a
+          href={item.href}
+          class="text-sm hover:opacity-70 transition-opacity duration-150"
+          style="color: var(--crt-accent);"
+          {...(item.external
+            ? { target: '_blank', rel: 'noopener noreferrer' }
+            : {})}
+        >
+          {item.display}
+        </a>
+      </li>
+    ))}
+  </ul>
 </section>

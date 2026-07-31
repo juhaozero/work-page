@@ -29,7 +29,7 @@ const report = healthReport as HealthReport;
 const itemListJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'ItemList',
-  name: t.site.title,
+  name: site.title,
   description: t.site.seo.description,
   numberOfItems: projectList.length,
   itemListElement: projectList.map((project, index) => ({
@@ -44,7 +44,7 @@ const itemListJsonLd = {
 const websiteJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  name: t.site.title,
+  name: site.title,
   description: t.site.seo.description,
   url: new URL(locale === 'zh' ? '/' : `/${locale}/`, siteUrl).href,
   inLanguage: localeHtmlLang[locale],
@@ -59,15 +59,10 @@ const websiteJsonLd = {
 
 <BaseLayout locale={locale} t={t} path="/" jsonLd={[websiteJsonLd, itemListJsonLd]}>
   <ProjectHealthInit projects={projectList} initialReport={report} client:load />
-  <main class="flex-1 w-full space-y-4">
-    <Hero
-      t={t}
-      locale={locale}
-      projectCount={projectList.length}
-      projects={projectList}
-    />
+  <main class="flex-1 w-full">
+    <Hero t={t} locale={locale} />
 
-    <div class="container-main pb-20">
+    <div class="container-main pt-12 pb-20">
       <ProjectCatalog
         projects={projectList}
         categories={categories}
@@ -81,6 +76,7 @@ const websiteJsonLd = {
   <Footer
     t={t}
     locale={locale}
+    siteTitle={site.title}
     domain={site.domain}
     email={site.email}
     github={site.github}

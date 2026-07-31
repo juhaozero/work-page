@@ -2,11 +2,6 @@ import type { Locale } from './config';
 import type { ProjectLifecycle, ProbeReason } from '../types/project';
 
 export interface SiteTranslations {
-  title: string;
-  eyebrow: string;
-  heroTitle: string;
-  heroDescription: string;
-  tagline: string;
   seo: {
     description: string;
     keywords: string[];
@@ -19,6 +14,13 @@ export interface UITranslations {
   nav: {
     online: string;
     home: string;
+    about: string;
+  };
+  portal: {
+    title: string;
+    github: string;
+    email: string;
+    blog: string;
     about: string;
   };
   hero: {
@@ -97,11 +99,6 @@ export interface UITranslations {
 const ui: Record<Locale, UITranslations> = {
   zh: {
     site: {
-      title: '项目炼金室',
-      eyebrow: '零散项目合集',
-      heroTitle: '加一点毒蘑菇\n再加点旧鞋跟',
-      heroDescription: '一些零散的项目合集,打开即用。',
-      tagline: '',
       seo: {
         description: '一些零散的项目合集,打开即用。集中展示个人开发的 Web 工具与小项目。',
         keywords: ['个人项目', '工具合集', '开源', 'Web 应用', '项目展示'],
@@ -111,6 +108,13 @@ const ui: Record<Locale, UITranslations> = {
     nav: {
       online: '◉ 在线',
       home: '首页',
+      about: '关于',
+    },
+    portal: {
+      title: '传送门',
+      github: 'GitHub',
+      blog : '博客',
+      email: '电子邮件',
       about: '关于',
     },
     hero: {
@@ -125,7 +129,7 @@ const ui: Record<Locale, UITranslations> = {
     },
     catalog: {
       divider: '-- 项目目录 ----------------------------------------------',
-      title: '全部项目',
+      title: '作品',
       showing: '显示',
       of: '/ {total} 个',
       categoryPrefix: ' · 分类：',
@@ -170,8 +174,8 @@ const ui: Record<Locale, UITranslations> = {
       },
     },
     about: {
-      title: '关于炼金室',
-      seoDescription: '项目炼金室的设定',
+      title: '',
+      seoDescription: '',
       introTitle: '这是什么',
       introBody:
         '个人作品的索引站,收纳一些个人的小项目',
@@ -185,9 +189,9 @@ const ui: Record<Locale, UITranslations> = {
       backHome: '← 返回首页',
     },
     footer: {
-      contact: '◆ 联系',
-      github: '▶ GitHub',
-      about: '◇ 关于',
+      contact: '联系',
+      github: 'GitHub',
+      about: '关于',
     },
     theme: {
       toLight: '切换为亮色模式',
@@ -201,11 +205,6 @@ const ui: Record<Locale, UITranslations> = {
   },
   en: {
     site: {
-      title: 'Project Alchemy Lab',
-      eyebrow: 'Misc project collection',
-      heroTitle: 'A pinch of poison mushroom\nAnd a dash of old shoe heel',
-      heroDescription: 'A collection of small projects — open and use instantly.',
-      tagline: '',
       seo: {
         description:
           'A collection of small projects — open and use instantly. Showcasing personal Web tools and side projects.',
@@ -216,6 +215,13 @@ const ui: Record<Locale, UITranslations> = {
     nav: {
       online: '◉ Online',
       home: 'Home',
+      about: 'About',
+    },
+    portal: {
+      title: 'Portal',
+      github: 'GitHub',
+      blog : 'Blog',
+      email: 'Email',
       about: 'About',
     },
     hero: {
@@ -230,7 +236,7 @@ const ui: Record<Locale, UITranslations> = {
     },
     catalog: {
       divider: '-- Project catalog ----------------------------------------',
-      title: 'All projects',
+      title: 'Works',
       showing: 'Showing',
       of: ' / {total}',
       categoryPrefix: ' · Category: ',
@@ -275,8 +281,8 @@ const ui: Record<Locale, UITranslations> = {
       },
     },
     about: {
-      title: 'About the Lab',
-      seoDescription: 'What Project Alchemy Lab is, how it is built, and what is new.',
+      title: '',
+      seoDescription: '',
       introTitle: 'What this is',
       introBody:
         'A personal project index: collect some small projects.',
@@ -290,9 +296,9 @@ const ui: Record<Locale, UITranslations> = {
       backHome: '← Back home',
     },
     footer: {
-      contact: '◆ Contact',
-      github: '▶ GitHub',
-      about: '◇ About',
+      contact: 'Contact',
+      github: 'GitHub',
+      about: 'About',
     },
     theme: {
       toLight: 'Switch to light mode',

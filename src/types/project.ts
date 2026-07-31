@@ -31,10 +31,6 @@ export interface SiteConfig {
   title: string;
   domain: string;
   url?: string;
-  eyebrow: string;
-  heroTitle: string;
-  heroDescription: string;
-  tagline: string;
   email: string;
   github: string;
   seo?: {

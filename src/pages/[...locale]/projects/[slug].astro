@@ -91,7 +91,7 @@ const checkedAtLabel =
   locale={locale}
   t={t}
   path={pagePath}
-  title={`${project.name} · ${t.site.title}`}
+  title={`${project.name} · ${site.title}`}
   description={project.description}
   ogImage={ogImage}
   jsonLd={softwareJsonLd}
@@ -100,24 +100,16 @@ const checkedAtLabel =
 
   <main class="flex-1 w-full">
     <article class="container-main pt-24 sm:pt-28 pb-20 max-w-3xl">
-      <a href={homeHref} class="text-xs mb-8 inline-block hover:opacity-80" style="color: var(--crt-accent);">
+      <a href={homeHref} class="text-xs mb-8 inline-block hover:opacity-70 transition-opacity duration-150" style="color: var(--crt-accent);">
         {t.project.backToCatalog}
       </a>
 
       <div class="flex items-start gap-4 mb-8">
-        <div
-          class="flex h-14 w-14 items-center justify-center text-2xl shrink-0"
-          style="border: 1px solid var(--crt-border-dim); background: var(--crt-bg);"
-        >
-          <span role="img" aria-label={project.name}>{project.emoji}</span>
-        </div>
-        <div class="min-w-0 space-y-3">
-          <h1 class="text-2xl sm:text-3xl font-semibold tracking-tight">{project.name}</h1>
-          <div class="flex flex-wrap items-center gap-2">
-            <span class="tag-terminal">{project.category}</span>
-            {project.lifecycle && (
-              <span class="tag-terminal">{t.project.lifecycle[project.lifecycle]}</span>
-            )}
+        <div class="text-2xl shrink-0" aria-hidden="true">{project.emoji}</div>
+        <div class="min-w-0 space-y-2">
+          <h1 class="text-2xl sm:text-3xl font-medium text-balance">{project.name}</h1>
+          <div class="flex flex-wrap items-center gap-3 text-sm">
+            <span style="color: var(--crt-text-muted);">{project.category}</span>
             <span class={healthClass}>{healthLabel}</span>
           </div>
         </div>
@@ -132,20 +124,9 @@ const checkedAtLabel =
         </p>
       )}
 
-      <p class="text-sm leading-relaxed mb-10" style="color: var(--crt-text-muted);">
+      <p class="text-sm leading-relaxed text-pretty mb-10" style="color: var(--crt-text-muted);">
         {longCopy}
       </p>
-
-      {project.tech && project.tech.length > 0 && (
-        <section class="mb-10 space-y-3">
-          <h2 class="terminal-section-title">{t.project.techLabel}</h2>
-          <div class="flex flex-wrap gap-2">
-            {project.tech.map((tech) => (
-              <span class="tag-terminal">{tech}</span>
-            ))}
-          </div>
-        </section>
-      )}
 
       {project.createdAt && (
         <p class="text-xs mb-10" style="color: var(--crt-text-dim);">
@@ -154,14 +135,15 @@ const checkedAtLabel =
       )}
 
       <section class="space-y-3">
-        <h2 class="terminal-section-title">{t.project.linksLabel}</h2>
-        <div class="flex flex-wrap gap-3">
+        <h2 class="text-lg font-medium">{t.project.linksLabel}</h2>
+        <div class="flex flex-wrap gap-x-4 gap-y-2">
           {links.map((link) => (
             <a
               href={link.href}
               target="_blank"
               rel="noopener noreferrer"
-              class="btn-terminal text-xs"
+              class="text-sm hover:opacity-70 transition-opacity duration-150"
+              style="color: var(--crt-accent);"
             >
               {link.label}
             </a>
@@ -174,6 +156,7 @@ const checkedAtLabel =
   <Footer
     t={t}
     locale={locale}
+    siteTitle={site.title}
     domain={site.domain}
     email={site.email}
     github={site.github}
