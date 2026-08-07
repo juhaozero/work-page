@@ -1,5 +1,5 @@
 User-agent: *
 Allow: /
 
-Sitemap:  https://work.juhaozero.com/sitemap-index.xml
-Sitemap:  https://work.juhaozero.com/baidusitemap.xml
+Sitemap:  https://dev.juhaozero.com/sitemap-index.xml
+Sitemap:  https://dev.juhaozero.com/baidusitemap.xml

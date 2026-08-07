@@ -2,7 +2,7 @@
 
 终端风格的个人项目展示站：集中索引作品，支持分类筛选、精选、暗黑模式、中英双语、项目详情与构建期服务探测。
 
-线上地址：https://work.juhaozero.com
+线上地址：https://dev.juhaozero.com
 
 ## 技术栈
 
