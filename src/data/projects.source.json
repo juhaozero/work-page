@@ -94,5 +94,30 @@
         "longDescription": "Paste a video URL to resolve a downloadable source, preferring watermark-free media when available — handy for archiving or editing."
       }
     }
+  },
+  {
+    "id": "5",
+    "slug": "tarot-hall",
+    "emoji": "🎲",
+    "url": "https://app.juhaozero.com/tarot/",
+    "featured": true,
+    "tech": ["TypeScript", "React"],
+    "createdAt": "2025-03-20",
+    "lifecycle": "active",
+    "i18n": {
+      "zh": {
+        "name": "算了吗",
+        "category": "娱乐",
+        "description": "塔罗牌占卜，可以占卜塔罗牌的含义。",
+        "longDescription": "塔罗牌占卜，可以占卜塔罗牌的含义，并给出建议。"
+      },
+      "en": {
+        "name": "tarot-hall",
+        "category": "Tools",
+        "description": "Tarot card reading.",
+        "longDescription": "Tarot card reading."
+      }
+    }
   }
+  
 ]

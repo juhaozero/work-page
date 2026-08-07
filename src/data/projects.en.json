@@ -67,5 +67,22 @@
     "category": "Tools",
     "description": "Parse a video link and download without watermark when possible.",
     "longDescription": "Paste a video URL to resolve a downloadable source, preferring watermark-free media when available — handy for archiving or editing."
+  },
+  {
+    "id": "5",
+    "slug": "tarot-hall",
+    "emoji": "🎲",
+    "url": "https://app.juhaozero.com/tarot/",
+    "featured": true,
+    "tech": [
+      "TypeScript",
+      "React"
+    ],
+    "createdAt": "2025-03-20",
+    "lifecycle": "active",
+    "name": "tarot-hall",
+    "category": "Tools",
+    "description": "Tarot card reading.",
+    "longDescription": "Tarot card reading."
   }
 ]

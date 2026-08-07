@@ -67,5 +67,22 @@
     "category": "工具",
     "description": "视频链接解析，一键获取无水印视频下载。",
     "longDescription": "粘贴视频链接即可解析可下载地址，尽量拿到无水印资源。适合备份与二次剪辑前的素材收集。"
+  },
+  {
+    "id": "5",
+    "slug": "tarot-hall",
+    "emoji": "🎲",
+    "url": "https://app.juhaozero.com/tarot/",
+    "featured": true,
+    "tech": [
+      "TypeScript",
+      "React"
+    ],
+    "createdAt": "2025-03-20",
+    "lifecycle": "active",
+    "name": "算了吗",
+    "category": "娱乐",
+    "description": "塔罗牌占卜，可以占卜塔罗牌的含义。",
+    "longDescription": "塔罗牌占卜，可以占卜塔罗牌的含义，并给出建议。"
   }
 ]
