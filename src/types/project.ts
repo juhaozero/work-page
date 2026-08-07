@@ -33,6 +33,8 @@ export interface SiteConfig {
   url?: string;
   email: string;
   github: string;
+  blog?: string;
+  avatar?: string;
   seo?: {
     description?: string;
     keywords?: string[];

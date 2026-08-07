@@ -18,6 +18,7 @@ export interface UITranslations {
   };
   portal: {
     title: string;
+    avatarAlt: string;
     github: string;
     email: string;
     blog: string;
@@ -111,7 +112,8 @@ const ui: Record<Locale, UITranslations> = {
       about: '关于',
     },
     portal: {
-      title: '传送门',
+      title: '',
+      avatarAlt: '头像',
       github: 'GitHub',
       blog : '博客',
       email: '电子邮件',
@@ -219,6 +221,7 @@ const ui: Record<Locale, UITranslations> = {
     },
     portal: {
       title: 'Portal',
+      avatarAlt: 'Avatar',
       github: 'GitHub',
       blog : 'Blog',
       email: 'Email',
