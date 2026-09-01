@@ -131,7 +131,7 @@ const ui: Record<Locale, UITranslations> = {
     },
     catalog: {
       divider: '-- 项目目录 ----------------------------------------------',
-      title: '作品',
+      title: '个人作品',
       showing: '显示',
       of: '/ {total} 个',
       categoryPrefix: ' · 分类：',
@@ -239,7 +239,7 @@ const ui: Record<Locale, UITranslations> = {
     },
     catalog: {
       divider: '-- Project catalog ----------------------------------------',
-      title: 'Works',
+      title: 'Personal works',
       showing: 'Showing',
       of: ' / {total}',
       categoryPrefix: ' · Category: ',
