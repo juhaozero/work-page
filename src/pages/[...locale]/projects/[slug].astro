@@ -1,14 +1,19 @@
 ---
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-import Footer from '../../../components/Footer.astro';
-import ProjectHealthInit from '../../../components/ProjectHealthInit';
-import { locales, getLocaleParam, localeHtmlLang, type Locale } from '../../../i18n/config';
-import { getTranslations, t as format } from '../../../i18n/ui';
-import { getProjects } from '../../../i18n/projects';
-import { homePath, projectDetailPath } from '../../../i18n/paths';
-import site from '../../../data/site.json';
-import healthReport from '../../../data/status.json';
-import type { HealthReport, Project } from '../../../types/project';
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import Footer from "../../../components/Footer.astro";
+import ProjectHealthInit from "../../../components/ProjectHealthInit";
+import {
+  locales,
+  getLocaleParam,
+  localeHtmlLang,
+  type Locale,
+} from "../../../i18n/config";
+import { getTranslations, t as format } from "../../../i18n/ui";
+import { getProjects } from "../../../i18n/projects";
+import { homePath, projectDetailPath } from "../../../i18n/paths";
+import site from "../../../data/site.json";
+import healthReport from "../../../data/status.json";
+import type { HealthReport, Project } from "../../../types/project";
 
 export function getStaticPaths() {
   return locales.flatMap((locale) => {
@@ -40,29 +45,31 @@ const links = [
     ? { href: project.demo, label: t.project.demo }
     : null,
   project.docs ? { href: project.docs, label: t.project.docs } : null,
-  project.changelog ? { href: project.changelog, label: t.project.changelog } : null,
+  project.changelog
+    ? { href: project.changelog, label: t.project.changelog }
+    : null,
   project.repo ? { href: project.repo, label: t.project.repo } : null,
 ].filter(Boolean) as { href: string; label: string }[];
 
 const softwareJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'SoftwareApplication',
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
   name: project.name,
   description: longCopy,
   url: pageUrl,
   applicationCategory: project.category,
-  operatingSystem: 'Web',
+  operatingSystem: "Web",
   inLanguage: localeHtmlLang[locale],
   image: new URL(ogImage, siteUrl).href,
   ...(project.createdAt ? { dateCreated: project.createdAt } : {}),
-  ...(project.tech?.length ? { keywords: project.tech.join(', ') } : {}),
+  ...(project.tech?.length ? { keywords: project.tech.join(", ") } : {}),
   offers: {
-    '@type': 'Offer',
-    price: '0',
-    priceCurrency: 'CNY',
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "CNY",
   },
   author: {
-    '@type': 'Person',
+    "@type": "Person",
     name: t.site.seo.author,
     url: site.github,
   },
@@ -75,14 +82,16 @@ const healthLabel = health
   : t.status.checking;
 const healthClass = health
   ? health.online
-    ? 'status-online'
-    : 'status-offline'
-  : 'status-checking';
+    ? "status-online"
+    : "status-offline"
+  : "status-checking";
 const reasonLabel = health ? t.status.reason[health.reason] : null;
 const checkedAtLabel =
-  report.checkedAt && report.checkedAt !== '1970-01-01T00:00:00.000Z'
+  report.checkedAt && report.checkedAt !== "1970-01-01T00:00:00.000Z"
     ? format(t.status.checkedAt, {
-        time: new Date(report.checkedAt).toLocaleString(locale === 'zh' ? 'zh-CN' : 'en-US'),
+        time: new Date(report.checkedAt).toLocaleString(
+          locale === "zh" ? "zh-CN" : "en-US",
+        ),
       })
     : null;
 ---
@@ -94,60 +103,72 @@ const checkedAtLabel =
   title={`${project.name} · ${site.title}`}
   description={project.description}
   ogImage={ogImage}
-  jsonLd={softwareJsonLd}
->
+  jsonLd={softwareJsonLd}>
   <ProjectHealthInit projects={[project]} initialReport={report} client:load />
 
   <main class="flex-1 w-full">
     <article class="container-main pt-24 sm:pt-28 pb-20 max-w-3xl">
-      <a href={homeHref} class="text-xs mb-8 inline-block hover:opacity-70 transition-opacity duration-150" style="color: var(--crt-accent);">
+      <a
+        href={homeHref}
+        class="text-xs mb-8 inline-block hover:opacity-70 transition-opacity duration-150"
+        style="color: var(--crt-accent);">
         {t.project.backToCatalog}
       </a>
 
       <div class="flex items-start gap-4 mb-8">
         <div class="text-2xl shrink-0" aria-hidden="true">{project.emoji}</div>
         <div class="min-w-0 space-y-2">
-          <h1 class="text-2xl sm:text-3xl font-medium text-balance">{project.name}</h1>
+          <h1 class="text-2xl sm:text-3xl font-medium text-balance">
+            {project.name}
+          </h1>
           <div class="flex flex-wrap items-center gap-3 text-sm">
-            <span style="color: var(--crt-text-muted);">{project.category}</span>
+            <span style="color: var(--crt-text-muted);">{project.category}</span
+            >
             <span class={healthClass}>{healthLabel}</span>
           </div>
         </div>
       </div>
 
-      {(checkedAtLabel || reasonLabel || health?.httpStatus != null) && (
-        <p class="text-xs mb-8 space-x-3" style="color: var(--crt-text-dim);">
-          {checkedAtLabel && <span>{checkedAtLabel}</span>}
-          {reasonLabel && <span>· {reasonLabel}</span>}
-          {health?.httpStatus != null && <span>· HTTP {health.httpStatus}</span>}
-          {health?.error && !health.online && <span>· {health.error}</span>}
-        </p>
-      )}
+      {
+        (checkedAtLabel || reasonLabel || health?.httpStatus != null) && (
+          <p class="text-xs mb-8 space-x-3" style="color: var(--crt-text-dim);">
+            {checkedAtLabel && <span>{checkedAtLabel}</span>}
+            {reasonLabel && <span>· {reasonLabel}</span>}
+            {/* {health?.httpStatus != null && <span>· HTTP {health.httpStatus}</span>} */}
+            {health?.error && !health.online && <span>· {health.error}</span>}
+          </p>
+        )
+      }
 
-      <p class="text-sm leading-relaxed text-pretty mb-10" style="color: var(--crt-text-muted);">
+      <p
+        class="text-sm leading-relaxed text-pretty mb-10"
+        style="color: var(--crt-text-muted);">
         {longCopy}
       </p>
 
-      {project.createdAt && (
-        <p class="text-xs mb-10" style="color: var(--crt-text-dim);">
-          {format(t.project.createdAt, { date: project.createdAt })}
-        </p>
-      )}
+      {
+        project.createdAt && (
+          <p class="text-xs mb-10" style="color: var(--crt-text-dim);">
+            {format(t.project.createdAt, { date: project.createdAt })}
+          </p>
+        )
+      }
 
       <section class="space-y-3">
         <h2 class="text-lg font-medium">{t.project.linksLabel}</h2>
         <div class="flex flex-wrap gap-x-4 gap-y-2">
-          {links.map((link) => (
-            <a
-              href={link.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="text-sm hover:opacity-70 transition-opacity duration-150"
-              style="color: var(--crt-accent);"
-            >
-              {link.label}
-            </a>
-          ))}
+          {
+            links.map((link) => (
+              <a
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-sm hover:opacity-70 transition-opacity duration-150"
+                style="color: var(--crt-accent);">
+                {link.label}
+              </a>
+            ))
+          }
         </div>
       </section>
     </article>

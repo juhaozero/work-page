@@ -139,6 +139,7 @@ const aboutHref = aboutPath(locale);
           "(prefers-color-scheme: dark)",
         ).matches;
         if (stored === "dark" || (!stored && prefersDark)) {
+          w;
           document.documentElement.classList.add("dark");
         }
       })();
