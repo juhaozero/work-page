@@ -44,6 +44,13 @@ export interface UITranslations {
     filterAriaLabel: string;
     emptyTitle: string;
     emptyHint: string;
+    columns: {
+      name: string;
+      category: string;
+      tech: string;
+      status: string;
+      date: string;
+    };
   };
   project: {
     indexLabel: string;
@@ -52,6 +59,7 @@ export interface UITranslations {
     backToCatalog: string;
     techLabel: string;
     linksLabel: string;
+    summaryLabel: string;
     demo: string;
     docs: string;
     changelog: string;
@@ -139,6 +147,13 @@ const ui: Record<Locale, UITranslations> = {
       filterAriaLabel: '项目分类筛选',
       emptyTitle: '未找到匹配的项目',
       emptyHint: '试试切换其他分类',
+      columns: {
+        name: '名称',
+        category: '分类',
+        tech: '技术',
+        status: '状态',
+        date: '日期',
+      },
     },
     project: {
       indexLabel: '项目 {index}',
@@ -147,6 +162,7 @@ const ui: Record<Locale, UITranslations> = {
       backToCatalog: '← 返回目录',
       techLabel: '技术栈',
       linksLabel: '相关链接',
+      summaryLabel: '简介',
       demo: '演示',
       docs: '文档',
       changelog: '更新日志',
@@ -176,8 +192,8 @@ const ui: Record<Locale, UITranslations> = {
       },
     },
     about: {
-      title: '',
-      seoDescription: '',
+      title: '关于本站',
+      seoDescription: '个人小项目索引站：技术栈、近期动态与站点说明。',
       introTitle: '这是什么',
       introBody:
         '个人作品的索引站,收纳一些个人的小项目',
@@ -247,6 +263,13 @@ const ui: Record<Locale, UITranslations> = {
       filterAriaLabel: 'Project category filter',
       emptyTitle: 'No matching projects',
       emptyHint: 'Try another category',
+      columns: {
+        name: 'Name',
+        category: 'Category',
+        tech: 'Tech',
+        status: 'Status',
+        date: 'Date',
+      },
     },
     project: {
       indexLabel: 'Project {index}',
@@ -255,6 +278,7 @@ const ui: Record<Locale, UITranslations> = {
       backToCatalog: '← Back to catalog',
       techLabel: 'Tech stack',
       linksLabel: 'Links',
+      summaryLabel: 'Summary',
       demo: 'Demo',
       docs: 'Docs',
       changelog: 'Changelog',
@@ -284,8 +308,9 @@ const ui: Record<Locale, UITranslations> = {
       },
     },
     about: {
-      title: '',
-      seoDescription: '',
+      title: 'About',
+      seoDescription:
+        'About this personal project index: stack, recent notes, and site notes.',
       introTitle: 'What this is',
       introBody:
         'A personal project index: collect some small projects.',

@@ -2,6 +2,7 @@
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import Footer from "../../../components/Footer.astro";
 import ProjectHealthInit from "../../../components/ProjectHealthInit";
+import ProjectStatus from "../../../components/ProjectStatus";
 import {
   locales,
   getLocaleParam,
@@ -11,6 +12,7 @@ import {
 import { getTranslations, t as format } from "../../../i18n/ui";
 import { getProjects } from "../../../i18n/projects";
 import { homePath, projectDetailPath } from "../../../i18n/paths";
+import { projectGlyph } from "../../../lib/projectGlyph";
 import site from "../../../data/site.json";
 import healthReport from "../../../data/status.json";
 import type { HealthReport, Project } from "../../../types/project";
@@ -32,15 +34,16 @@ const { locale, project } = Astro.props as { locale: Locale; project: Project };
 const t = getTranslations(locale);
 const siteUrl = site.url ?? `https://${site.domain}`;
 const report = healthReport as HealthReport;
-const health = report.projects[project.id];
 const homeHref = homePath(locale);
 const pagePath = `/projects/${project.slug}`;
 const pageUrl = new URL(projectDetailPath(locale, project.slug), siteUrl).href;
 const ogImage = project.cover ?? `/og/projects/${project.slug}.png`;
 const longCopy = project.longDescription ?? project.description;
+const glyph = projectGlyph(project.slug);
+const cols = t.catalog.columns;
 
-const links = [
-  { href: project.url, label: t.project.openLabel },
+const primaryLink = { href: project.url, label: t.project.openLabel };
+const secondaryLinks = [
   project.demo && project.demo !== project.url
     ? { href: project.demo, label: t.project.demo }
     : null,
@@ -75,16 +78,7 @@ const softwareJsonLd = {
   },
 };
 
-const healthLabel = health
-  ? health.online
-    ? t.status.online
-    : t.status.offline
-  : t.status.checking;
-const healthClass = health
-  ? health.online
-    ? "status-online"
-    : "status-offline"
-  : "status-checking";
+const health = report.projects[project.id];
 const reasonLabel = health ? t.status.reason[health.reason] : null;
 const checkedAtLabel =
   report.checkedAt && report.checkedAt !== "1970-01-01T00:00:00.000Z"
@@ -94,6 +88,11 @@ const checkedAtLabel =
         ),
       })
     : null;
+const lifecycleLabel = project.lifecycle
+  ? t.project.lifecycle[project.lifecycle]
+  : null;
+const techLine =
+  project.tech && project.tech.length > 0 ? project.tech.join(" · ") : null;
 ---
 
 <BaseLayout
@@ -110,60 +109,129 @@ const checkedAtLabel =
     <article class="container-main pt-24 sm:pt-28 pb-20 max-w-3xl">
       <a
         href={homeHref}
-        class="text-xs mb-8 inline-block hover:opacity-70 transition-opacity duration-150"
+        class="text-xs mb-8 inline-block transition-opacity duration-150 hover:opacity-70"
         style="color: var(--crt-accent);">
         {t.project.backToCatalog}
       </a>
 
-      <div class="flex items-start gap-4 mb-8">
-        <div class="text-2xl shrink-0" aria-hidden="true">{project.emoji}</div>
-        <div class="min-w-0 space-y-2">
-          <h1 class="text-2xl sm:text-3xl font-medium text-balance">
-            {project.name}
-          </h1>
-          <div class="flex flex-wrap items-center gap-3 text-sm">
-            <span style="color: var(--crt-text-muted);">{project.category}</span
-            >
-            <span class={healthClass}>{healthLabel}</span>
+      {/* 与首页精选卡同构的头部 */}
+      <header class="terminal-card relative mb-8 py-3 px-3 sm:px-4">
+        <div class="flex items-start gap-3">
+          <div
+            class="terminal-glyph !h-10 !w-10 !text-xs"
+            aria-hidden="true">{glyph}</div>
+          <div class="min-w-0 space-y-1.5">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="tag-terminal">{project.category}</span>
+              {
+                lifecycleLabel && (
+                  <span class="tag-terminal">{lifecycleLabel}</span>
+                )
+              }
+              <ProjectStatus
+                projectId={project.id}
+                labels={t.status}
+                client:load
+              />
+            </div>
+            <h1 class="text-lg sm:text-xl font-semibold tracking-tight text-balance">
+              {project.name}
+            </h1>
+            <p
+              class="text-xs leading-snug text-pretty"
+              style="color: var(--crt-text-muted);">
+              {project.description}
+            </p>
           </div>
         </div>
-      </div>
+      </header>
+
+      {/* 与方案 A 目录列对齐的元信息行 */}
+      <dl class="mb-10 border-t border-[var(--crt-border-dim)]">
+        <div
+          class="flex flex-wrap items-baseline gap-x-4 gap-y-1 sm:gap-x-0 py-3 border-b border-[var(--crt-border-dim)]">
+          <dt
+            class="shrink-0 text-xs sm:w-[8em] sm:pr-4 terminal-label !normal-case !tracking-normal">
+            {cols.category}
+          </dt>
+          <dd class="text-sm" style="color: var(--crt-text-muted);">
+            {project.category}
+          </dd>
+        </div>
+        {
+          techLine && (
+            <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1 sm:gap-x-0 py-3 border-b border-[var(--crt-border-dim)]">
+              <dt class="shrink-0 text-xs sm:w-[8em] sm:pr-4 terminal-label !normal-case !tracking-normal">
+                {cols.tech}
+              </dt>
+              <dd class="text-sm" style="color: var(--crt-text-muted);">
+                {techLine}
+              </dd>
+            </div>
+          )
+        }
+        <div
+          class="flex flex-wrap items-baseline gap-x-4 gap-y-1 sm:gap-x-0 py-3 border-b border-[var(--crt-border-dim)]">
+          <dt
+            class="shrink-0 text-xs sm:w-[8em] sm:pr-4 terminal-label !normal-case !tracking-normal">
+            {cols.status}
+          </dt>
+          <dd class="text-sm">
+            <ProjectStatus projectId={project.id} labels={t.status} client:load />
+          </dd>
+        </div>
+        {
+          project.createdAt && (
+            <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1 sm:gap-x-0 py-3 border-b border-[var(--crt-border-dim)]">
+              <dt class="shrink-0 text-xs sm:w-[8em] sm:pr-4 terminal-label !normal-case !tracking-normal">
+                {cols.date}
+              </dt>
+              <dd
+                class="text-sm tabular-nums"
+                style="color: var(--crt-text-muted);">
+                {project.createdAt}
+              </dd>
+            </div>
+          )
+        }
+      </dl>
 
       {
-        (checkedAtLabel || reasonLabel || health?.httpStatus != null) && (
+        (checkedAtLabel || reasonLabel || (health?.error && !health.online)) && (
           <p class="text-xs mb-8 space-x-3" style="color: var(--crt-text-dim);">
             {checkedAtLabel && <span>{checkedAtLabel}</span>}
             {reasonLabel && <span>· {reasonLabel}</span>}
-            {/* {health?.httpStatus != null && <span>· HTTP {health.httpStatus}</span>} */}
             {health?.error && !health.online && <span>· {health.error}</span>}
           </p>
         )
       }
 
-      <p
-        class="text-sm leading-relaxed text-pretty mb-10"
-        style="color: var(--crt-text-muted);">
-        {longCopy}
-      </p>
+      <section class="mb-10 space-y-3">
+        <h2 class="terminal-label">{t.project.summaryLabel}</h2>
+        <p
+          class="text-sm leading-relaxed text-pretty"
+          style="color: var(--crt-text-muted);">
+          {longCopy}
+        </p>
+      </section>
 
-      {
-        project.createdAt && (
-          <p class="text-xs mb-10" style="color: var(--crt-text-dim);">
-            {format(t.project.createdAt, { date: project.createdAt })}
-          </p>
-        )
-      }
-
-      <section class="space-y-3">
-        <h2 class="text-lg font-medium">{t.project.linksLabel}</h2>
-        <div class="flex flex-wrap gap-x-4 gap-y-2">
+      <section class="space-y-4">
+        <h2 class="terminal-label">{t.project.linksLabel}</h2>
+        <div class="flex flex-wrap items-center gap-3">
+          <a
+            href={primaryLink.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-terminal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--crt-accent)]">
+            {primaryLink.label}
+          </a>
           {
-            links.map((link) => (
+            secondaryLinks.map((link) => (
               <a
                 href={link.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="text-sm hover:opacity-70 transition-opacity duration-150"
+                class="text-sm transition-opacity duration-150 hover:opacity-70"
                 style="color: var(--crt-accent);">
                 {link.label}
               </a>

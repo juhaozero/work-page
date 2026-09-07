@@ -39,6 +39,11 @@ html.dark {
   --crt-scanline: rgba(95, 230, 106, 0.025);
   --crt-selection-bg: rgba(95, 230, 106, 0.2);
   --crt-selection-text: #5fe66a;
+  color-scheme: dark;
+}
+
+html:not(.dark) {
+  color-scheme: light;
 }
 
 html {
@@ -130,15 +135,69 @@ body::before {
 
 /* ── 终端卡片 ── */
 @utility terminal-card {
-  background-color: transparent;
+  background-color: var(--crt-surface);
   border: 1px solid var(--crt-border-dim);
   border-radius: 0;
-  transition: border-color 0.15s ease, opacity 0.15s ease;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 @utility terminal-card-hover {
   &:hover {
     border-color: var(--crt-border);
+    box-shadow: inset 2px 0 0 var(--crt-accent);
+  }
+}
+
+@utility terminal-glyph {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  flex-shrink: 0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--crt-accent);
+  border: 1px solid var(--crt-border-dim);
+  background-color: var(--crt-bg);
+  user-select: none;
+}
+
+/* ── 方案 A：终端表 ── */
+@utility terminal-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+}
+
+@utility terminal-th {
+  padding: 0.5rem 0.75rem 0.5rem 0;
+  text-align: left;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--crt-text-dim);
+  border-bottom: 1px solid var(--crt-border);
+  white-space: nowrap;
+}
+
+@utility terminal-td {
+  padding: 0.75rem 0.75rem 0.75rem 0;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--crt-border-dim);
+}
+
+@utility terminal-row {
+  transition: background-color 0.15s ease, box-shadow 0.15s ease;
+
+  &:hover {
+    background-color: var(--crt-glow);
+    box-shadow: inset 2px 0 0 var(--crt-accent);
   }
 }
 
@@ -260,29 +319,4 @@ html.dark .select-terminal {
 @keyframes status-pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.45; }
-}
-
-@utility featured-pin {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.625rem;
-  height: 1.625rem;
-  color: var(--crt-accent);
-  background-color: var(--crt-surface-2);
-  border-right: 1px solid var(--crt-border-dim);
-  border-bottom: 1px solid var(--crt-border-dim);
-  box-shadow: 1px 1px 0 var(--crt-border-dim);
-  pointer-events: none;
-  transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
-}
-
-@utility featured-pin-icon {
-  width: 0.75rem;
-  height: 0.75rem;
-  transform: rotate(-45deg);
 }

@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Hero from '../../components/Hero.astro';
 import Footer from '../../components/Footer.astro';
+import FeaturedProjects from '../../components/FeaturedProjects';
 import ProjectCatalog from '../../components/ProjectCatalog';
 import ProjectHealthInit from '../../components/ProjectHealthInit';
 import { locales, getLocaleParam, type Locale, localeHtmlLang } from '../../i18n/config';
@@ -22,6 +23,7 @@ export function getStaticPaths() {
 const { locale } = Astro.props as { locale: Locale };
 const t = getTranslations(locale);
 const projectList = getProjects(locale);
+const featuredProjects = projectList.filter((p) => p.featured);
 const categories = [...new Set(projectList.map((p) => p.category))];
 const siteUrl = site.url ?? `https://${site.domain}`;
 const report = healthReport as HealthReport;
@@ -60,9 +62,19 @@ const websiteJsonLd = {
 <BaseLayout locale={locale} t={t} path="/" jsonLd={[websiteJsonLd, itemListJsonLd]}>
   <ProjectHealthInit projects={projectList} initialReport={report} client:load />
   <main class="flex-1 w-full">
-    <Hero t={t} locale={locale} />
+    <Hero
+      t={t}
+      projectCount={projectList.length}
+      featuredCount={featuredProjects.length}
+    />
 
-    <div class="container-main pt-12 pb-20">
+    <div class="container-main pt-10 pb-20 space-y-8">
+      <FeaturedProjects
+        projects={featuredProjects}
+        locale={locale}
+        t={t}
+        client:load
+      />
       <ProjectCatalog
         projects={projectList}
         categories={categories}

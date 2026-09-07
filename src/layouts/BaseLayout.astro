@@ -84,7 +84,7 @@ const aboutHref = aboutPath(locale);
 ---
 
 <!doctype html>
-<html lang={htmlLang}>
+<html lang={htmlLang} class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -134,12 +134,10 @@ const aboutHref = aboutPath(locale);
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
     <script is:inline>
       (function () {
-        const stored = localStorage.getItem("theme");
-        const prefersDark = window.matchMedia(
-          "(prefers-color-scheme: dark)",
-        ).matches;
-        if (stored === "dark" || (!stored && prefersDark)) {
-          w;
+        // 暗色为首选；仅当用户显式选过亮色时去掉 .dark
+        if (localStorage.getItem("theme") === "light") {
+          document.documentElement.classList.remove("dark");
+        } else {
           document.documentElement.classList.add("dark");
         }
       })();

@@ -28,6 +28,7 @@ export default function ProjectCatalog({
   );
 
   const allCategories = [filterAll, ...categories];
+  const cols = t.catalog.columns;
 
   return (
     <section aria-labelledby="catalog-heading">
@@ -52,34 +53,60 @@ export default function ProjectCatalog({
         </div>
 
         <nav className="flex flex-wrap gap-2" aria-label={t.catalog.filterAriaLabel}>
-          {allCategories.map((category) => (
-            <button
-              key={category}
-              type="button"
-              onClick={() => setActive(category)}
-              className={[
-                'btn-filter',
-                'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--crt-accent)]',
-                active === category ? 'btn-filter-active' : 'btn-filter-inactive',
-              ].join(' ')}
-              aria-pressed={active === category}
-            >
-              {category}
-            </button>
-          ))}
+          {allCategories.map((category) => {
+            const isActive = active === category;
+            return (
+              <button
+                key={category}
+                type="button"
+                onClick={() => setActive(category)}
+                className={[
+                  'btn-filter',
+                  'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--crt-accent)]',
+                  isActive ? 'btn-filter-active' : 'btn-filter-inactive',
+                ].join(' ')}
+                aria-pressed={isActive}
+              >
+                {isActive ? `[x] ${category}` : category}
+              </button>
+            );
+          })}
         </nav>
       </div>
 
-      <ul className="border-t border-[var(--crt-border-dim)]">
-        {filtered.map((project) => (
-          <ProjectCard
-            key={project.id}
-            project={project}
-            t={t}
-            detailHref={projectDetailPath(locale, project.slug)}
-          />
-        ))}
-      </ul>
+      <div className="overflow-x-auto">
+        <table className="terminal-table">
+          <thead>
+            <tr>
+              <th scope="col" className="terminal-th">
+                {cols.name}
+              </th>
+              <th scope="col" className="terminal-th hidden sm:table-cell">
+                {cols.category}
+              </th>
+              <th scope="col" className="terminal-th hidden md:table-cell">
+                {cols.tech}
+              </th>
+              <th scope="col" className="terminal-th">
+                {cols.status}
+              </th>
+              <th scope="col" className="terminal-th hidden lg:table-cell">
+                {cols.date}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {filtered.map((project) => (
+              <ProjectCard
+                key={project.id}
+                project={project}
+                t={t}
+                detailHref={projectDetailPath(locale, project.slug)}
+              />
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       {filtered.length === 0 && (
         <div className="flex flex-col items-center py-16 text-center" role="status">

@@ -1,5 +1,6 @@
 import type { Project } from '../types/project';
 import type { UITranslations } from '../i18n/ui';
+import { projectGlyph } from '../lib/projectGlyph';
 import ProjectStatus from './ProjectStatus';
 
 interface ProjectCardProps {
@@ -8,30 +9,46 @@ interface ProjectCardProps {
   detailHref: string;
 }
 
-export default function ProjectCard({ project, t, detailHref }: ProjectCardProps) {
-  return (
-    <li className="group">
-      <a
-        href={detailHref}
-        className="flex flex-wrap items-baseline gap-x-4 gap-y-1 py-3 sm:gap-x-0 border-b border-[var(--crt-border-dim)] hover:opacity-80 transition-opacity duration-150"
-      >
-        <span className="flex items-baseline gap-2 shrink-0 text-sm sm:w-[14em] sm:pr-4">
-          <span role="img" aria-hidden="true">
-            {project.emoji}
-          </span>
-          <span className="font-medium truncate">{project.name}</span>
-        </span>
+function formatDate(date: string | undefined): string {
+  if (!date) return '—';
+  return date;
+}
 
-        <span className="flex flex-1 items-baseline gap-3 min-w-0 text-sm">
-          <span
-            className="text-pretty flex-1 min-w-0 line-clamp-2 sm:line-clamp-1"
-            style={{ color: 'var(--crt-text-muted)' }}
-          >
-            {project.description}
+export default function ProjectCard({ project, t, detailHref }: ProjectCardProps) {
+  const techPreview = (project.tech ?? []).slice(0, 3).join(' · ') || '—';
+  const moreTech =
+    project.tech && project.tech.length > 3 ? ` +${project.tech.length - 3}` : '';
+
+  return (
+    <tr className="terminal-row group">
+      <td className="terminal-td">
+        <a
+          href={detailHref}
+          className="flex items-center gap-3 min-w-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--crt-accent)]"
+        >
+          <span className="terminal-glyph !h-8 !w-8 !text-[0.6875rem]" aria-hidden="true">
+            {projectGlyph(project.slug)}
           </span>
-          <ProjectStatus projectId={project.id} labels={t.status} className="ml-auto" />
+          <span className="font-medium truncate" style={{ color: 'var(--crt-text)' }}>
+            {project.name}
+          </span>
+        </a>
+      </td>
+      <td className="terminal-td hidden sm:table-cell">
+        <span style={{ color: 'var(--crt-text-muted)' }}>{project.category}</span>
+      </td>
+      <td className="terminal-td hidden md:table-cell">
+        <span className="truncate block max-w-[14rem]" style={{ color: 'var(--crt-text-dim)' }}>
+          {techPreview}
+          {moreTech}
         </span>
-      </a>
-    </li>
+      </td>
+      <td className="terminal-td">
+        <ProjectStatus projectId={project.id} labels={t.status} />
+      </td>
+      <td className="terminal-td hidden lg:table-cell tabular-nums">
+        <span style={{ color: 'var(--crt-text-dim)' }}>{formatDate(project.createdAt)}</span>
+      </td>
+    </tr>
   );
 }

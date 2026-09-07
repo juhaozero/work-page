@@ -1,15 +1,15 @@
 ---
-import type { Locale } from '../i18n/config';
 import type { UITranslations } from '../i18n/ui';
-import { aboutPath } from '../i18n/paths';
+import { t as format } from '../i18n/ui';
 import site from '../data/site.json';
 
 interface Props {
   t: UITranslations;
-  locale: Locale;
+  projectCount: number;
+  featuredCount: number;
 }
 
-const { t, locale } = Astro.props;
+const { t, projectCount, featuredCount } = Astro.props;
 
 const githubDisplay = site.github.replace(/^https?:\/\//, '');
 const portals = [
@@ -30,51 +30,59 @@ const portals = [
     href: site.blog,
     display: site.blog,
     external: true,
-  }
-
+  },
 ];
 ---
 
 <section class="container-main pt-24 sm:pt-28 pb-4" aria-labelledby="portal-heading">
-  {site.avatar && (
-    <div class="mb-5">
-      <img
-        src={site.avatar}
-        alt={t.portal.avatarAlt}
-        width="72"
-        height="72"
-        class="w-[72px] h-[72px] object-cover border border-[var(--crt-border)]"
-        style="background-color: var(--crt-surface);"
-        loading="eager"
-        decoding="async"
-      />
-    </div>
-  )}
+  {
+    site.avatar && (
+      <div class="mb-5">
+        <img
+          src={site.avatar}
+          alt={t.portal.avatarAlt}
+          width="72"
+          height="72"
+          class="w-[72px] h-[72px] object-cover border border-[var(--crt-border)]"
+          style="background-color: var(--crt-surface);"
+          loading="eager"
+          decoding="async"
+        />
+      </div>
+    )
+  }
 
-  <h2 id="portal-heading" class="text-lg font-medium mb-4">
+  <h2 id="portal-heading" class="text-lg font-medium mb-2">
     {t.portal.title}
   </h2>
+  <p class="text-xs mb-5" style="color: var(--crt-text-dim);">
+    {format(t.hero.projectsTotal, { count: projectCount })}
+    <span aria-hidden="true"> · </span>
+    {format(t.hero.featuredCount, { count: featuredCount })}
+  </p>
 
   <ul class="space-y-3">
-    {portals.map((item) => (
-      <li class="flex flex-wrap items-baseline gap-x-4 gap-y-1 sm:gap-x-0">
-        <span
-          class="shrink-0 text-sm sm:w-[12em] sm:pr-4"
-          style="color: var(--crt-text-muted);"
-        >
-          {item.label}
-        </span>
-        <a
-          href={item.href}
-          class="text-sm hover:opacity-70 transition-opacity duration-150"
-          style="color: var(--crt-accent);"
-          {...(item.external
-            ? { target: '_blank', rel: 'noopener noreferrer' }
-            : {})}
-        >
-          {item.display}
-        </a>
-      </li>
-    ))}
+    {
+      portals.map((item) => (
+        <li class="flex flex-wrap items-baseline gap-x-4 gap-y-1 sm:gap-x-0">
+          <span
+            class="shrink-0 text-sm sm:w-[12em] sm:pr-4"
+            style="color: var(--crt-text-muted);"
+          >
+            {item.label}
+          </span>
+          <a
+            href={item.href}
+            class="text-sm hover:opacity-70 transition-opacity duration-150"
+            style="color: var(--crt-accent);"
+            {...(item.external
+              ? { target: '_blank', rel: 'noopener noreferrer' }
+              : {})}
+          >
+            {item.display}
+          </a>
+        </li>
+      ))
+    }
   </ul>
 </section>
