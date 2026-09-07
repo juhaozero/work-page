@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Hero from '../../components/Hero.astro';
+import HeroPortal from '../../components/HeroPortal';
+import CrtBootController from '../../components/CrtBootController';
 import Footer from '../../components/Footer.astro';
 import FeaturedProjects from '../../components/FeaturedProjects';
 import ProjectCatalog from '../../components/ProjectCatalog';
@@ -59,16 +60,18 @@ const websiteJsonLd = {
 };
 ---
 
-<BaseLayout locale={locale} t={t} path="/" jsonLd={[websiteJsonLd, itemListJsonLd]}>
+<BaseLayout locale={locale} t={t} path="/" crtBoot jsonLd={[websiteJsonLd, itemListJsonLd]}>
+  <CrtBootController client:load />
   <ProjectHealthInit projects={projectList} initialReport={report} client:load />
   <main class="flex-1 w-full">
-    <Hero
+    <HeroPortal
       t={t}
       projectCount={projectList.length}
       featuredCount={featuredProjects.length}
+      client:load
     />
 
-    <div class="container-main pt-10 pb-20 space-y-8">
+    <div class="container-main pt-[4.5rem] pb-20 flex flex-col gap-16 sm:gap-20">
       <FeaturedProjects
         projects={featuredProjects}
         locale={locale}

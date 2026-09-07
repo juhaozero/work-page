@@ -3,8 +3,10 @@ import type { Locale } from '../i18n/config';
 import type { UITranslations } from '../i18n/ui';
 import { t as format } from '../i18n/ui';
 import { projectDetailPath } from '../i18n/paths';
-import { useMemo, useState } from 'react';
-import ProjectCard from './ProjectCard';
+import { useEffect, useMemo, useState } from 'react';
+import { ProjectMobileRow, ProjectTableRow } from './ProjectCard';
+import { subscribeCrtIntroCatalog } from '../lib/crtBoot';
+import Typewriter from './Typewriter';
 
 interface ProjectCatalogProps {
   projects: Project[];
@@ -12,6 +14,8 @@ interface ProjectCatalogProps {
   locale: Locale;
   t: UITranslations;
 }
+
+type Phase = 'pending' | 'command' | 'show';
 
 export default function ProjectCatalog({
   projects,
@@ -21,6 +25,19 @@ export default function ProjectCatalog({
 }: ProjectCatalogProps) {
   const filterAll = t.catalog.filterAll;
   const [active, setActive] = useState(filterAll);
+  const [phase, setPhase] = useState<Phase>('pending');
+  const [instant, setInstant] = useState(false);
+
+  useEffect(() => {
+    return subscribeCrtIntroCatalog((detail) => {
+      setInstant(detail.instant);
+      if (detail.instant) {
+        setPhase('show');
+      } else {
+        setPhase('command');
+      }
+    });
+  }, []);
 
   const filtered = useMemo(
     () => (active === filterAll ? projects : projects.filter((p) => p.category === active)),
@@ -29,95 +46,151 @@ export default function ProjectCatalog({
 
   const allCategories = [filterAll, ...categories];
   const cols = t.catalog.columns;
+  const onCommandDone = () => setPhase('show');
 
   return (
-    <section aria-labelledby="catalog-heading">
-      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6">
-        <div className="space-y-1">
-          <h2 id="catalog-heading" className="text-lg font-medium">
-            {t.catalog.title}
-          </h2>
-          <p className="text-xs" style={{ color: 'var(--crt-text-muted)' }}>
-            {t.catalog.showing}{' '}
-            <span className="tabular-nums" style={{ color: 'var(--crt-text)' }}>
-              {filtered.length}
+    <section aria-labelledby="catalog-heading" aria-busy={phase === 'pending'}>
+      {phase !== 'pending' && (
+        <p
+          className="terminal-prompt mb-6 sm:mb-8 flex flex-wrap items-baseline gap-x-2 gap-y-1"
+          style={{ color: 'var(--crt-text-muted)' }}
+        >
+          <span className="crt-phosphor shrink-0" style={{ color: 'var(--crt-accent)' }}>
+            {t.crt.prompt}
+          </span>
+          {instant || phase === 'show' ? (
+            <span className="crt-phosphor" style={{ color: 'var(--crt-text)' }}>
+              {t.crt.catalogCommand}
             </span>
-            {format(t.catalog.of, { total: projects.length })}
-            {active !== filterAll && (
-              <span style={{ color: 'var(--crt-text-dim)' }}>
-                {t.catalog.categoryPrefix}
-                {active}
+          ) : (
+            <Typewriter
+              text={t.crt.catalogCommand}
+              charMs={40}
+              delayMs={60}
+              className="crt-phosphor"
+              style={{ color: 'var(--crt-text)' }}
+              onDone={onCommandDone}
+            />
+          )}
+        </p>
+      )}
+
+      <div
+        className={phase === 'show' ? 'crt-reveal' : 'crt-reveal-pending'}
+        aria-hidden={phase !== 'show'}
+      >
+        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6">
+          <div className="space-y-1">
+            <h2 id="catalog-heading" className="text-lg font-medium">
+              {t.catalog.title}
+            </h2>
+            <p className="text-xs" style={{ color: 'var(--crt-text-muted)' }}>
+              {t.catalog.showing}{' '}
+              <span className="tabular-nums" style={{ color: 'var(--crt-text)' }}>
+                {filtered.length}
               </span>
-            )}
-          </p>
+              {format(t.catalog.of, { total: projects.length })}
+              {active !== filterAll && (
+                <span style={{ color: 'var(--crt-text-dim)' }}>
+                  {t.catalog.categoryPrefix}
+                  {active}
+                </span>
+              )}
+            </p>
+          </div>
+
+          <nav
+            className="flex flex-wrap gap-x-2 gap-y-1 -mx-1"
+            aria-label={t.catalog.filterAriaLabel}
+          >
+            {allCategories.map((category) => {
+              const isActive = active === category;
+              return (
+                <button
+                  key={category}
+                  type="button"
+                  onClick={() => setActive(category)}
+                  disabled={phase !== 'show'}
+                  className={[
+                    'btn-filter min-h-10 px-2',
+                    'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--crt-accent)]',
+                    isActive ? 'btn-filter-active' : 'btn-filter-inactive',
+                  ].join(' ')}
+                  aria-pressed={isActive}
+                >
+                  {isActive ? `[x] ${category}` : category}
+                </button>
+              );
+            })}
+          </nav>
         </div>
 
-        <nav className="flex flex-wrap gap-2" aria-label={t.catalog.filterAriaLabel}>
-          {allCategories.map((category) => {
-            const isActive = active === category;
-            return (
-              <button
-                key={category}
-                type="button"
-                onClick={() => setActive(category)}
-                className={[
-                  'btn-filter',
-                  'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--crt-accent)]',
-                  isActive ? 'btn-filter-active' : 'btn-filter-inactive',
-                ].join(' ')}
-                aria-pressed={isActive}
-              >
-                {isActive ? `[x] ${category}` : category}
-              </button>
-            );
-          })}
-        </nav>
-      </div>
-
-      <div className="overflow-x-auto">
-        <table className="terminal-table">
-          <thead>
-            <tr>
-              <th scope="col" className="terminal-th">
-                {cols.name}
-              </th>
-              <th scope="col" className="terminal-th hidden sm:table-cell">
-                {cols.category}
-              </th>
-              <th scope="col" className="terminal-th hidden md:table-cell">
-                {cols.tech}
-              </th>
-              <th scope="col" className="terminal-th">
-                {cols.status}
-              </th>
-              <th scope="col" className="terminal-th hidden lg:table-cell">
-                {cols.date}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.map((project) => (
-              <ProjectCard
-                key={project.id}
+        <div className="sm:hidden border-t border-[var(--crt-border)]">
+          {filtered.map((project, index) => (
+            <div
+              key={project.id}
+              className={phase === 'show' && !instant ? 'crt-stagger-item' : undefined}
+              style={
+                phase === 'show' && !instant
+                  ? { ['--crt-stagger' as string]: String(index) }
+                  : undefined
+              }
+            >
+              <ProjectMobileRow
                 project={project}
                 t={t}
                 detailHref={projectDetailPath(locale, project.slug)}
               />
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {filtered.length === 0 && (
-        <div className="flex flex-col items-center py-16 text-center" role="status">
-          <p className="text-sm" style={{ color: 'var(--crt-text-muted)' }}>
-            {t.catalog.emptyTitle}
-          </p>
-          <p className="text-xs mt-2" style={{ color: 'var(--crt-text-dim)' }}>
-            {t.catalog.emptyHint}
-          </p>
+            </div>
+          ))}
         </div>
-      )}
+
+        <div className="hidden sm:block overflow-x-auto">
+          <table className="terminal-table">
+            <thead>
+              <tr>
+                <th scope="col" className="terminal-th">
+                  {cols.name}
+                </th>
+                <th scope="col" className="terminal-th">
+                  {cols.category}
+                </th>
+                <th scope="col" className="terminal-th hidden md:table-cell">
+                  {cols.tech}
+                </th>
+                <th scope="col" className="terminal-th">
+                  {cols.status}
+                </th>
+                <th scope="col" className="terminal-th hidden lg:table-cell">
+                  {cols.date}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map((project, index) => (
+                <ProjectTableRow
+                  key={project.id}
+                  project={project}
+                  t={t}
+                  detailHref={projectDetailPath(locale, project.slug)}
+                  staggerIndex={phase === 'show' && !instant ? index : undefined}
+                />
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {filtered.length === 0 && (
+          <div className="flex flex-col items-center py-16 text-center" role="status">
+            <p className="text-sm" style={{ color: 'var(--crt-text-muted)' }}>
+              {t.catalog.emptyTitle}
+            </p>
+            <p className="text-xs mt-2" style={{ color: 'var(--crt-text-dim)' }}>
+              {t.catalog.emptyHint}
+            </p>
+          </div>
+        )}
+      </div>
     </section>
   );
 }

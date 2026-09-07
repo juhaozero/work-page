@@ -103,6 +103,16 @@ export interface UITranslations {
   langSwitcher: {
     ariaLabel: string;
   };
+  crt: {
+    prompt: string;
+    homeCommand: string;
+    detailCommand: string;
+    bootTitle: string;
+    bootLines: [string, string, string, string];
+    bootSkip: string;
+    featuredCommand: string;
+    catalogCommand: string;
+  };
 }
 
 const ui: Record<Locale, UITranslations> = {
@@ -220,6 +230,21 @@ const ui: Record<Locale, UITranslations> = {
     langSwitcher: {
       ariaLabel: '切换语言',
     },
+    crt: {
+      prompt: 'guest@dev:~$',
+      homeCommand: 'ls ~/projects',
+      detailCommand: 'cat projects/{slug}.md',
+      bootTitle: 'CRT POWER ON',
+      bootLines: [
+        '> init phosphor…',
+        '> sync scanline…',
+        '> mount /home/dev…',
+        '> ready.',
+      ],
+      bootSkip: 'click / esc to skip',
+      featuredCommand: 'cat ~/featured.list',
+      catalogCommand: 'ls -l ~/projects',
+    },
   },
   en: {
     site: {
@@ -336,6 +361,21 @@ const ui: Record<Locale, UITranslations> = {
     },
     langSwitcher: {
       ariaLabel: 'Switch language',
+    },
+    crt: {
+      prompt: 'guest@dev:~$',
+      homeCommand: 'ls ~/projects',
+      detailCommand: 'cat projects/{slug}.md',
+      bootTitle: 'CRT POWER ON',
+      bootLines: [
+        '> init phosphor…',
+        '> sync scanline…',
+        '> mount /home/dev…',
+        '> ready.',
+      ],
+      bootSkip: 'click / esc to skip',
+      featuredCommand: 'cat ~/featured.list',
+      catalogCommand: 'ls -l ~/projects',
     },
   },
 };

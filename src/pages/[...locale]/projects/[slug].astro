@@ -12,7 +12,8 @@ import {
 import { getTranslations, t as format } from "../../../i18n/ui";
 import { getProjects } from "../../../i18n/projects";
 import { homePath, projectDetailPath } from "../../../i18n/paths";
-import { projectGlyph } from "../../../lib/projectGlyph";
+import { projectCover, projectOgImage } from "../../../lib/projectCover";
+import DetailBoot from "../../../components/DetailBoot";
 import site from "../../../data/site.json";
 import healthReport from "../../../data/status.json";
 import type { HealthReport, Project } from "../../../types/project";
@@ -37,10 +38,11 @@ const report = healthReport as HealthReport;
 const homeHref = homePath(locale);
 const pagePath = `/projects/${project.slug}`;
 const pageUrl = new URL(projectDetailPath(locale, project.slug), siteUrl).href;
-const ogImage = project.cover ?? `/og/projects/${project.slug}.png`;
+const coverSrc = projectCover(project);
+const ogImage = projectOgImage(project);
 const longCopy = project.longDescription ?? project.description;
-const glyph = projectGlyph(project.slug);
 const cols = t.catalog.columns;
+const coverAlt = format(t.project.coverAlt, { name: project.name });
 
 const primaryLink = { href: project.url, label: t.project.openLabel };
 const secondaryLinks = [
@@ -93,6 +95,7 @@ const lifecycleLabel = project.lifecycle
   : null;
 const techLine =
   project.tech && project.tech.length > 0 ? project.tech.join(" · ") : null;
+const detailCommand = format(t.crt.detailCommand, { slug: project.slug });
 ---
 
 <BaseLayout
@@ -107,6 +110,13 @@ const techLine =
 
   <main class="flex-1 w-full">
     <article class="container-main pt-24 sm:pt-28 pb-20 max-w-3xl">
+      <DetailBoot
+        prompt={t.crt.prompt}
+        command={detailCommand}
+        client:load
+      />
+
+      <div class="crt-detail-body">
       <a
         href={homeHref}
         class="text-xs mb-8 inline-block transition-opacity duration-150 hover:opacity-70"
@@ -114,13 +124,24 @@ const techLine =
         {t.project.backToCatalog}
       </a>
 
-      {/* 与首页精选卡同构的头部 */}
-      <header class="terminal-card relative mb-8 py-3 px-3 sm:px-4">
-        <div class="flex items-start gap-3">
+      {/* 与首页精选卡同构的头部：左封面 + 右文案 */}
+      <header class="terminal-card relative mb-8 p-4">
+        <div class="flex items-stretch gap-4">
           <div
-            class="terminal-glyph !h-10 !w-10 !text-xs"
-            aria-hidden="true">{glyph}</div>
-          <div class="min-w-0 space-y-1.5">
+            class="shrink-0 w-[7rem] sm:w-[8.5rem] self-stretch min-h-[5.5rem] border border-[var(--crt-border-dim)] overflow-hidden"
+            style="background-color: var(--crt-bg);"
+          >
+            <img
+              src={coverSrc}
+              alt={coverAlt}
+              width="136"
+              height="88"
+              class="h-full w-full object-cover"
+              loading="eager"
+              decoding="async"
+            />
+          </div>
+          <div class="min-w-0 flex-1 space-y-1.5 flex flex-col justify-center">
             <div class="flex flex-wrap items-center gap-2">
               <span class="tag-terminal">{project.category}</span>
               {
@@ -138,7 +159,7 @@ const techLine =
               {project.name}
             </h1>
             <p
-              class="text-xs leading-snug text-pretty"
+              class="text-sm leading-snug text-pretty"
               style="color: var(--crt-text-muted);">
               {project.description}
             </p>
@@ -239,6 +260,7 @@ const techLine =
           }
         </div>
       </section>
+      </div>
     </article>
   </main>
 

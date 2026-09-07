@@ -24,6 +24,8 @@ interface Props {
   path?: string;
   ogImage?: string;
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  /** 首页 CRT 开机遮罩（仅首页传 true） */
+  crtBoot?: boolean;
 }
 
 const siteUrl = site.url ?? `https://${site.domain}`;
@@ -38,6 +40,7 @@ const {
   path = "/",
   ogImage: ogImageProp,
   jsonLd: jsonLdProp,
+  crtBoot = false,
 } = Astro.props;
 
 const pageTitle = title ?? site.title;
@@ -142,6 +145,24 @@ const aboutHref = aboutPath(locale);
         }
       })();
     </script>
+    {
+      crtBoot && (
+        <script is:inline>
+          (function () {
+            try {
+              if (
+                window.matchMedia("(prefers-reduced-motion: reduce)").matches
+              )
+                return;
+              if (localStorage.getItem("theme") === "light") return;
+              var p = location.pathname;
+              if (p !== "/" && p !== "/en" && p !== "/en/") return;
+              document.documentElement.classList.add("crt-boot");
+            } catch (e) {}
+          })();
+        </script>
+      )
+    }
     <script
       data-goatcounter="https://abuan.goatcounter.com/count"
       async
@@ -149,6 +170,24 @@ const aboutHref = aboutPath(locale);
       is:inline></script>
   </head>
   <body class="min-h-screen flex flex-col font-mono">
+    {
+      crtBoot && (
+        <div class="crt-boot-shield" aria-hidden="true">
+          <div class="crt-boot-glow" />
+          <div class="crt-boot-beam" />
+          <div class="crt-boot-frame">
+            <p class="crt-boot-title">{t.crt.bootTitle}</p>
+            <ul class="crt-boot-lines">
+              <li>{t.crt.bootLines[0]}</li>
+              <li>{t.crt.bootLines[1]}</li>
+              <li>{t.crt.bootLines[2]}</li>
+              <li>{t.crt.bootLines[3]}</li>
+            </ul>
+            <p class="crt-boot-skip">{t.crt.bootSkip}</p>
+          </div>
+        </div>
+      )
+    }
     <header
       class="fixed top-0 left-0 right-0 z-40 border-b border-[var(--crt-border-dim)] bg-[var(--crt-bg)]/90 backdrop-blur-sm"
       style="padding-top: env(safe-area-inset-top);">
