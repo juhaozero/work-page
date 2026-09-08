@@ -4,10 +4,60 @@ export const CRT_BOOT_CLASS = 'crt-boot';
 export const CRT_BOOT_EVENT = 'crt-boot:done';
 /** 与 BaseLayout 内联脚本保持一致 */
 export const CRT_HOME_PLAYED_KEY = 'crt-home-played';
-/** 点亮总时长（需与 CSS animation 对齐） */
-export const CRT_BOOT_DURATION_MS = 1600;
-/** 开机后短暂禁止跳过，避免被当成白屏误点 */
-export const CRT_BOOT_SKIP_GUARD_MS = 400;
+
+/**
+ * CRT 打字 / 间隔总表 —— 调节奏只改这里。
+ * charMs：每字间隔；delayMs：开始前等待。
+ */
+export const CRT_TIMING = {
+  boot: {
+    /** 开机每字 */
+    charMs: 60,
+    /** 第一行开始前（等窗口入场） */
+    firstLineDelayMs: 320,
+    /** 行与行之间 */
+    lineGapMs: 120,
+    /** 最后一行打完后再关遮罩 */
+    endHoldMs: 450,
+    /** 多久后允许跳过 */
+    skipGuardMs: 400,
+  },
+  home: {
+    charMs: 100,
+    delayMs: 120,
+    /** 首页命令打完 → 精选 */
+    afterTypedMs: 500,
+  },
+  featured: {
+    charMs: 100,
+    delayMs: 180,
+    /** 精选列表亮起后 → 目录：基数 + 每项 */
+    afterShowBaseMs: 280,
+    afterShowPerItemMs: 90,
+  },
+  catalog: {
+      charMs: 100,
+    delayMs: 120,
+  },
+  detail: {
+    charMs: 26, // 详情打字速度
+    delayMs: 120, // 详情打字延迟
+  },
+} as const;
+
+/** 终端式跟随：区块底边超出视口时平滑下滚（instant / reduced-motion 不滚） */
+export function followTerminalScroll(el: HTMLElement | null): void {
+  if (!el || typeof window === 'undefined') return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  requestAnimationFrame(() => {
+    const pad = 28;
+    const rect = el.getBoundingClientRect();
+    const overflow = rect.bottom - (window.innerHeight - pad);
+    if (overflow <= 4) return;
+    window.scrollBy({ top: overflow, behavior: 'smooth' });
+  });
+}
 
 export const CRT_INTRO_FEATURED_EVENT = 'crt-intro:featured';
 export const CRT_INTRO_CATALOG_EVENT = 'crt-intro:catalog';

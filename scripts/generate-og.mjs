@@ -38,18 +38,18 @@ async function renderOg({ slug, name, emoji, category, siteTitle }) {
   const titleSvg = lines
     .map(
       (line, i) =>
-        `<text x="80" y="${280 + i * 64}" fill="#5fe66a" font-size="52" font-family="ui-monospace, monospace" font-weight="700">${escapeXml(line)}</text>`,
+        `<text x="80" y="${280 + i * 64}" fill="#8f9a68" font-size="52" font-family="ui-monospace, monospace" font-weight="700">${escapeXml(line)}</text>`,
     )
     .join('');
 
   const svg = `<?xml version="1.0" encoding="UTF-8"?>
 <svg width="${WIDTH}" height="${HEIGHT}" viewBox="0 0 ${WIDTH} ${HEIGHT}" xmlns="http://www.w3.org/2000/svg">
-  <rect width="100%" height="100%" fill="#080d08"/>
-  <rect x="40" y="40" width="${WIDTH - 80}" height="${HEIGHT - 80}" fill="none" stroke="#1e4a22" stroke-width="2"/>
-  <text x="80" y="120" fill="#2d6a34" font-size="22" font-family="ui-monospace, monospace" letter-spacing="4">${escapeXml(siteTitle.toUpperCase())}</text>
+  <rect width="100%" height="100%" fill="#0b0c09"/>
+  <rect x="40" y="40" width="${WIDTH - 80}" height="${HEIGHT - 80}" fill="none" stroke="#2c3022" stroke-width="2"/>
+  <text x="80" y="120" fill="#3f4532" font-size="22" font-family="ui-monospace, monospace" letter-spacing="4">${escapeXml(siteTitle.toUpperCase())}</text>
   <text x="80" y="200" font-size="64">${escapeXml(emoji)}</text>
   ${titleSvg}
-  <text x="80" y="540" fill="#4a9a52" font-size="24" font-family="ui-monospace, monospace">[${escapeXml(category)}] · /projects/${escapeXml(slug)}</text>
+  <text x="80" y="540" fill="#66704c" font-size="24" font-family="ui-monospace, monospace">[${escapeXml(category)}] · /projects/${escapeXml(slug)}</text>
 </svg>`;
 
   const png = await sharp(Buffer.from(svg)).png().toBuffer();

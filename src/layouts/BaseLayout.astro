@@ -2,6 +2,7 @@
 import "../styles/global.css";
 import ThemeToggle from "../components/ThemeToggle";
 import LanguageSwitcher from "../components/LanguageSwitcher";
+import CrtBootShield from "../components/CrtBootShield";
 import { getRelativeLocaleUrl } from "astro:i18n";
 import {
   locales,
@@ -177,20 +178,12 @@ const aboutHref = aboutPath(locale);
   <body class="min-h-screen flex flex-col font-mono">
     {
       crtBoot && (
-        <div class="crt-boot-shield" aria-hidden="true">
-          <div class="crt-boot-glow" />
-          <div class="crt-boot-beam" />
-          <div class="crt-boot-frame">
-            <p class="crt-boot-title">{t.crt.bootTitle}</p>
-            <ul class="crt-boot-lines">
-              <li>{t.crt.bootLines[0]}</li>
-              <li>{t.crt.bootLines[1]}</li>
-              <li>{t.crt.bootLines[2]}</li>
-              <li>{t.crt.bootLines[3]}</li>
-            </ul>
-            <p class="crt-boot-skip">{t.crt.bootSkip}</p>
-          </div>
-        </div>
+        <CrtBootShield
+          client:load
+          windowTitle={site.github.replace(/^https?:\/\//, "")}
+          bootLines={t.crt.bootLines}
+          bootSkip={t.crt.bootSkip}
+        />
       )
     }
     <header

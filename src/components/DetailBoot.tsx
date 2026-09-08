@@ -1,4 +1,5 @@
 import Typewriter from './Typewriter';
+import { CRT_TIMING } from '../lib/crtBoot';
 
 interface DetailBootProps {
   prompt: string;
@@ -17,8 +18,8 @@ export default function DetailBoot({ prompt, command }: DetailBootProps) {
       </span>
       <Typewriter
         text={command}
-        charMs={26}
-        delayMs={180}
+        charMs={CRT_TIMING.detail.charMs}
+        delayMs={CRT_TIMING.detail.delayMs}
         className="crt-phosphor break-all"
         style={{ color: 'var(--crt-text)' }}
       />

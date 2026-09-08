@@ -263,7 +263,7 @@ const ui: Record<Locale, UITranslations> = {
       about: 'About',
     },
     portal: {
-      title: 'Portal',
+      title: '',
       avatarAlt: 'Avatar',
       github: 'GitHub',
       blog : 'Blog',

@@ -3,6 +3,7 @@ import type { UITranslations } from '../i18n/ui';
 import site from '../data/site.json';
 import Typewriter from './Typewriter';
 import {
+  CRT_TIMING,
   dispatchCrtIntroFeatured,
   shouldPlayCrtHomeIntro,
   subscribeCrtBootDone,
@@ -43,7 +44,7 @@ export default function HeroPortal({ t }: HeroPortalProps) {
   useEffect(() => {
     if (!showBody) return;
     const instant = mode === 'instant';
-    const delay = instant ? 0 : 500;
+    const delay = instant ? 0 : CRT_TIMING.home.afterTypedMs;
     const id = window.setTimeout(() => dispatchCrtIntroFeatured(instant), delay);
     return () => window.clearTimeout(id);
   }, [showBody, mode]);
@@ -97,8 +98,8 @@ export default function HeroPortal({ t }: HeroPortalProps) {
         ) : (
           <Typewriter
             text={t.crt.homeCommand}
-            charMs={64}
-            delayMs={120}
+            charMs={CRT_TIMING.home.charMs}
+            delayMs={CRT_TIMING.home.delayMs}
             className="crt-phosphor"
             style={{ color: 'var(--crt-text)' }}
             onDone={onCommandDone}

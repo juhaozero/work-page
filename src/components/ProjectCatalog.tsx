@@ -2,9 +2,14 @@ import type { Project } from '../types/project';
 import type { Locale } from '../i18n/config';
 import type { UITranslations } from '../i18n/ui';
 import { projectDetailPath } from '../i18n/paths';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { ProjectMobileRow, ProjectTableRow } from './ProjectCard';
-import { subscribeCrtIntroCatalog, shouldPlayCrtHomeIntro } from '../lib/crtBoot';
+import {
+  CRT_TIMING,
+  followTerminalScroll,
+  subscribeCrtIntroCatalog,
+  shouldPlayCrtHomeIntro,
+} from '../lib/crtBoot';
 import Typewriter from './Typewriter';
 
 interface ProjectCatalogProps {
@@ -27,6 +32,7 @@ export default function ProjectCatalog({
   const [active, setActive] = useState(filterAll);
   const [phase, setPhase] = useState<Phase>(skipIntro ? 'show' : 'pending');
   const [instant, setInstant] = useState(skipIntro);
+  const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     return subscribeCrtIntroCatalog((detail) => {
@@ -39,6 +45,22 @@ export default function ProjectCatalog({
     });
   }, []);
 
+  useEffect(() => {
+    if (phase === 'pending' || instant) return;
+    followTerminalScroll(sectionRef.current);
+  }, [phase, instant]);
+
+  useEffect(() => {
+    if (phase !== 'show' || instant) return;
+    const ids = projects.map((_, index) =>
+      window.setTimeout(
+        () => followTerminalScroll(sectionRef.current),
+        100 + index * 70,
+      ),
+    );
+    return () => ids.forEach((id) => window.clearTimeout(id));
+  }, [phase, instant, projects.length]);
+
   const filtered = useMemo(
     () => (active === filterAll ? projects : projects.filter((p) => p.category === active)),
     [active, filterAll, projects],
@@ -49,7 +71,11 @@ export default function ProjectCatalog({
   const onCommandDone = () => setPhase('show');
 
   return (
-    <section aria-labelledby="catalog-heading" aria-busy={phase === 'pending'}>
+    <section
+      ref={sectionRef}
+      aria-labelledby="catalog-heading"
+      aria-busy={phase === 'pending'}
+    >
       {phase !== 'pending' && (
         <p
           className="terminal-prompt mb-6 sm:mb-8 flex flex-wrap items-baseline gap-x-2 gap-y-1"
@@ -65,8 +91,8 @@ export default function ProjectCatalog({
           ) : (
             <Typewriter
               text={t.crt.catalogCommand}
-              charMs={40}
-              delayMs={60}
+              charMs={CRT_TIMING.catalog.charMs}
+              delayMs={CRT_TIMING.catalog.delayMs}
               className="crt-phosphor"
               style={{ color: 'var(--crt-text)' }}
               onDone={onCommandDone}

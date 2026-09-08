@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { Project } from '../types/project';
 import type { Locale } from '../i18n/config';
 import type { UITranslations } from '../i18n/ui';
 import { projectDetailPath } from '../i18n/paths';
 import {
+  CRT_TIMING,
   dispatchCrtIntroCatalog,
+  followTerminalScroll,
   shouldPlayCrtHomeIntro,
   subscribeCrtIntroFeatured,
 } from '../lib/crtBoot';
@@ -22,6 +24,7 @@ export default function FeaturedProjects({ projects, locale, t }: FeaturedProjec
   const skipIntro = !shouldPlayCrtHomeIntro();
   const [phase, setPhase] = useState<Phase>(skipIntro ? 'show' : 'pending');
   const [instant, setInstant] = useState(skipIntro);
+  const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     return subscribeCrtIntroFeatured((detail) => {
@@ -36,10 +39,29 @@ export default function FeaturedProjects({ projects, locale, t }: FeaturedProjec
   }, []);
 
   useEffect(() => {
+    if (phase === 'pending' || instant) return;
+    followTerminalScroll(sectionRef.current);
+  }, [phase, instant]);
+
+  useEffect(() => {
     if (phase !== 'show' || instant) return;
-    const delay = 280 + projects.length * 90;
-    const id = window.setTimeout(() => dispatchCrtIntroCatalog(false), delay);
-    return () => window.clearTimeout(id);
+
+    const ids = projects.map((_, index) =>
+      window.setTimeout(
+        () => followTerminalScroll(sectionRef.current),
+        80 + index * 70,
+      ),
+    );
+
+    const delay =
+      CRT_TIMING.featured.afterShowBaseMs +
+      projects.length * CRT_TIMING.featured.afterShowPerItemMs;
+    const catalogId = window.setTimeout(() => dispatchCrtIntroCatalog(false), delay);
+
+    return () => {
+      ids.forEach((id) => window.clearTimeout(id));
+      window.clearTimeout(catalogId);
+    };
   }, [phase, instant, projects.length]);
 
   if (projects.length === 0) return null;
@@ -48,6 +70,7 @@ export default function FeaturedProjects({ projects, locale, t }: FeaturedProjec
 
   return (
     <section
+      ref={sectionRef}
       className="pb-4"
       aria-labelledby="featured-heading"
       aria-busy={phase === 'pending'}
@@ -67,8 +90,8 @@ export default function FeaturedProjects({ projects, locale, t }: FeaturedProjec
           ) : (
             <Typewriter
               text={t.crt.featuredCommand}
-              charMs={40}
-              delayMs={80}
+              charMs={CRT_TIMING.featured.charMs}
+              delayMs={CRT_TIMING.featured.delayMs}
               className="crt-phosphor"
               style={{ color: 'var(--crt-text)' }}
               onDone={onCommandDone}
