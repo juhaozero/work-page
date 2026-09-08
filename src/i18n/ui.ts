@@ -232,7 +232,7 @@ const ui: Record<Locale, UITranslations> = {
     },
     crt: {
       prompt: 'guest@dev:~$',
-      homeCommand: 'ls ~/projects',
+      homeCommand: 'ls ~/home',
       detailCommand: 'cat projects/{slug}.md',
       bootTitle: 'CRT POWER ON',
       bootLines: [
@@ -364,7 +364,7 @@ const ui: Record<Locale, UITranslations> = {
     },
     crt: {
       prompt: 'guest@dev:~$',
-      homeCommand: 'ls ~/projects',
+      homeCommand: 'ls ~/home',
       detailCommand: 'cat projects/{slug}.md',
       bootTitle: 'CRT POWER ON',
       bootLines: [
