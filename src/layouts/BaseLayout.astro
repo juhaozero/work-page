@@ -157,6 +157,11 @@ const aboutHref = aboutPath(locale);
               if (localStorage.getItem("theme") === "light") return;
               var p = location.pathname;
               if (p !== "/" && p !== "/en" && p !== "/en/") return;
+              // 与 src/lib/crtBoot.ts CRT_HOME_PLAYED_KEY 保持一致
+              var KEY = "crt-home-played";
+              var nav = performance.getEntriesByType("navigation")[0];
+              var isReload = nav && nav.type === "reload";
+              if (!isReload && sessionStorage.getItem(KEY) === "1") return;
               document.documentElement.classList.add("crt-boot");
             } catch (e) {}
           })();

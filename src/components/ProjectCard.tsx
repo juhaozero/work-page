@@ -9,11 +9,6 @@ interface ProjectCardProps {
   staggerIndex?: number;
 }
 
-function formatDate(date: string | undefined): string {
-  if (!date) return '—';
-  return date;
-}
-
 /** 桌面终端表的一行 */
 export function ProjectTableRow({
   project,
@@ -54,9 +49,6 @@ export function ProjectTableRow({
       </td>
       <td className="terminal-td">
         <ProjectStatus projectId={project.id} labels={t.status} />
-      </td>
-      <td className="terminal-td hidden lg:table-cell tabular-nums">
-        <span style={{ color: 'var(--crt-text-dim)' }}>{formatDate(project.createdAt)}</span>
       </td>
     </tr>
   );

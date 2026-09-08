@@ -1,7 +1,9 @@
-/** 首页 CRT 开机 + 分区揭示：每次进入首页都播完整仪式 */
+/** 首页 CRT 开机 + 分区揭示：仅首访或刷新主页时播放完整仪式 */
 
 export const CRT_BOOT_CLASS = 'crt-boot';
 export const CRT_BOOT_EVENT = 'crt-boot:done';
+/** 与 BaseLayout 内联脚本保持一致 */
+export const CRT_HOME_PLAYED_KEY = 'crt-home-played';
 /** 点亮总时长（需与 CSS animation 对齐） */
 export const CRT_BOOT_DURATION_MS = 1600;
 /** 开机后短暂禁止跳过，避免被当成白屏误点 */
@@ -22,8 +24,38 @@ export type CrtIntroDetail = {
 let bootResult: CrtBootDoneDetail | null = null;
 let featuredIntro: CrtIntroDetail | null = null;
 let catalogIntro: CrtIntroDetail | null = null;
+/** 本页生命周期内只判定一次，避免 mark 后其它组件误判 */
+let playDecision: boolean | null = null;
 
-/** 全页刷新时重置模块闩锁（软导航/HMR 保险） */
+/** 首访或刷新主页 → 播仪式；同会话内从详情/关于页返回 → 跳过 */
+export function shouldPlayCrtHomeIntro(): boolean {
+  if (playDecision !== null) return playDecision;
+
+  try {
+    const nav = performance.getEntriesByType(
+      'navigation',
+    )[0] as PerformanceNavigationTiming | undefined;
+    if (nav?.type === 'reload') {
+      playDecision = true;
+      return playDecision;
+    }
+    playDecision = sessionStorage.getItem(CRT_HOME_PLAYED_KEY) !== '1';
+    return playDecision;
+  } catch {
+    playDecision = true;
+    return playDecision;
+  }
+}
+
+export function markCrtHomeIntroPlayed(): void {
+  try {
+    sessionStorage.setItem(CRT_HOME_PLAYED_KEY, '1');
+  } catch {
+    /* private mode 等 */
+  }
+}
+
+/** 全页刷新时重置模块门锁（软导航/HMR 保险） */
 export function resetCrtIntroLatches(): void {
   bootResult = null;
   featuredIntro = null;

@@ -7,6 +7,7 @@ import { projectDetailPath } from '../i18n/paths';
 import { projectCover } from '../lib/projectCover';
 import {
   dispatchCrtIntroCatalog,
+  shouldPlayCrtHomeIntro,
   subscribeCrtIntroFeatured,
 } from '../lib/crtBoot';
 import ProjectStatus from './ProjectStatus';
@@ -21,8 +22,9 @@ interface FeaturedProjectsProps {
 type Phase = 'pending' | 'command' | 'show';
 
 export default function FeaturedProjects({ projects, locale, t }: FeaturedProjectsProps) {
-  const [phase, setPhase] = useState<Phase>('pending');
-  const [instant, setInstant] = useState(false);
+  const skipIntro = !shouldPlayCrtHomeIntro();
+  const [phase, setPhase] = useState<Phase>(skipIntro ? 'show' : 'pending');
+  const [instant, setInstant] = useState(skipIntro);
 
   useEffect(() => {
     return subscribeCrtIntroFeatured((detail) => {

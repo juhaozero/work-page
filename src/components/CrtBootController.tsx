@@ -4,25 +4,29 @@ import {
   CRT_BOOT_DURATION_MS,
   CRT_BOOT_SKIP_GUARD_MS,
   dispatchCrtBootDone,
+  markCrtHomeIntroPlayed,
   resetCrtIntroLatches,
+  shouldPlayCrtHomeIntro,
 } from '../lib/crtBoot';
 
 /**
- * 首页开机控制器：每次进入都播；仅 reduced-motion 跳过点亮。
+ * 首页开机控制器：首访/刷新主页播完整仪式；同会话内返回主页则瞬间展示。
  * 遮罩 DOM 由 BaseLayout SSR，首屏靠 html.crt-boot 显示。
  */
 export default function CrtBootController() {
   useEffect(() => {
-    resetCrtIntroLatches();
-
     const root = document.documentElement;
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    if (reduce) {
+    if (!shouldPlayCrtHomeIntro() || reduce) {
       root.classList.remove(CRT_BOOT_CLASS);
+      resetCrtIntroLatches();
       dispatchCrtBootDone(false);
       return;
     }
+
+    markCrtHomeIntroPlayed();
+    resetCrtIntroLatches();
 
     if (!root.classList.contains(CRT_BOOT_CLASS)) {
       // 亮色等：无遮罩，仍播打字

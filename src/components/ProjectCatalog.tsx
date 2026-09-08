@@ -1,11 +1,10 @@
 import type { Project } from '../types/project';
 import type { Locale } from '../i18n/config';
 import type { UITranslations } from '../i18n/ui';
-import { t as format } from '../i18n/ui';
 import { projectDetailPath } from '../i18n/paths';
 import { useEffect, useMemo, useState } from 'react';
 import { ProjectMobileRow, ProjectTableRow } from './ProjectCard';
-import { subscribeCrtIntroCatalog } from '../lib/crtBoot';
+import { subscribeCrtIntroCatalog, shouldPlayCrtHomeIntro } from '../lib/crtBoot';
 import Typewriter from './Typewriter';
 
 interface ProjectCatalogProps {
@@ -24,9 +23,10 @@ export default function ProjectCatalog({
   t,
 }: ProjectCatalogProps) {
   const filterAll = t.catalog.filterAll;
+  const skipIntro = !shouldPlayCrtHomeIntro();
   const [active, setActive] = useState(filterAll);
-  const [phase, setPhase] = useState<Phase>('pending');
-  const [instant, setInstant] = useState(false);
+  const [phase, setPhase] = useState<Phase>(skipIntro ? 'show' : 'pending');
+  const [instant, setInstant] = useState(skipIntro);
 
   useEffect(() => {
     return subscribeCrtIntroCatalog((detail) => {
@@ -80,24 +80,9 @@ export default function ProjectCatalog({
         aria-hidden={phase !== 'show'}
       >
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6">
-          <div className="space-y-1">
-            <h2 id="catalog-heading" className="text-lg font-medium">
-              {t.catalog.title}
-            </h2>
-            <p className="text-xs" style={{ color: 'var(--crt-text-muted)' }}>
-              {t.catalog.showing}{' '}
-              <span className="tabular-nums" style={{ color: 'var(--crt-text)' }}>
-                {filtered.length}
-              </span>
-              {format(t.catalog.of, { total: projects.length })}
-              {active !== filterAll && (
-                <span style={{ color: 'var(--crt-text-dim)' }}>
-                  {t.catalog.categoryPrefix}
-                  {active}
-                </span>
-              )}
-            </p>
-          </div>
+          <h2 id="catalog-heading" className="text-lg font-medium">
+            {t.catalog.title}
+          </h2>
 
           <nav
             className="flex flex-wrap gap-x-2 gap-y-1 -mx-1"
@@ -160,9 +145,6 @@ export default function ProjectCatalog({
                 </th>
                 <th scope="col" className="terminal-th">
                   {cols.status}
-                </th>
-                <th scope="col" className="terminal-th hidden lg:table-cell">
-                  {cols.date}
                 </th>
               </tr>
             </thead>

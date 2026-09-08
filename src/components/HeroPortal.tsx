@@ -1,24 +1,23 @@
 import { useEffect, useState } from 'react';
 import type { UITranslations } from '../i18n/ui';
-import { t as format } from '../i18n/ui';
 import site from '../data/site.json';
 import Typewriter from './Typewriter';
 import {
   dispatchCrtIntroFeatured,
+  shouldPlayCrtHomeIntro,
   subscribeCrtBootDone,
 } from '../lib/crtBoot';
 
 interface HeroPortalProps {
   t: UITranslations;
-  projectCount: number;
-  featuredCount: number;
 }
 
 type IntroMode = 'pending' | 'type' | 'instant';
 
-export default function HeroPortal({ t, projectCount, featuredCount }: HeroPortalProps) {
-  const [mode, setMode] = useState<IntroMode>('pending');
-  const [typed, setTyped] = useState(false);
+export default function HeroPortal({ t }: HeroPortalProps) {
+  const skipIntro = !shouldPlayCrtHomeIntro();
+  const [mode, setMode] = useState<IntroMode>(skipIntro ? 'instant' : 'pending');
+  const [typed, setTyped] = useState(skipIntro);
 
   useEffect(() => {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -71,8 +70,6 @@ export default function HeroPortal({ t, projectCount, featuredCount }: HeroPorta
     },
   ].filter((p) => p.display);
 
-  const stats = `${format(t.hero.projectsTotal, { count: projectCount })} · ${format(t.hero.featuredCount, { count: featuredCount })}`;
-  const headingId = t.portal.title ? 'portal-heading' : 'portal-stats';
   const revealClass = showBody ? 'crt-reveal space-y-0' : 'crt-reveal-pending space-y-0';
 
   const onCommandDone = () => {
@@ -82,7 +79,7 @@ export default function HeroPortal({ t, projectCount, featuredCount }: HeroPorta
   return (
     <section
       className="container-main pt-24 sm:pt-28 pb-2"
-      aria-labelledby={headingId}
+      {...(t.portal.title ? { 'aria-labelledby': 'portal-heading' } : {})}
     >
       <p
         className="terminal-prompt mb-5 flex flex-wrap items-baseline gap-x-2 gap-y-1"
@@ -109,7 +106,7 @@ export default function HeroPortal({ t, projectCount, featuredCount }: HeroPorta
         )}
       </p>
 
-      <div className={revealClass}>
+      <div className={`${revealClass} flex flex-col items-center text-center`}>
         {site.avatar && (
           <div className="mb-5">
             <img
@@ -126,35 +123,13 @@ export default function HeroPortal({ t, projectCount, featuredCount }: HeroPorta
         )}
 
         {t.portal.title ? (
-          <h2 id="portal-heading" className="text-lg font-medium mb-2 crt-phosphor">
+          <h2 id="portal-heading" className="text-lg font-medium mb-5 crt-phosphor">
             {t.portal.title}
           </h2>
         ) : null}
 
-        <p
-          id="portal-stats"
-          className="text-xs mb-5"
-          style={{ color: 'var(--crt-text-dim)' }}
-        >
-          {mode === 'instant' ? (
-            <span>{stats}</span>
-          ) : typed ? (
-            <Typewriter
-              text={stats}
-              charMs={18}
-              delayMs={60}
-              cursor={false}
-              style={{ color: 'var(--crt-text-dim)' }}
-            />
-          ) : (
-            <span className="opacity-0" aria-hidden="true">
-              {stats}
-            </span>
-          )}
-        </p>
-
         <ul
-          className={`space-y-3 ${showBody ? '' : 'invisible'}`}
+          className={`w-fit space-y-3 text-left ${showBody ? '' : 'invisible'}`}
           aria-hidden={!showBody}
         >
           {portals.map((item, index) => (
