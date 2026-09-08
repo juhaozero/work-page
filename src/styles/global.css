@@ -380,6 +380,103 @@ html.dark .select-terminal {
   animation: crt-fade-up 0.5s ease 0.55s both;
 }
 
+/* ── 项目封面：终端 framebuffer，而非照片缩略图 ── */
+@utility crt-cover {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  width: 6.5rem;
+  align-self: stretch;
+  min-height: 5.5rem;
+  border: 1px solid var(--crt-border-dim);
+  background-color: var(--crt-bg);
+  overflow: hidden;
+
+  @variant sm {
+    width: 8rem;
+  }
+}
+
+@utility crt-cover-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.35rem;
+  padding: 0.15rem 0.35rem;
+  border-bottom: 1px solid var(--crt-border-dim);
+  background-color: var(--crt-surface-2);
+  color: var(--crt-text-dim);
+  font-size: 0.5625rem;
+  line-height: 1.2;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+@utility crt-cover-viewport {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 4.25rem;
+  overflow: hidden;
+  background-color: #050805;
+
+  /* 磷光晕 + 暗角 */
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse at center, transparent 42%, rgba(0, 0, 0, 0.42) 100%),
+      linear-gradient(
+        180deg,
+        rgba(95, 230, 106, 0.08) 0%,
+        transparent 28%,
+        rgba(0, 0, 0, 0.2) 100%
+      );
+  }
+
+  /* 局部扫描线，与页面 body 纹理对齐 */
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.22) 2px,
+      rgba(0, 0, 0, 0.22) 3px
+    );
+    opacity: 0.55;
+  }
+}
+
+@utility crt-cover-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  /* 压锐度，贴近磷光管成像 */
+  filter: contrast(1.04) saturate(0.92) brightness(0.94);
+
+  @variant dark {
+    filter: contrast(1.06) saturate(1.05) brightness(0.9);
+  }
+}
+
+html:not(.dark) .crt-cover-viewport {
+  box-shadow: inset 0 0 0 1px rgba(31, 107, 40, 0.2);
+}
+
+html.dark .crt-cover-viewport {
+  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.45);
+}
+
 /* ── CRT 开机遮罩（html.crt-boot 时显示）── */
 .crt-boot-shield {
   display: none;

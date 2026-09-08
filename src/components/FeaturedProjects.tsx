@@ -12,6 +12,7 @@ import {
 } from '../lib/crtBoot';
 import ProjectStatus from './ProjectStatus';
 import Typewriter from './Typewriter';
+import CrtCover from './CrtCover';
 
 interface FeaturedProjectsProps {
   projects: Project[];
@@ -110,20 +111,12 @@ export default function FeaturedProjects({ projects, locale, t }: FeaturedProjec
                 }
                 tabIndex={phase === 'show' ? undefined : -1}
               >
-                <div
-                  className="shrink-0 w-[7rem] sm:w-[8.5rem] self-stretch min-h-[5.5rem] border border-[var(--crt-border-dim)] overflow-hidden"
-                  style={{ backgroundColor: 'var(--crt-bg)' }}
-                >
-                  <img
-                    src={cover}
-                    alt={format(t.project.coverAlt, { name: project.name })}
-                    width={136}
-                    height={88}
-                    className="h-full w-full object-cover"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
+                <CrtCover
+                  src={cover}
+                  alt={format(t.project.coverAlt, { name: project.name })}
+                  slug={project.slug}
+                  loading="lazy"
+                />
 
                 <div className="flex-1 min-w-0 flex flex-col justify-center gap-1.5 py-0.5">
                   <div className="flex items-baseline gap-3 min-w-0">

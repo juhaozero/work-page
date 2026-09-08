@@ -14,6 +14,7 @@ import { getProjects } from "../../../i18n/projects";
 import { homePath, projectDetailPath } from "../../../i18n/paths";
 import { projectCover, projectOgImage } from "../../../lib/projectCover";
 import DetailBoot from "../../../components/DetailBoot";
+import CrtCover from "../../../components/CrtCover";
 import site from "../../../data/site.json";
 import healthReport from "../../../data/status.json";
 import type { HealthReport, Project } from "../../../types/project";
@@ -123,19 +124,12 @@ const detailCommand = format(t.crt.detailCommand, { slug: project.slug });
         {/* 与首页精选卡同构的头部：左封面 + 右文案 */}
         <header class="terminal-card relative mb-8 p-4">
           <div class="flex items-stretch gap-4">
-            <div
-              class="shrink-0 w-[7rem] sm:w-[8.5rem] self-stretch min-h-[5.5rem] border border-[var(--crt-border-dim)] overflow-hidden"
-              style="background-color: var(--crt-bg);">
-              <img
-                src={coverSrc}
-                alt={coverAlt}
-                width="136"
-                height="88"
-                class="h-full w-full object-cover"
-                loading="eager"
-                decoding="async"
-              />
-            </div>
+            <CrtCover
+              src={coverSrc}
+              alt={coverAlt}
+              slug={project.slug}
+              loading="eager"
+            />
             <div
               class="min-w-0 flex-1 space-y-1.5 flex flex-col justify-center">
               <div class="flex flex-wrap items-center gap-2">
