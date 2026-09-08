@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Footer from '../../components/Footer.astro';
+import DetailBoot from '../../components/DetailBoot';
 import { locales, getLocaleParam, type Locale } from '../../i18n/config';
 import { getTranslations } from '../../i18n/ui';
 import { homePath } from '../../i18n/paths';
@@ -16,6 +17,14 @@ export function getStaticPaths() {
 const { locale } = Astro.props as { locale: Locale };
 const t = getTranslations(locale);
 const homeHref = homePath(locale);
+const host = site.seo?.author ?? site.title;
+const stackShort = 'Astro · React · Tailwind';
+const localeLabel = locale === 'zh' ? 'zh-CN' : 'en-US';
+
+const metaRowClass =
+  'flex flex-wrap items-baseline gap-x-4 gap-y-1 sm:gap-x-0 py-3 border-b border-[var(--crt-border-dim)]';
+const metaDtClass =
+  'shrink-0 text-xs sm:w-[8em] sm:pr-4 terminal-label !normal-case !tracking-normal';
 ---
 
 <BaseLayout
@@ -27,35 +36,54 @@ const homeHref = homePath(locale);
 >
   <main class="flex-1 w-full">
     <section class="container-main pt-24 sm:pt-28 pb-20 max-w-3xl">
-      <a href={homeHref} class="text-xs mb-8 inline-block hover:opacity-70 transition-opacity duration-150" style="color: var(--crt-accent);">
-        {t.about.backHome}
-      </a>
+      <DetailBoot prompt={t.crt.prompt} command={t.about.whoamiCommand} client:load />
 
-      <p class="terminal-label mb-3">{t.nav.about}</p>
-      <h1 class="text-2xl sm:text-3xl font-medium text-balance mb-10">{t.about.title}</h1>
+      <div class="crt-detail-body">
+        <a href={homeHref} class="text-xs mb-8 inline-block hover:opacity-70 transition-opacity duration-150" style="color: var(--crt-accent);">
+          {t.about.backHome}
+        </a>
 
-      <div class="space-y-10 text-sm leading-relaxed">
-        <section class="space-y-3">
-          <h2 class="text-lg font-medium">{t.about.introTitle}</h2>
-          <p class="text-pretty" style="color: var(--crt-text-muted);">{t.about.introBody}</p>
-        </section>
+        <p class="terminal-label mb-3">{t.nav.about}</p>
+        <h1 class="text-2xl sm:text-3xl font-medium text-balance mb-8">{t.about.title}</h1>
 
-        <section class="space-y-3">
-          <h2 class="text-lg font-medium">{t.about.stackTitle}</h2>
-          <p class="text-pretty" style="color: var(--crt-text-muted);">{t.about.stackBody}</p>
-        </section>
+        <dl class="mb-10 border-t border-[var(--crt-border-dim)]">
+          <div class={metaRowClass}>
+            <dt class={metaDtClass}>{t.about.metaHost}</dt>
+            <dd class="text-sm" style="color: var(--crt-text-muted);">{host}</dd>
+          </div>
+          <div class={metaRowClass}>
+            <dt class={metaDtClass}>{t.about.metaStack}</dt>
+            <dd class="text-sm" style="color: var(--crt-text-muted);">{stackShort}</dd>
+          </div>
+          <div class={metaRowClass}>
+            <dt class={metaDtClass}>{t.about.metaLocale}</dt>
+            <dd class="text-sm" style="color: var(--crt-text-muted);">{localeLabel}</dd>
+          </div>
+        </dl>
 
-        <section class="space-y-3">
-          <h2 class="text-lg font-medium">{t.about.nowTitle}</h2>
-          <ul class="space-y-2" style="color: var(--crt-text-muted);">
-            {t.about.nowItems.map((item) => (
-              <li class="flex gap-2">
-                <span style="color: var(--crt-accent);" aria-hidden="true">·</span>
-                <span class="text-pretty">{item}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
+        <div class="space-y-10 text-sm leading-relaxed">
+          <section class="space-y-3">
+            <h2 class="text-lg font-medium">{t.about.introTitle}</h2>
+            <p class="text-pretty" style="color: var(--crt-text-muted);">{t.about.introBody}</p>
+          </section>
+
+          <section class="space-y-3">
+            <h2 class="text-lg font-medium">{t.about.stackTitle}</h2>
+            <p class="text-pretty" style="color: var(--crt-text-muted);">{t.about.stackBody}</p>
+          </section>
+
+          <section class="space-y-3">
+            <h2 class="text-lg font-medium">{t.about.nowTitle}</h2>
+            <ul class="space-y-2" style="color: var(--crt-text-muted);">
+              {t.about.nowItems.map((item) => (
+                <li class="flex gap-2">
+                  <span style="color: var(--crt-accent);" aria-hidden="true">·</span>
+                  <span class="text-pretty">{item}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        </div>
       </div>
     </section>
   </main>

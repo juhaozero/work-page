@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { UITranslations } from '../i18n/ui';
+import { t as format } from '../i18n/ui';
 import site from '../data/site.json';
 import Typewriter from './Typewriter';
 import {
@@ -11,11 +12,17 @@ import {
 
 interface HeroPortalProps {
   t: UITranslations;
+  projectCount?: number;
+  featuredCount?: number;
 }
 
 type IntroMode = 'pending' | 'type' | 'instant';
 
-export default function HeroPortal({ t }: HeroPortalProps) {
+export default function HeroPortal({
+  t,
+  projectCount,
+  featuredCount,
+}: HeroPortalProps) {
   const skipIntro = !shouldPlayCrtHomeIntro();
   const [mode, setMode] = useState<IntroMode>(skipIntro ? 'instant' : 'pending');
   const [typed, setTyped] = useState(skipIntro);
@@ -124,9 +131,21 @@ export default function HeroPortal({ t }: HeroPortalProps) {
         )}
 
         {t.portal.title ? (
-          <h2 id="portal-heading" className="text-lg font-medium mb-5 crt-phosphor">
+          <h2
+            id="portal-heading"
+            className={`text-lg font-medium crt-phosphor${typeof projectCount === 'number' ? ' mb-2' : ' mb-5'}`}
+          >
             {t.portal.title}
           </h2>
+        ) : null}
+
+        {typeof projectCount === 'number' ? (
+          <p className="text-xs mb-5" style={{ color: 'var(--crt-text-dim)' }}>
+            {format(t.hero.projectsTotal, { count: projectCount })}
+            {typeof featuredCount === 'number'
+              ? ` · ${format(t.hero.featuredCount, { count: featuredCount })}`
+              : null}
+          </p>
         ) : null}
 
         <ul

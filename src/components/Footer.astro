@@ -20,36 +20,38 @@ const aboutHref = aboutPath(locale);
 
 <footer class="mt-auto container-main py-12">
   <div
-    class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs pt-8"
+    class="pt-8 space-y-2 text-xs"
     style="border-top: 1px solid var(--crt-border-dim); color: var(--crt-text-muted);">
-    <p class="leading-relaxed">
-      <span style="color: var(--crt-text);">{siteTitle}</span>
-      <span>
-        · © {createYear}&nbsp;-&nbsp;{year}{domain ? ` ${domain}` : ""}</span
-      >
-    </p>
-
-    <div class="flex items-center gap-4">
-      <a
-        href={aboutHref}
-        class="hover:opacity-70 transition-opacity duration-150"
-        style="color: var(--crt-accent);">
-        {t.footer.about}
-      </a>
-      <a
-        href={`mailto:${email}`}
-        class="hover:opacity-70 transition-opacity duration-150"
-        style="color: var(--crt-accent);">
-        {t.footer.contact}
-      </a>
-      <a
-        href={github}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="hover:opacity-70 transition-opacity duration-150"
-        style="color: var(--crt-accent);">
-        {t.footer.github}
-      </a>
+    <div class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-3 sm:gap-4">
+      <p class="leading-relaxed m-0">
+        <span style="color: var(--crt-text);">{siteTitle}</span>
+        <span>
+          · © {createYear}&nbsp;-&nbsp;{year}{domain ? ` ${domain}` : ""}</span
+        >
+      </p>
+      <nav class="flex items-baseline gap-4 shrink-0">
+        <a
+          href={aboutHref}
+          class="hover:opacity-70 transition-opacity duration-150"
+          style="color: var(--crt-accent);">
+          {t.footer.about}
+        </a>
+        <a
+          href={`mailto:${email}`}
+          class="hover:opacity-70 transition-opacity duration-150"
+          style="color: var(--crt-accent);">
+          {t.footer.contact}
+        </a>
+        <a
+          href={github}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hover:opacity-70 transition-opacity duration-150"
+          style="color: var(--crt-accent);">
+          {t.footer.github}
+        </a>
+      </nav>
     </div>
+    <p class="m-0 font-mono" style="color: var(--crt-text-dim);">{t.footer.exitLine}</p>
   </div>
 </footer>

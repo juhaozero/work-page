@@ -129,7 +129,7 @@ export default function ProjectCatalog({
                   ].join(' ')}
                   aria-pressed={isActive}
                 >
-                  {isActive ? `[x] ${category}` : category}
+                  {isActive ? `[x] ${category}` : `[ ] ${category}`}
                 </button>
               );
             })}

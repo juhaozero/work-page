@@ -12,7 +12,7 @@ import {
 import { getTranslations, t as format } from "../../../i18n/ui";
 import { getProjects } from "../../../i18n/projects";
 import { homePath, projectDetailPath } from "../../../i18n/paths";
-import { projectOgImage } from "../../../lib/projectCover";
+import { projectCoverImage, projectOgImage } from "../../../lib/projectCover";
 import DetailBoot from "../../../components/DetailBoot";
 import site from "../../../data/site.json";
 import healthReport from "../../../data/status.json";
@@ -43,17 +43,21 @@ const longCopy = project.longDescription ?? project.description;
 const cols = t.catalog.columns;
 
 const links = [
-  { href: project.url, label: t.project.openLabel },
+  { href: project.url, label: t.project.openLabel, primary: true as const },
   project.demo && project.demo !== project.url
-    ? { href: project.demo, label: t.project.demo }
+    ? { href: project.demo, label: t.project.demo, primary: false as const }
     : null,
-  project.docs ? { href: project.docs, label: t.project.docs } : null,
+  project.docs ? { href: project.docs, label: t.project.docs, primary: false as const } : null,
   project.changelog
-    ? { href: project.changelog, label: t.project.changelog }
+    ? { href: project.changelog, label: t.project.changelog, primary: false as const }
     : null,
-  project.repo ? { href: project.repo, label: t.project.repo } : null,
-].filter(Boolean) as { href: string; label: string }[];
+  project.repo ? { href: project.repo, label: t.project.repo, primary: false as const } : null,
+].filter(Boolean) as { href: string; label: string; primary: boolean }[];
 
+const primaryLink = links.find((link) => link.primary) ?? links[0];
+const secondaryLinks = links.filter((link) => link !== primaryLink);
+const coverImage = projectCoverImage(project);
+const coverAlt = format(t.project.coverAlt, { name: project.name });
 const softwareJsonLd = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
@@ -124,6 +128,21 @@ const metaDtClass =
         </a>
 
         <header class="mb-8">
+          {
+            coverImage && (
+              <div class="mb-6 overflow-hidden border border-[var(--crt-border-dim)] bg-[var(--crt-surface)]">
+                <img
+                  src={coverImage}
+                  alt={coverAlt}
+                  width={1200}
+                  height={630}
+                  class="w-full aspect-[16/9] object-cover"
+                  loading="eager"
+                  decoding="async"
+                />
+              </div>
+            )
+          }
           <h1 class="text-lg sm:text-xl font-semibold tracking-tight text-balance crt-phosphor">
             {project.name}
           </h1>
@@ -132,6 +151,20 @@ const metaDtClass =
             style="color: var(--crt-text-muted);">
             {project.description}
           </p>
+          {
+            primaryLink && (
+              <div class="mt-6">
+                <a
+                  href={primaryLink.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="btn-terminal-primary"
+                >
+                  {primaryLink.label}
+                </a>
+              </div>
+            )
+          }
         </header>
 
         <dl class="mb-10 border-t border-[var(--crt-border-dim)]">
@@ -196,25 +229,28 @@ const metaDtClass =
           </p>
         </section>
 
-        <section>
-          <h2 class="terminal-label mb-0">{t.project.linksLabel}</h2>
-          <ul class="border-t border-[var(--crt-border-dim)] mt-3">
-            {
-              links.map((link) => (
-                <li class={metaRowClass}>
-                  <a
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="text-sm transition-opacity duration-150 hover:opacity-70 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--crt-accent)]"
-                    style="color: var(--crt-accent);">
-                    {link.label}
-                  </a>
-                </li>
-              ))
-            }
-          </ul>
-        </section>
+        {
+          secondaryLinks.length > 0 && (
+            <section>
+              <h2 class="terminal-label mb-0">{t.project.linksLabel}</h2>
+              <ul class="border-t border-[var(--crt-border-dim)] mt-3">
+                {secondaryLinks.map((link) => (
+                  <li class={metaRowClass}>
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="text-sm transition-opacity duration-150 hover:opacity-70 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--crt-accent)]"
+                      style="color: var(--crt-accent);"
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )
+        }
       </div>
     </article>
   </main>

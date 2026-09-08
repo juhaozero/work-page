@@ -11,28 +11,44 @@ interface LanguageSwitcherProps {
   links: LanguageLink[];
 }
 
-export default function LanguageSwitcher({ locale, ariaLabel, links }: LanguageSwitcherProps) {
-  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const nextLocale = event.target.value as Locale;
-    const target = links.find((link) => link.locale === nextLocale);
-    if (target && target.locale !== locale) {
-      window.location.assign(target.url);
-    }
-  };
-
+/** 终端风格文字切换，不用带边框的 select */
+export default function LanguageSwitcher({
+  locale,
+  ariaLabel,
+  links,
+}: LanguageSwitcherProps) {
   return (
-    <select
-      value={locale}
-      onChange={handleChange}
-      aria-label={ariaLabel}
-      className="select-terminal text-xs"
-    >
-      {links.map(({ locale: code }) => (
-        <option key={code} value={code}>
-          {localeLabels[code]}
-        </option>
-      ))}
-    </select>
+    <nav className="flex items-center gap-0.5" aria-label={ariaLabel}>
+      {links.map(({ locale: code, url }, index) => {
+        const active = code === locale;
+        return (
+          <span key={code} className="inline-flex items-center">
+            {index > 0 ? (
+              <span className="px-0.5" style={{ color: 'var(--crt-text-dim)' }} aria-hidden="true">
+                /
+              </span>
+            ) : null}
+            {active ? (
+              <span
+                className="btn-filter btn-filter-active min-h-10 inline-flex items-center"
+                aria-current="true"
+              >
+                {localeLabels[code]}
+              </span>
+            ) : (
+              <a
+                href={url}
+                className="btn-filter btn-filter-inactive min-h-10 inline-flex items-center no-underline"
+                style={{ color: 'var(--crt-text-dim)' }}
+                hrefLang={code}
+              >
+                {localeLabels[code]}
+              </a>
+            )}
+          </span>
+        );
+      })}
+    </nav>
   );
 }
 

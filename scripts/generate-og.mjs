@@ -33,23 +33,28 @@ function wrapText(text, maxChars = 22) {
   return lines;
 }
 
-async function renderOg({ slug, name, emoji, category, siteTitle }) {
+async function renderOg({ slug, name, category, siteTitle }) {
   const lines = wrapText(name);
   const titleSvg = lines
     .map(
       (line, i) =>
-        `<text x="80" y="${280 + i * 64}" fill="#8f9a68" font-size="52" font-family="ui-monospace, monospace" font-weight="700">${escapeXml(line)}</text>`,
+        `<text x="80" y="${240 + i * 64}" fill="#f0f0f4" font-size="52" font-family="ui-monospace, monospace" font-weight="700">${escapeXml(line)}</text>`,
     )
     .join('');
 
+  const brand = siteTitle?.trim() || 'Project Hub';
+
   const svg = `<?xml version="1.0" encoding="UTF-8"?>
 <svg width="${WIDTH}" height="${HEIGHT}" viewBox="0 0 ${WIDTH} ${HEIGHT}" xmlns="http://www.w3.org/2000/svg">
-  <rect width="100%" height="100%" fill="#0b0c09"/>
-  <rect x="40" y="40" width="${WIDTH - 80}" height="${HEIGHT - 80}" fill="none" stroke="#2c3022" stroke-width="2"/>
-  <text x="80" y="120" fill="#3f4532" font-size="22" font-family="ui-monospace, monospace" letter-spacing="4">${escapeXml(siteTitle.toUpperCase())}</text>
-  <text x="80" y="200" font-size="64">${escapeXml(emoji)}</text>
+  <rect width="100%" height="100%" fill="#2d2e49"/>
+  <rect x="40" y="40" width="${WIDTH - 80}" height="${HEIGHT - 80}" rx="16" fill="#212238" stroke="#3f4060" stroke-width="2"/>
+  <circle cx="72" cy="78" r="8" fill="#ff5f57"/>
+  <circle cx="96" cy="78" r="8" fill="#febc2e"/>
+  <circle cx="120" cy="78" r="8" fill="#28c840"/>
+  <text x="160" y="84" fill="#b4b5c8" font-size="20" font-family="ui-monospace, monospace">${escapeXml(brand)}</text>
+  <text x="80" y="180" fill="#8fd4a8" font-size="28" font-family="ui-monospace, monospace">$</text>
   ${titleSvg}
-  <text x="80" y="540" fill="#66704c" font-size="24" font-family="ui-monospace, monospace">[${escapeXml(category)}] · /projects/${escapeXml(slug)}</text>
+  <text x="80" y="540" fill="#8fd4a8" font-size="24" font-family="ui-monospace, monospace">[${escapeXml(category)}] · /projects/${escapeXml(slug)}</text>
 </svg>`;
 
   const png = await sharp(Buffer.from(svg)).png().toBuffer();
@@ -65,9 +70,8 @@ for (const project of projects) {
   await renderOg({
     slug: project.slug,
     name: project.name,
-    emoji: project.emoji,
     category: project.category,
-    siteTitle: site.title ?? 'Project Hub',
+    siteTitle: site.title,
   });
   console.log(`OG → ${project.slug}.png`);
 }

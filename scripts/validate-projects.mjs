@@ -10,7 +10,7 @@ const sourcePath = join(root, 'src/data/projects.source.json');
 
 const LOCALES = ['zh', 'en'];
 const LIFECYCLES = new Set(['active', 'maintenance', 'archived']);
-const REQUIRED_SHARED = ['id', 'slug', 'emoji', 'url'];
+const REQUIRED_SHARED = ['id', 'slug', 'url'];
 const REQUIRED_I18N = ['name', 'category', 'description'];
 
 function isNonEmptyString(value) {

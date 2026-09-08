@@ -6,7 +6,6 @@ export interface Project {
   /** URL 路径段，全局唯一 */
   slug: string;
   name: string;
-  emoji: string;
   category: string;
   /** 列表短描述 */
   description: string;
@@ -23,8 +22,8 @@ export interface Project {
   demo?: string;
   docs?: string;
   changelog?: string;
+  /** 站内封面图路径；无则不上图（OG 另走 /og/projects） */
   cover?: string;
-  screenshots?: string[];
 }
 
 export interface SiteConfig {

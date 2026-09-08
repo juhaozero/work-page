@@ -1,6 +1,6 @@
 # 个人项目页面 · Personal Project Hub
 
-终端风格的个人项目展示站：集中索引作品，支持分类筛选、精选、暗黑模式、中英双语、项目详情与构建期服务探测。
+现代终端窗风格的个人项目展示站：集中索引作品，支持分类筛选、精选、暗黑模式、中英双语、项目详情与构建期服务探测。
 
 线上地址：https://dev.juhaozero.com
 
@@ -9,7 +9,7 @@
 | 技术                                         | 用途                                   |
 | -------------------------------------------- | -------------------------------------- |
 | [Astro](https://astro.build)                 | 静态站点生成（SSG）+ 多语言路由        |
-| [Tailwind CSS](https://tailwindcss.com) v4   | CRT 主题与响应式布局                   |
+| [Tailwind CSS](https://tailwindcss.com) v4   | 终端窗主题与响应式布局                 |
 | [React](https://react.dev)                   | 交互岛屿（筛选、主题、语言、健康状态） |
 | [TypeScript](https://www.typescriptlang.org) | 类型安全                               |
 | JSON                                         | 统一源数据生成中英文项目列表           |
@@ -34,25 +34,31 @@ npm run preview
 
 ```text
 /
-├── docs/development.md          # 开发指南与拓展方向
+├── docs/
+│   ├── development.md              # 开发指南
+│   ├── ui-design-review.md         # 美学立意与改进方向
+│   └── ui-improvement-proposal.md  # 首页升格落地规格
 ├── scripts/
-│   ├── generate-projects.mjs    # source → 中英文 JSON
-│   ├── validate-projects.mjs    # 源数据校验
-│   ├── probe-health.mjs         # 构建期 URL 探测
-│   └── generate-og.mjs          # 项目 OG 图
+│   ├── generate-projects.mjs       # source → 中英文 JSON
+│   ├── validate-projects.mjs       # 源数据校验
+│   ├── probe-health.mjs            # 构建期 URL 探测
+│   ├── generate-og.mjs             # 项目 OG 图（终端窗风格）
+│   └── generate-favicon.mjs        # favicon 生成（按需）
 ├── src/
 │   ├── data/
-│   │   ├── projects.source.json # ★ 唯一编辑入口
-│   │   ├── projects.json        # 生成物（中文）
-│   │   ├── projects.en.json     # 生成物（英文）
-│   │   ├── status.json          # 健康探测结果
-│   │   └── site.json
-│   ├── i18n/ · components/ · layouts/ · lib/ · pages/ · styles/ · types/
+│   │   ├── projects.source.json    # ★ 唯一编辑入口
+│   │   ├── projects.json           # 生成物（中文）
+│   │   ├── projects.en.json        # 生成物（英文）
+│   │   ├── status.json             # 健康探测结果
+│   │   └── site.json               # 域名、联系方式、SEO
+│   ├── components/                 # HeroPortal / Catalog / 开机窗等
+│   ├── i18n/ · layouts/ · lib/ · pages/ · styles/ · types/
+├── public/og/projects/             # 按项目生成的 OG PNG
 ├── .github/workflows/deploy-cos.yml
 └── package.json
 ```
 
-细节见 [docs/development.md](docs/development.md)。
+细节见 [docs/development.md](docs/development.md)；视觉立意见 [docs/ui-design-review.md](docs/ui-design-review.md)。
 
 ## 添加 / 修改项目
 
@@ -63,7 +69,7 @@ npm run validate:projects
 npm run generate:projects
 ```
 
-共享字段示例：`id`、`slug`、`emoji`、`url`、`featured`、`tech`、`createdAt`、`lifecycle`、`repo`、`demo`、`docs`；文案放在 `i18n.zh` / `i18n.en`。
+共享字段：`id`、`slug`、`url`（必填）；可选 `featured`、`tech`、`createdAt`、`lifecycle`、`repo`、`demo`、`docs`、`changelog`、`cover`。文案放在 `i18n.zh` / `i18n.en`（`name`、`category`、`description`、`longDescription?`）。
 
 ## 功能特性
 
@@ -72,7 +78,7 @@ npm run generate:projects
 - **About / Now** — `/about` 叙事与近期动态
 - **构建期探测** — 写入 status.json，详情页展示检测时间与原因
 - **SEO** — hreflang、ItemList / SoftwareApplication、按项目 OG
-- **分类筛选 · 精选 · 暗黑模式 · CRT 视觉**
+- **分类筛选 · 精选 · 暗黑模式 · 现代终端窗视觉（开机窗 + 命令行分区）**
 - **部署** — `main` 推送与每日定时构建后同步腾讯云 COS
 
 ## License

@@ -9,10 +9,11 @@ pages/[...locale]/
 └── projects/[slug].astro         # 项目详情
 
 index.astro
-├── BaseLayout.astro              # HTML 骨架、SEO、顶栏
+├── BaseLayout.astro              # HTML 骨架、SEO、顶栏、开机窗
 ├── ProjectHealthInit.tsx         # 注入构建期 status.json
-├── Hero.astro + FeaturedProjects
-├── ProjectCatalog + ProjectCard
+├── HeroPortal                    # 门户首屏
+├── FeaturedProjects              # 精选列表
+├── ProjectCatalog + ProjectCard  # 终端表目录
 └── Footer.astro
 ```
 
@@ -62,9 +63,9 @@ getProjects(locale)
 | `src/data/site.json` | 域名、联系方式、默认 OG |
 | `src/i18n/ui.ts` | 界面与 About 文案 |
 
-`Project` 主要字段：`id`、`slug`、`name`、`emoji`、`category`、`description`、`longDescription?`、`url`、`featured?`、`repo?`、`tech?`、`createdAt?`、`lifecycle?`、`demo?`、`docs?`、`changelog?`、`cover?`、`screenshots?`。
+`Project` 主要字段：`id`、`slug`、`name`、`category`、`description`、`longDescription?`、`url`、`featured?`、`repo?`、`tech?`、`createdAt?`、`lifecycle?`、`demo?`、`docs?`、`changelog?`、`cover?`。
 
-生命周期 `lifecycle`：`active` | `maintenance` | `archived`（与在线探测状态分离）。
+生命周期 `lifecycle`：`active` | `maintenance` | `archived`（与在线探测状态分离）。社交 OG 图由 `scripts/generate-og.mjs` 写入 `public/og/projects/{slug}.png`，与可选站内 `cover` 分离。
 
 ## npm 脚本
 
@@ -106,8 +107,11 @@ getProjects(locale)
 
 使用 **Tailwind CSS v4**（`src/styles/global.css`）：
 
-- 暗黑模式：`html.dark` + `--crt-*` CRT 终端变量
+- 暗黑模式：`html.dark` + `--crt-*` 变量（命名历史遗留；美学为 **现代终端窗**，非 CRT 显像管）
+- 气质：slate chrome + mint prompt；无扫描线 / 无磷光 glow
 - 字体系列：`JetBrains Mono` + `Noto Sans Mono` / `Noto Sans SC`
+- 开机：`CrtBootShield`（macOS 红绿灯窗）；时序见 `src/lib/crtBoot.ts`
+- UI 立意与改进方向：[`docs/ui-design-review.md`](./ui-design-review.md)、[`docs/ui-improvement-proposal.md`](./ui-improvement-proposal.md)
 
 ### 响应式断点（项目网格）
 
@@ -116,6 +120,9 @@ getProjects(locale)
 | 默认（< 640px） | 1 列 | — |
 | sm（≥ 640px） | 2 列 | `sm:grid-cols-2` |
 | lg（≥ 1024px） | 3 列 | `lg:grid-cols-3` |
+
+> 首页目录现为终端表（非卡片网格）；上表适用于其它网格布局场景。
+
 
 ## 常见开发任务
 
@@ -129,7 +136,6 @@ getProjects(locale)
 {
   "id": "5",
   "slug": "my-tool",
-  "emoji": "🧪",
   "url": "https://example.com/",
   "featured": false,
   "tech": ["TypeScript"],
@@ -165,7 +171,7 @@ getProjects(locale)
 
 ### 修改主题色
 
-改 `global.css` 中 `:root` / `html.dark` 的 `--crt-*`。
+改 `global.css` 中 `:root` / `html.dark` 的 `--crt-*`。保持「现代终端窗」立意（slate + mint），不要加回扫描线/磷光 glow。设计约束见 `docs/ui-design-review.md`。
 
 ### 添加多语言新页
 

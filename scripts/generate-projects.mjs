@@ -16,7 +16,6 @@ const outFiles = {
 const SHARED_KEYS = [
   'id',
   'slug',
-  'emoji',
   'url',
   'featured',
   'repo',
@@ -27,7 +26,6 @@ const SHARED_KEYS = [
   'docs',
   'changelog',
   'cover',
-  'screenshots',
 ];
 
 function pickShared(entry) {

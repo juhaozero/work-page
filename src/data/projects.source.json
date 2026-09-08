@@ -2,7 +2,6 @@
   {
     "id": "1",
     "slug": "browser-toolbox",
-    "emoji": "🏷️",
     "url": "https://app.juhaozero.com/browser/",
     "featured": false,
     "tech": ["HTML", "CSS", "JavaScript"],
@@ -26,7 +25,6 @@
   {
     "id": "2",
     "slug": "p4g-persona-fusion",
-    "emoji": "🎮",
     "url": "https://app.juhaozero.com/persona/",
     "featured": false,
     "tech": ["TypeScript", "React"],
@@ -50,7 +48,6 @@
   {
     "id": "3",
     "slug": "ins-collage",
-    "emoji": "🖼️",
     "url": "https://app.juhaozero.com/images/",
     "featured": false,
     "tech": ["Canvas", "JavaScript"],
@@ -74,7 +71,6 @@
   {
     "id": "4",
     "slug": "watermark-video",
-    "emoji": "🔨",
     "url": "https://app.juhaozero.com/watermark/",
     "featured": true,
     "tech": ["TypeScript", "Node"],
@@ -98,7 +94,6 @@
   {
     "id": "5",
     "slug": "tarot-hall",
-    "emoji": "🎲",
     "url": "https://app.juhaozero.com/tarot/",
     "featured": true,
     "tech": ["TypeScript", "React"],
@@ -119,5 +114,4 @@
       }
     }
   }
-  
 ]

@@ -7,7 +7,7 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://work.juhaozero.com',
+  site: 'https://dev.juhaozero.com',
 
   i18n: {
     defaultLocale: 'zh',

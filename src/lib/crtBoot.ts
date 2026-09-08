@@ -12,7 +12,7 @@ export const CRT_HOME_PLAYED_KEY = 'crt-home-played';
 export const CRT_TIMING = {
   boot: {
     /** 开机每字 */
-    charMs: 60,
+    charMs: 45,
     /** 第一行开始前（等窗口入场） */
     firstLineDelayMs: 320,
     /** 行与行之间 */
@@ -26,11 +26,11 @@ export const CRT_TIMING = {
     charMs: 100,
     delayMs: 120,
     /** 首页命令打完 → 精选 */
-    afterTypedMs: 500,
+    afterTypedMs: 400,
   },
   featured: {
     charMs: 100,
-    delayMs: 180,
+    delayMs: 120,
     /** 精选列表亮起后 → 目录：基数 + 每项 */
     afterShowBaseMs: 280,
     afterShowPerItemMs: 90,

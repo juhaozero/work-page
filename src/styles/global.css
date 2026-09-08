@@ -6,23 +6,23 @@
   --font-mono: "JetBrains Mono", "Noto Sans Mono", "Noto Sans SC", ui-monospace, monospace;
 }
 
-/* ── 主题变量：偏终端窗（参考 macOS terminal portfolio）── */
+/* ── 主题变量：现代终端窗（slate chrome + mint prompt）── */
 :root {
   --crt-bg: #eef0f6;
   --crt-surface: #e4e6f0;
   --crt-surface-2: #d8dae6;
-  --crt-text: #2a2b45;
-  --crt-text-muted: #5a5c78;
-  --crt-text-dim: #7a7c96;
-  --crt-border: #b8bacd;
-  --crt-border-dim: #cdd0de;
-  --crt-accent: #3f6b8a;
-  --crt-accent-dim: #5482a0;
-  --crt-glow: rgba(63, 107, 138, 0.08);
-  --crt-scanline: rgba(42, 43, 69, 0.02);
-  --crt-selection-bg: rgba(63, 107, 138, 0.16);
+  --crt-text: #1e1f36;
+  --crt-text-muted: #4a4c66;
+  --crt-text-dim: #6a6c86;
+  --crt-border: #a8aac0;
+  --crt-border-dim: #c5c7d6;
+  --crt-accent: #2f5a78;
+  --crt-accent-dim: #3f6b8a;
+  --crt-glow: rgba(47, 90, 120, 0.09);
+  --crt-scanline: transparent;
+  --crt-selection-bg: rgba(47, 90, 120, 0.18);
   --crt-selection-text: #1a1b2e;
-  --crt-vignette: rgba(42, 43, 69, 0.08);
+  --crt-vignette: rgba(30, 31, 54, 0.05);
 }
 
 html.dark {
@@ -36,11 +36,11 @@ html.dark {
   --crt-border-dim: #353652;
   --crt-accent: #8fd4a8;
   --crt-accent-dim: #6bb88a;
-  --crt-glow: rgba(143, 212, 168, 0.07);
-  --crt-scanline: rgba(240, 240, 244, 0.015);
+  --crt-glow: rgba(143, 212, 168, 0.06);
+  --crt-scanline: transparent;
   --crt-selection-bg: rgba(143, 212, 168, 0.18);
   --crt-selection-text: #f0f0f4;
-  --crt-vignette: rgba(12, 12, 24, 0.45);
+  --crt-vignette: rgba(12, 12, 24, 0.22);
   color-scheme: dark;
 }
 
@@ -75,38 +75,23 @@ body {
   position: relative;
 }
 
-/* 静态扫描线纹理 */
+/* 终端窗：无扫描线；极轻边缘压暗即可 */
 body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 50;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    var(--crt-scanline) 2px,
-    var(--crt-scanline) 3px
-  );
-  opacity: 0.55;
+  content: none;
 }
 
-/* CRT 暗角 + 极轻磷光晕 */
 body::after {
   content: "";
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 49;
-  background:
-    radial-gradient(ellipse 85% 70% at 50% 45%, transparent 40%, var(--crt-vignette) 100%),
-    radial-gradient(ellipse 120% 80% at 50% -10%, var(--crt-glow) 0%, transparent 55%);
+  background: radial-gradient(
+    ellipse 95% 80% at 50% 40%,
+    transparent 55%,
+    var(--crt-vignette) 100%
+  );
   opacity: 1;
-}
-
-html.dark body::before {
-  opacity: 0.28;
 }
 
 
@@ -205,7 +190,7 @@ html.dark body::before {
   }
 }
 
-/* 精选行：与目录同行交互，略疏 */
+/* 精选行：与目录同行交互，略疏（旧布局兼容） */
 @utility featured-row {
   padding: 1rem 0;
   border-bottom: 1px solid var(--crt-border-dim);
@@ -214,6 +199,76 @@ html.dark body::before {
   &:hover {
     background-color: var(--crt-glow);
     box-shadow: inset 2px 0 0 var(--crt-accent);
+  }
+}
+
+/* 精选舞台卡：左媒体 + 右文案 */
+@utility featured-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: var(--crt-surface);
+  border: 1px solid var(--crt-border-dim);
+  border-radius: 0;
+  text-decoration: none;
+  color: inherit;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
+
+  &:hover {
+    border-color: var(--crt-border);
+    box-shadow: inset 2px 0 0 var(--crt-accent);
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow:
+      inset 2px 0 0 var(--crt-accent),
+      0 0 0 1px var(--crt-accent);
+  }
+
+  @media (min-width: 640px) {
+    flex-direction: row;
+    align-items: stretch;
+    min-height: 7rem;
+  }
+}
+
+@utility featured-card-media {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  flex-shrink: 0;
+  background-color: var(--crt-surface-2);
+  border-bottom: 1px solid var(--crt-border-dim);
+  overflow: hidden;
+
+  @media (min-width: 640px) {
+    width: 11rem;
+    aspect-ratio: auto;
+    align-self: stretch;
+    border-bottom: none;
+    border-right: 1px solid var(--crt-border-dim);
+  }
+
+  @media (min-width: 768px) {
+    width: 13rem;
+  }
+}
+
+@utility featured-card-body {
+  padding: 1rem 1rem 1.125rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+@utility featured-card--text {
+  @media (min-width: 640px) {
+    min-height: auto;
   }
 }
 
@@ -240,7 +295,8 @@ html.dark body::before {
 }
 
 @utility btn-filter {
-  padding: 0.125rem 0.5rem;
+  padding: 0.5rem 0.625rem;
+  min-height: 2.75rem;
   font-size: 0.75rem;
   cursor: pointer;
   border: none;
@@ -269,7 +325,7 @@ html.dark body::before {
   color: var(--crt-text);
   font-family: inherit;
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235c6248' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%234a4c66' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 0.45rem center;
   background-size: 0.75rem;
@@ -287,7 +343,7 @@ html.dark body::before {
 }
 
 html.dark .select-terminal {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2366704c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23b4b5c8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
 }
 
 @utility btn-terminal {
@@ -295,17 +351,49 @@ html.dark .select-terminal {
   align-items: center;
   gap: 0.375rem;
   padding: 0.375rem 0.875rem;
+  min-height: 2.5rem;
   font-size: 0.8125rem;
   cursor: pointer;
   border: 1px solid var(--crt-border);
   color: var(--crt-text);
   background-color: var(--crt-surface);
+  text-decoration: none;
   transition: border-color 0.15s ease, color 0.15s ease, background-color 0.15s ease;
 
   &:hover {
     border-color: var(--crt-accent);
     color: var(--crt-accent);
     background-color: var(--crt-glow);
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 1px var(--crt-accent);
+  }
+}
+
+@utility btn-terminal-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.625rem 1.125rem;
+  min-height: 2.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid var(--crt-accent);
+  color: var(--crt-bg);
+  background-color: var(--crt-accent);
+  text-decoration: none;
+  transition: opacity 0.15s ease, filter 0.15s ease;
+
+  &:hover {
+    filter: brightness(1.06);
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--crt-bg), 0 0 0 4px var(--crt-accent);
   }
 }
 
@@ -337,13 +425,9 @@ html.dark .select-terminal {
   50% { opacity: 0.45; }
 }
 
-/* ── CRT 氛围：磷光 / 光标 / 进场 ── */
+/* ── 终端氛围：光标 / 进场（无磷光 glow）── */
 @utility crt-phosphor {
-  @variant dark {
-    text-shadow:
-      0 0 0.5px var(--crt-accent),
-      0 0 8px rgba(143, 212, 168, 0.2);
-  }
+  text-shadow: none;
 }
 
 @utility crt-cursor {
@@ -400,7 +484,7 @@ html.dark .select-terminal {
   z-index: 100;
   pointer-events: auto;
   cursor: pointer;
-  background: #2d2e49;
+  background: var(--crt-bg);
   overflow: hidden;
 }
 
@@ -421,14 +505,20 @@ html.crt-boot {
   width: min(48rem, calc(100vw - 2rem));
   border-radius: 12px;
   overflow: hidden;
-  background: #282a36;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: var(--crt-surface-2);
+  border: 1px solid var(--crt-border-dim);
   box-shadow:
-    0 18px 50px rgba(0, 0, 0, 0.45),
-    0 0 0 1px rgba(0, 0, 0, 0.25);
+    0 18px 50px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(0, 0, 0, 0.18);
   opacity: 0;
   transform: translateY(10px) scale(0.98);
   animation: crt-boot-window-in 0.45s ease-out forwards;
+}
+
+html:not(.dark) .crt-boot-window {
+  box-shadow:
+    0 18px 48px rgba(42, 43, 69, 0.16),
+    0 0 0 1px rgba(42, 43, 69, 0.06);
 }
 
 .crt-boot-titlebar {
@@ -438,8 +528,8 @@ html.crt-boot {
   gap: 0.5rem;
   height: 2.25rem;
   padding: 0 0.85rem;
-  background: #3a3b4a;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.28);
+  background: var(--crt-surface);
+  border-bottom: 1px solid var(--crt-border-dim);
 }
 
 .crt-boot-traffic {
@@ -477,13 +567,13 @@ html.crt-boot {
   white-space: nowrap;
   font-size: 0.6875rem;
   letter-spacing: 0.02em;
-  color: #c8c9d4;
+  color: var(--crt-text-muted);
 }
 
 .crt-boot-body {
   padding: 1.75rem 1.75rem 1.35rem;
   min-height: 14rem;
-  background: #282a36;
+  background: var(--crt-surface-2);
 }
 
 .crt-boot-lines {
@@ -492,7 +582,7 @@ html.crt-boot {
   list-style: none;
   font-size: 0.9375rem;
   line-height: 1.8;
-  color: #f0f0f4;
+  color: var(--crt-text);
   min-height: 10.5em;
 }
 
@@ -504,7 +594,7 @@ html.crt-boot {
   margin: 1rem 0 0;
   font-size: 0.6875rem;
   letter-spacing: 0.04em;
-  color: #7a7b94;
+  color: var(--crt-text-dim);
 }
 
 .crt-boot-skip--live {

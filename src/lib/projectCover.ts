@@ -1,11 +1,12 @@
 import type { Project } from '../types/project';
 
-/** 站内封面路径（保留供资产脚本等使用；列表/详情已改用字形块） */
-export function projectCover(project: Project): string {
-  return project.cover ?? `/covers/projects/${project.slug}.png`;
-}
-
-/** 社交分享 OG 图（与站内 CRT 封面分离） */
+/** 社交分享用的 OG 图（meta，不用于站内展示） */
 export function projectOgImage(project: Project): string {
   return `/og/projects/${project.slug}.png`;
+}
+
+/** 站内封面：仅真实 cover，无则不上图 */
+export function projectCoverImage(project: Project): string | null {
+  const cover = project.cover?.trim();
+  return cover ? cover : null;
 }

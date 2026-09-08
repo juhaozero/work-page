@@ -13,7 +13,6 @@ export interface UITranslations {
   site: SiteTranslations;
   nav: {
     online: string;
-    home: string;
     about: string;
   };
   portal: {
@@ -30,16 +29,10 @@ export interface UITranslations {
   };
   featured: {
     label: string;
-    ariaLabel: string;
-    pinLabel: string;
     goTo: string;
   };
   catalog: {
-    divider: string;
     title: string;
-    showing: string;
-    of: string;
-    categoryPrefix: string;
     filterAll: string;
     filterAriaLabel: string;
     emptyTitle: string;
@@ -49,13 +42,10 @@ export interface UITranslations {
       category: string;
       tech: string;
       status: string;
-      date: string;
     };
   };
   project: {
-    indexLabel: string;
     openLabel: string;
-    detailsLabel: string;
     backToCatalog: string;
     techLabel: string;
     linksLabel: string;
@@ -89,11 +79,16 @@ export interface UITranslations {
     nowTitle: string;
     nowItems: string[];
     backHome: string;
+    whoamiCommand: string;
+    metaHost: string;
+    metaStack: string;
+    metaLocale: string;
   };
   footer: {
     contact: string;
     github: string;
     about: string;
+    exitLine: string;
   };
   theme: {
     toLight: string;
@@ -127,14 +122,13 @@ const ui: Record<Locale, UITranslations> = {
     },
     nav: {
       online: '◉ 在线',
-      home: '首页',
       about: '关于',
     },
     portal: {
-      title: '',
+      title: '个人小项目索引',
       avatarAlt: '头像',
       github: 'GitHub',
-      blog : '博客',
+      blog: '博客',
       email: '电子邮件',
       about: '关于',
     },
@@ -144,16 +138,10 @@ const ui: Record<Locale, UITranslations> = {
     },
     featured: {
       label: '精选项目',
-      ariaLabel: '精选项目',
-      pinLabel: '精选项目',
       goTo: '详情',
     },
     catalog: {
-      divider: '-- 项目目录 ----------------------------------------------',
       title: '个人作品',
-      showing: '显示',
-      of: '/ {total} 个',
-      categoryPrefix: ' · 分类：',
       filterAll: '全部',
       filterAriaLabel: '项目分类筛选',
       emptyTitle: '未找到匹配的项目',
@@ -163,13 +151,10 @@ const ui: Record<Locale, UITranslations> = {
         category: '分类',
         tech: '技术',
         status: '状态',
-        date: '日期',
       },
     },
     project: {
-      indexLabel: '项目 {index}',
       openLabel: '打开项目',
-      detailsLabel: '查看详情 →',
       backToCatalog: '← 返回目录',
       techLabel: '技术栈',
       linksLabel: '相关链接',
@@ -207,21 +192,23 @@ const ui: Record<Locale, UITranslations> = {
       title: '关于本站',
       seoDescription: '个人小项目索引站：技术栈、近期动态与站点说明。',
       introTitle: '这是什么',
-      introBody:
-        '个人作品的索引站,收纳一些个人的小项目',
+      introBody: '个人作品的索引站，收纳一些打开即用的小项目与工具。',
       stackTitle: '怎么做的',
       stackBody:
-        'Astro 静态生成 + React 交互岛屿，Tailwind 驱动 CRT 终端视觉；中英文由一份 projects.source.json 生成，构建与 CI 会校验数据并写入健康状态。',
+        'Astro 静态生成 + React 交互岛屿，Tailwind 驱动现代终端窗视觉；中英文由一份 projects.source.json 生成，构建与 CI 会校验数据并写入健康状态。',
       nowTitle: '最近动态',
-      nowItems: [
-        '新增了无水印下载工具',
-      ],
+      nowItems: ['新增了无水印下载工具'],
       backHome: '← 返回首页',
+      whoamiCommand: 'whoami',
+      metaHost: 'host',
+      metaStack: 'stack',
+      metaLocale: 'locale',
     },
     footer: {
       contact: '联系',
       github: 'GitHub',
       about: '关于',
+      exitLine: 'exit 0',
     },
     theme: {
       toLight: '切换为亮色模式',
@@ -236,11 +223,11 @@ const ui: Record<Locale, UITranslations> = {
       prompt: 'guest@dev:~$',
       homeCommand: 'ls ~/home',
       detailCommand: 'cat projects/{slug}.md',
-      bootTitle: 'CRT POWER ON',
+      bootTitle: 'Terminal',
       bootLines: [
-        '> init phosphor…',
-        '> sync scanline…',
-        '> mount /home/dev…',
+        '> loading shell…',
+        '> source ~/.profile…',
+        '> cd ~/dev…',
         '> ready.',
       ],
       bootSkip: 'click / esc to skip',
@@ -259,14 +246,13 @@ const ui: Record<Locale, UITranslations> = {
     },
     nav: {
       online: '◉ Online',
-      home: 'Home',
       about: 'About',
     },
     portal: {
-      title: '',
+      title: 'Personal tools index',
       avatarAlt: 'Avatar',
       github: 'GitHub',
-      blog : 'Blog',
+      blog: 'Blog',
       email: 'Email',
       about: 'About',
     },
@@ -276,16 +262,10 @@ const ui: Record<Locale, UITranslations> = {
     },
     featured: {
       label: 'Featured',
-      ariaLabel: 'Featured projects',
-      pinLabel: 'Featured project',
       goTo: 'Details',
     },
     catalog: {
-      divider: '-- Project catalog ----------------------------------------',
       title: 'Personal works',
-      showing: 'Showing',
-      of: ' / {total}',
-      categoryPrefix: ' · Category: ',
       filterAll: 'All',
       filterAriaLabel: 'Project category filter',
       emptyTitle: 'No matching projects',
@@ -295,13 +275,10 @@ const ui: Record<Locale, UITranslations> = {
         category: 'Category',
         tech: 'Tech',
         status: 'Status',
-        date: 'Date',
       },
     },
     project: {
-      indexLabel: 'Project {index}',
       openLabel: 'Open project',
-      detailsLabel: 'View details →',
       backToCatalog: '← Back to catalog',
       techLabel: 'Tech stack',
       linksLabel: 'Links',
@@ -341,20 +318,23 @@ const ui: Record<Locale, UITranslations> = {
         'About this personal project index: stack, recent notes, and site notes.',
       introTitle: 'What this is',
       introBody:
-        'A personal project index: collect some small projects.',
+        'A personal project index for small tools you can open and use instantly.',
       stackTitle: 'How it is built',
       stackBody:
-        'Astro SSG with React islands and a CRT terminal look via Tailwind. zh/en project files are generated from projects.source.json; CI validates data and writes health status.',
-      nowTitle: 'Recent dynamic',
-      nowItems: [
-        'Added a watermark video download tool',
-      ],
+        'Astro SSG with React islands and a modern terminal-window look via Tailwind. zh/en project files are generated from projects.source.json; CI validates data and writes health status.',
+      nowTitle: 'Recent notes',
+      nowItems: ['Added a watermark-free video download tool'],
       backHome: '← Back home',
+      whoamiCommand: 'whoami',
+      metaHost: 'host',
+      metaStack: 'stack',
+      metaLocale: 'locale',
     },
     footer: {
       contact: 'Contact',
       github: 'GitHub',
       about: 'About',
+      exitLine: 'exit 0',
     },
     theme: {
       toLight: 'Switch to light mode',
@@ -369,11 +349,11 @@ const ui: Record<Locale, UITranslations> = {
       prompt: 'guest@dev:~$',
       homeCommand: 'ls ~/home',
       detailCommand: 'cat projects/{slug}.md',
-      bootTitle: 'CRT POWER ON',
+      bootTitle: 'Terminal',
       bootLines: [
-        '> init phosphor…',
-        '> sync scanline…',
-        '> mount /home/dev…',
+        '> loading shell…',
+        '> source ~/.profile…',
+        '> cd ~/dev…',
         '> ready.',
       ],
       bootSkip: 'click / esc to skip',
