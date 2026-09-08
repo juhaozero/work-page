@@ -11,7 +11,7 @@
     ],
     "createdAt": "2024-06-01",
     "lifecycle": "active",
-    "name": "Browser Toolbox",
+    "name": "Tool Shed",
     "category": "Tools",
     "description": "A pure frontend browser toolbox with commonly used utilities.",
     "longDescription": "A single-page collection of everyday browser utilities — open and use instantly, no install required. Handy for quick measuring, converting, and debugging."
@@ -27,7 +27,7 @@
     ],
     "createdAt": "2024-08-15",
     "lifecycle": "active",
-    "name": "P4G Persona Fusion Finder",
+    "name": "P4G Fusion Index",
     "category": "Games",
     "description": "Look up Persona fusion recipes in Persona 4 Golden.",
     "longDescription": "A Persona 4 Golden fusion helper: search by target Persona or materials and find recipes without digging through guide spreadsheets."
@@ -43,7 +43,7 @@
     ],
     "createdAt": "2024-10-01",
     "lifecycle": "active",
-    "name": "Instagram Collage Maker",
+    "name": "Collage Canvas",
     "category": "Images",
     "description": "Generate Instagram-style photo collages.",
     "longDescription": "Build Instagram-style collages in the browser — layout and export in one place, ready to share."
@@ -59,7 +59,7 @@
     ],
     "createdAt": "2025-01-20",
     "lifecycle": "active",
-    "name": "Video Downloader",
+    "name": "UnWatermark",
     "category": "Tools",
     "description": "Parse a video link and download without watermark when possible.",
     "longDescription": "Paste a video URL to resolve a downloadable source, preferring watermark-free media when available — handy for archiving or editing."
@@ -75,7 +75,7 @@
     ],
     "createdAt": "2025-03-20",
     "lifecycle": "active",
-    "name": "tarot-hall",
+    "name": "Ask the Cards",
     "category": "Tools",
     "description": "Tarot card reading.",
     "longDescription": "Tarot card reading."

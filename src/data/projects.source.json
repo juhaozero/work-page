@@ -9,13 +9,13 @@
     "lifecycle": "active",
     "i18n": {
       "zh": {
-        "name": "浏览器工具箱",
+        "name": "百宝箱",
         "category": "工具",
         "description": "纯前端浏览器工具箱，一些常用的浏览器工具合集。",
         "longDescription": "把日常开发与排查里常用的小工具收进同一个纯前端页面：打开即用，无需安装。适合随手测量、转换和调试。"
       },
       "en": {
-        "name": "Browser Toolbox",
+        "name": "Tool Shed",
         "category": "Tools",
         "description": "A pure frontend browser toolbox with commonly used utilities.",
         "longDescription": "A single-page collection of everyday browser utilities — open and use instantly, no install required. Handy for quick measuring, converting, and debugging."
@@ -32,13 +32,13 @@
     "lifecycle": "active",
     "i18n": {
       "zh": {
-        "name": "P4G面具合成查询器",
+        "name": "P4G合成图鉴",
         "category": "游戏",
         "description": "P4G面具合成查询器，可以查询面具的合成配方。",
         "longDescription": "面向《女神异闻录4 黄金版》的面具合成查询工具：按目标面具或素材反向查找配方，少翻攻略表。"
       },
       "en": {
-        "name": "P4G Persona Fusion Finder",
+        "name": "P4G Fusion Index",
         "category": "Games",
         "description": "Look up Persona fusion recipes in Persona 4 Golden.",
         "longDescription": "A Persona 4 Golden fusion helper: search by target Persona or materials and find recipes without digging through guide spreadsheets."
@@ -55,13 +55,13 @@
     "lifecycle": "active",
     "i18n": {
       "zh": {
-        "name": "Ins拼图生成器",
+        "name": "拼贴画布",
         "category": "图片",
         "description": "Ins拼图生成器，可以生成Ins风格的拼图。",
         "longDescription": "在浏览器里拼出 Instagram 风格拼图：排版、导出一气呵成，适合分享前快速出图。"
       },
       "en": {
-        "name": "Instagram Collage Maker",
+        "name": "Collage Canvas",
         "category": "Images",
         "description": "Generate Instagram-style photo collages.",
         "longDescription": "Build Instagram-style collages in the browser — layout and export in one place, ready to share."
@@ -78,13 +78,13 @@
     "lifecycle": "active",
     "i18n": {
       "zh": {
-        "name": "无水印视频下载",
+        "name": "去水印",
         "category": "工具",
         "description": "视频链接解析，一键获取无水印视频下载。",
         "longDescription": "粘贴视频链接即可解析可下载地址，尽量拿到无水印资源。适合备份与二次剪辑前的素材收集。"
       },
       "en": {
-        "name": "Video Downloader",
+        "name": "UnWatermark",
         "category": "Tools",
         "description": "Parse a video link and download without watermark when possible.",
         "longDescription": "Paste a video URL to resolve a downloadable source, preferring watermark-free media when available — handy for archiving or editing."
@@ -107,7 +107,7 @@
         "longDescription": "塔罗牌占卜，可以占卜塔罗牌的含义，并给出建议。"
       },
       "en": {
-        "name": "tarot-hall",
+        "name": "Ask the Cards",
         "category": "Tools",
         "description": "Tarot card reading.",
         "longDescription": "Tarot card reading."
