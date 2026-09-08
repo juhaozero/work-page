@@ -1,4 +1,4 @@
-# 项目炼金室 · Personal Project Hub
+# 个人项目页面 · Personal Project Hub
 
 终端风格的个人项目展示站：集中索引作品，支持分类筛选、精选、暗黑模式、中英双语、项目详情与构建期服务探测。
 
@@ -6,13 +6,13 @@
 
 ## 技术栈
 
-| 技术 | 用途 |
-|------|------|
-| [Astro](https://astro.build) | 静态站点生成（SSG）+ 多语言路由 |
-| [Tailwind CSS](https://tailwindcss.com) v4 | CRT 主题与响应式布局 |
-| [React](https://react.dev) | 交互岛屿（筛选、主题、语言、健康状态） |
-| [TypeScript](https://www.typescriptlang.org) | 类型安全 |
-| JSON | 统一源数据生成中英文项目列表 |
+| 技术                                         | 用途                                   |
+| -------------------------------------------- | -------------------------------------- |
+| [Astro](https://astro.build)                 | 静态站点生成（SSG）+ 多语言路由        |
+| [Tailwind CSS](https://tailwindcss.com) v4   | CRT 主题与响应式布局                   |
+| [React](https://react.dev)                   | 交互岛屿（筛选、主题、语言、健康状态） |
+| [TypeScript](https://www.typescriptlang.org) | 类型安全                               |
+| JSON                                         | 统一源数据生成中英文项目列表           |
 
 ## 快速开始
 

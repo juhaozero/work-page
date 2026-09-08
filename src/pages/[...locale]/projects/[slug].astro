@@ -12,9 +12,8 @@ import {
 import { getTranslations, t as format } from "../../../i18n/ui";
 import { getProjects } from "../../../i18n/projects";
 import { homePath, projectDetailPath } from "../../../i18n/paths";
-import { projectCover, projectOgImage } from "../../../lib/projectCover";
+import { projectOgImage } from "../../../lib/projectCover";
 import DetailBoot from "../../../components/DetailBoot";
-import CrtCover from "../../../components/CrtCover";
 import site from "../../../data/site.json";
 import healthReport from "../../../data/status.json";
 import type { HealthReport, Project } from "../../../types/project";
@@ -39,14 +38,12 @@ const report = healthReport as HealthReport;
 const homeHref = homePath(locale);
 const pagePath = `/projects/${project.slug}`;
 const pageUrl = new URL(projectDetailPath(locale, project.slug), siteUrl).href;
-const coverSrc = projectCover(project);
 const ogImage = projectOgImage(project);
 const longCopy = project.longDescription ?? project.description;
 const cols = t.catalog.columns;
-const coverAlt = format(t.project.coverAlt, { name: project.name });
 
-const primaryLink = { href: project.url, label: t.project.openLabel };
-const secondaryLinks = [
+const links = [
+  { href: project.url, label: t.project.openLabel },
   project.demo && project.demo !== project.url
     ? { href: project.demo, label: t.project.demo }
     : null,
@@ -97,6 +94,11 @@ const lifecycleLabel = project.lifecycle
 const techLine =
   project.tech && project.tech.length > 0 ? project.tech.join(" · ") : null;
 const detailCommand = format(t.crt.detailCommand, { slug: project.slug });
+
+const metaRowClass =
+  "flex flex-wrap items-baseline gap-x-4 gap-y-1 sm:gap-x-0 py-3 border-b border-[var(--crt-border-dim)]";
+const metaDtClass =
+  "shrink-0 text-xs sm:w-[8em] sm:pr-4 terminal-label !normal-case !tracking-normal";
 ---
 
 <BaseLayout
@@ -121,73 +123,46 @@ const detailCommand = format(t.crt.detailCommand, { slug: project.slug });
           {t.project.backToCatalog}
         </a>
 
-        {/* 与首页精选卡同构的头部：左封面 + 右文案 */}
-        <header class="terminal-card relative mb-8 p-4">
-          <div class="flex items-stretch gap-4">
-            <CrtCover
-              src={coverSrc}
-              alt={coverAlt}
-              slug={project.slug}
-              loading="eager"
-            />
-            <div
-              class="min-w-0 flex-1 space-y-1.5 flex flex-col justify-center">
-              <div class="flex flex-wrap items-center gap-2">
-                <span class="tag-terminal">{project.category}</span>
-                {
-                  lifecycleLabel && (
-                    <span class="tag-terminal">{lifecycleLabel}</span>
-                  )
-                }
-                <ProjectStatus
-                  projectId={project.id}
-                  labels={t.status}
-                  client:load
-                />
-              </div>
-              <h1
-                class="text-lg sm:text-xl font-semibold tracking-tight text-balance">
-                {project.name}
-              </h1>
-              <p
-                class="text-sm leading-snug text-pretty"
-                style="color: var(--crt-text-muted);">
-                {project.description}
-              </p>
-            </div>
-          </div>
+        <header class="mb-8">
+          <h1 class="text-lg sm:text-xl font-semibold tracking-tight text-balance crt-phosphor">
+            {project.name}
+          </h1>
+          <p
+            class="text-sm mt-2 leading-snug text-pretty"
+            style="color: var(--crt-text-muted);">
+            {project.description}
+          </p>
         </header>
 
-        {/* 与方案 A 目录列对齐的元信息行 */}
         <dl class="mb-10 border-t border-[var(--crt-border-dim)]">
-          <div
-            class="flex flex-wrap items-baseline gap-x-4 gap-y-1 sm:gap-x-0 py-3 border-b border-[var(--crt-border-dim)]">
-            <dt
-              class="shrink-0 text-xs sm:w-[8em] sm:pr-4 terminal-label !normal-case !tracking-normal">
-              {cols.category}
-            </dt>
+          <div class={metaRowClass}>
+            <dt class={metaDtClass}>{cols.category}</dt>
             <dd class="text-sm" style="color: var(--crt-text-muted);">
               {project.category}
             </dd>
           </div>
           {
+            lifecycleLabel && (
+              <div class={metaRowClass}>
+                <dt class={metaDtClass}>{t.project.lifecycleLabel}</dt>
+                <dd class="text-sm" style="color: var(--crt-text-muted);">
+                  {lifecycleLabel}
+                </dd>
+              </div>
+            )
+          }
+          {
             techLine && (
-              <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1 sm:gap-x-0 py-3 border-b border-[var(--crt-border-dim)]">
-                <dt class="shrink-0 text-xs sm:w-[8em] sm:pr-4 terminal-label !normal-case !tracking-normal">
-                  {cols.tech}
-                </dt>
+              <div class={metaRowClass}>
+                <dt class={metaDtClass}>{cols.tech}</dt>
                 <dd class="text-sm" style="color: var(--crt-text-muted);">
                   {techLine}
                 </dd>
               </div>
             )
           }
-          <div
-            class="flex flex-wrap items-baseline gap-x-4 gap-y-1 sm:gap-x-0 py-3 border-b border-[var(--crt-border-dim)]">
-            <dt
-              class="shrink-0 text-xs sm:w-[8em] sm:pr-4 terminal-label !normal-case !tracking-normal">
-              {cols.status}
-            </dt>
+          <div class={metaRowClass}>
+            <dt class={metaDtClass}>{cols.status}</dt>
             <dd class="text-sm">
               <ProjectStatus
                 projectId={project.id}
@@ -196,20 +171,6 @@ const detailCommand = format(t.crt.detailCommand, { slug: project.slug });
               />
             </dd>
           </div>
-          <!-- {
-            project.createdAt && (
-              <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1 sm:gap-x-0 py-3 border-b border-[var(--crt-border-dim)]">
-                <dt class="shrink-0 text-xs sm:w-[8em] sm:pr-4 terminal-label !normal-case !tracking-normal">
-                  {cols.date}
-                </dt>
-                <dd
-                  class="text-sm tabular-nums"
-                  style="color: var(--crt-text-muted);">
-                  {project.createdAt}
-                </dd>
-              </div>
-            )
-          } -->
         </dl>
 
         {
@@ -235,29 +196,24 @@ const detailCommand = format(t.crt.detailCommand, { slug: project.slug });
           </p>
         </section>
 
-        <section class="space-y-4">
-          <h2 class="terminal-label">{t.project.linksLabel}</h2>
-          <div class="flex flex-wrap items-center gap-3">
-            <a
-              href={primaryLink.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="btn-terminal focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--crt-accent)]">
-              {primaryLink.label}
-            </a>
+        <section>
+          <h2 class="terminal-label mb-0">{t.project.linksLabel}</h2>
+          <ul class="border-t border-[var(--crt-border-dim)] mt-3">
             {
-              secondaryLinks.map((link) => (
-                <a
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="text-sm transition-opacity duration-150 hover:opacity-70"
-                  style="color: var(--crt-accent);">
-                  {link.label}
-                </a>
+              links.map((link) => (
+                <li class={metaRowClass}>
+                  <a
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-sm transition-opacity duration-150 hover:opacity-70 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--crt-accent)]"
+                    style="color: var(--crt-accent);">
+                    {link.label}
+                  </a>
+                </li>
               ))
             }
-          </div>
+          </ul>
         </section>
       </div>
     </article>

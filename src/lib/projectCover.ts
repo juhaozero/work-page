@@ -1,6 +1,6 @@
 import type { Project } from '../types/project';
 
-/** 站内展示封面：显式 cover，否则 CRT 风格 `/covers/projects/{slug}.png` */
+/** 站内封面路径（保留供资产脚本等使用；列表/详情已改用字形块） */
 export function projectCover(project: Project): string {
   return project.cover ?? `/covers/projects/${project.slug}.png`;
 }

@@ -60,6 +60,7 @@ export interface UITranslations {
     techLabel: string;
     linksLabel: string;
     summaryLabel: string;
+    lifecycleLabel: string;
     demo: string;
     docs: string;
     changelog: string;
@@ -167,12 +168,13 @@ const ui: Record<Locale, UITranslations> = {
     },
     project: {
       indexLabel: '项目 {index}',
-      openLabel: '打开项目 →',
+      openLabel: '打开项目',
       detailsLabel: '查看详情 →',
       backToCatalog: '← 返回目录',
       techLabel: '技术栈',
       linksLabel: '相关链接',
       summaryLabel: '简介',
+      lifecycleLabel: '生命周期',
       demo: '演示',
       docs: '文档',
       changelog: '更新日志',
@@ -298,12 +300,13 @@ const ui: Record<Locale, UITranslations> = {
     },
     project: {
       indexLabel: 'Project {index}',
-      openLabel: 'Open project →',
+      openLabel: 'Open project',
       detailsLabel: 'View details →',
       backToCatalog: '← Back to catalog',
       techLabel: 'Tech stack',
       linksLabel: 'Links',
       summaryLabel: 'Summary',
+      lifecycleLabel: 'Lifecycle',
       demo: 'Demo',
       docs: 'Docs',
       changelog: 'Changelog',
