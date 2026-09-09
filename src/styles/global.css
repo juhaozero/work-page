@@ -163,22 +163,137 @@ body::after {
   font-size: 0.8125rem;
 }
 
+@utility terminal-table--ls {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+}
+
+/* 收窄自含式“目录窗口”：ls -l 输出框 */
+@utility crt-window {
+  border: 1px solid var(--crt-border);
+  background-color: var(--crt-surface);
+  overflow: hidden;
+}
+
+/* 双线框 + 轻微内凹，更像终端面板 */
+@utility crt-window--listing {
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--crt-border-dim) 80%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--crt-bg) 40%, transparent);
+}
+
+@utility crt-listing-filter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.375rem 0.75rem;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px dashed var(--crt-border-dim);
+
+  @media (min-width: 640px) {
+    padding-inline: 1.25rem;
+  }
+}
+
+@utility crt-listing-filter-flag {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: var(--crt-text-dim);
+  user-select: none;
+}
+
+@utility crt-listing-filter-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.125rem 0.875rem;
+}
+
+@utility crt-listing-body {
+  padding: 0.5rem 0.75rem 0.75rem;
+
+  @media (min-width: 640px) {
+    padding-inline: 1.25rem;
+  }
+}
+
+@utility crt-listing-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 2rem 0 1.5rem;
+  font-family: inherit;
+}
+
+@utility crt-ls-mode {
+  display: inline-block;
+  min-width: 10ch;
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  color: var(--crt-accent-dim);
+  user-select: none;
+}
+
+@utility crt-ls-name {
+  font-weight: 600;
+  color: var(--crt-text);
+  text-decoration: none;
+
+  .group:hover & {
+    color: var(--crt-accent);
+  }
+}
+
+@utility crt-ls-meta {
+  color: var(--crt-text-muted);
+}
+
+@utility crt-ls-tech {
+  color: var(--crt-text-dim);
+}
+
+@utility crt-ls-mobile {
+  padding: 0.625rem 0;
+  border-bottom: 1px dashed var(--crt-border-dim);
+  text-decoration: none;
+  color: inherit;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease;
+
+  &:hover {
+    background-color: var(--crt-glow);
+    box-shadow: inset 2px 0 0 var(--crt-accent);
+  }
+}
+
 @utility terminal-th {
-  padding: 0.5rem 0.75rem 0.5rem 0;
+  padding: 0.375rem 0.75rem 0.375rem 0;
   text-align: left;
-  font-size: 0.6875rem;
+  font-size: 0.625rem;
   font-weight: 500;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--crt-text-dim);
-  border-bottom: 1px solid var(--crt-border);
+  border-bottom: 1px dashed var(--crt-border);
   white-space: nowrap;
 }
 
+@utility terminal-th--mode {
+  width: 11ch;
+  padding-right: 0.5rem;
+}
+
 @utility terminal-td {
-  padding: 0.75rem 0.75rem 0.75rem 0;
+  padding: 0.55rem 0.75rem 0.55rem 0;
   vertical-align: middle;
-  border-bottom: 1px solid var(--crt-border-dim);
+  border-bottom: 1px dashed var(--crt-border-dim);
+}
+
+@utility terminal-td--mode {
+  width: 11ch;
+  padding-right: 0.5rem;
+  white-space: nowrap;
 }
 
 @utility terminal-row {
@@ -188,39 +303,31 @@ body::after {
     background-color: var(--crt-glow);
     box-shadow: inset 2px 0 0 var(--crt-accent);
   }
-}
 
-/* 精选行：与目录同行交互，略疏（旧布局兼容） */
-@utility featured-row {
-  padding: 1rem 0;
-  border-bottom: 1px solid var(--crt-border-dim);
-  transition: background-color 0.15s ease, box-shadow 0.15s ease;
-
-  &:hover {
-    background-color: var(--crt-glow);
-    box-shadow: inset 2px 0 0 var(--crt-accent);
+  &:last-child .terminal-td {
+    border-bottom-color: transparent;
   }
 }
 
-/* 精选舞台卡：左媒体 + 右文案 */
-@utility featured-card {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  padding: 0;
-  overflow: hidden;
-  background-color: var(--crt-surface);
-  border: 1px solid var(--crt-border-dim);
-  border-radius: 0;
+/* 精选：cat ~/featured.list 输出行 */
+@utility featured-list {
+  padding: 0.375rem 0;
+}
+
+@utility featured-entry {
+  display: block;
+  padding: 0.75rem 1rem;
   text-decoration: none;
   color: inherit;
-  transition:
-    border-color 0.15s ease,
-    background-color 0.15s ease,
-    box-shadow 0.15s ease;
+  border-bottom: 1px dashed var(--crt-border-dim);
+  transition: background-color 0.15s ease, box-shadow 0.15s ease;
+
+  @media (min-width: 640px) {
+    padding-inline: 1.25rem;
+  }
 
   &:hover {
-    border-color: var(--crt-border);
+    background-color: var(--crt-glow);
     box-shadow: inset 2px 0 0 var(--crt-accent);
   }
 
@@ -231,45 +338,53 @@ body::after {
       0 0 0 1px var(--crt-accent);
   }
 
-  @media (min-width: 640px) {
-    flex-direction: row;
-    align-items: stretch;
-    min-height: 7rem;
+  li:last-child & {
+    border-bottom-color: transparent;
   }
 }
 
-@utility featured-card-media {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  flex-shrink: 0;
-  background-color: var(--crt-surface-2);
-  border-bottom: 1px solid var(--crt-border-dim);
-  overflow: hidden;
-
-  @media (min-width: 640px) {
-    width: 11rem;
-    aspect-ratio: auto;
-    align-self: stretch;
-    border-bottom: none;
-    border-right: 1px solid var(--crt-border-dim);
-  }
-
-  @media (min-width: 768px) {
-    width: 13rem;
-  }
-}
-
-@utility featured-card-body {
-  padding: 1rem 1rem 1.125rem;
+@utility featured-entry-head {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.375rem 0.75rem;
+  min-width: 0;
 }
 
-@utility featured-card--text {
-  @media (min-width: 640px) {
-    min-height: auto;
+@utility featured-entry-mark {
+  flex-shrink: 0;
+  color: var(--crt-accent);
+  font-weight: 600;
+  user-select: none;
+}
+
+@utility featured-entry-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--crt-text);
+
+  .group:hover & {
+    color: var(--crt-accent);
   }
+}
+
+@utility featured-entry-status {
+  margin-left: auto;
+}
+
+@utility featured-entry-desc {
+  margin: 0.375rem 0 0;
+  padding-left: 1.125rem;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--crt-text-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-wrap: pretty;
 }
 
 @utility tag-terminal {
@@ -295,19 +410,25 @@ body::after {
 }
 
 @utility btn-filter {
-  padding: 0.5rem 0.625rem;
-  min-height: 2.75rem;
+  padding: 0;
+  min-height: 0;
   font-size: 0.75rem;
+  line-height: 1.4;
   cursor: pointer;
   border: none;
   background-color: transparent;
   color: var(--crt-text-dim);
-  transition: color 0.15s ease, opacity 0.15s ease;
+  transition: color 0.15s ease;
 }
 
 @utility btn-filter-active {
   color: var(--crt-accent);
   font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 1px;
+  background-color: transparent;
+  box-shadow: none;
 }
 
 @utility btn-filter-inactive {
@@ -450,6 +571,13 @@ html.dark .select-terminal {
 
 @utility crt-reveal-pending {
   opacity: 0;
+  visibility: hidden;
+  height: 0;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  border: none;
+  pointer-events: none;
 }
 
 @utility crt-reveal {

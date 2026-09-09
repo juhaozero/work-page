@@ -120,12 +120,7 @@ const metaDtClass =
       <DetailBoot prompt={t.crt.prompt} command={detailCommand} client:load />
 
       <div class="crt-detail-body">
-        <a
-          href={homeHref}
-          class="text-xs mb-8 inline-block transition-opacity duration-150 hover:opacity-70"
-          style="color: var(--crt-accent);">
-          {t.project.backToCatalog}
-        </a>
+        <a href={homeHref} class="btn-terminal mb-8">{t.project.backToCatalog}</a>
 
         <header class="mb-8">
           {

@@ -13,12 +13,12 @@
     "lifecycle": "active",
     "name": "Tool Shed",
     "category": "Tools",
-    "description": "A pure frontend browser toolbox with commonly used utilities.",
-    "longDescription": "A single-page collection of everyday browser utilities — open and use instantly, no install required. Handy for quick measuring, converting, and debugging."
+    "description": "Everyday browser utilities in one page — open and go.",
+    "longDescription": "A single page of daily web utilities for quick measuring, converting, and debugging. No install, no sign-up — open, use, close."
   },
   {
     "id": "2",
-    "slug": "p4g-persona-fusion",
+    "slug": "midnight-channel",
     "url": "https://app.juhaozero.com/persona/",
     "featured": false,
     "tech": [
@@ -27,10 +27,10 @@
     ],
     "createdAt": "2024-08-15",
     "lifecycle": "active",
-    "name": "P4G Fusion Index",
+    "name": "Midnight Channel",
     "category": "Games",
-    "description": "Look up Persona fusion recipes in Persona 4 Golden.",
-    "longDescription": "A Persona 4 Golden fusion helper: search by target Persona or materials and find recipes without digging through guide spreadsheets."
+    "description": "Reverse-search Persona fusion recipes in Persona 4 Golden.",
+    "longDescription": "A Persona 4 Golden helper — start from the Persona you want or the materials you have and get exact fusion routes, no guide spreadsheets required."
   },
   {
     "id": "3",
@@ -45,8 +45,8 @@
     "lifecycle": "active",
     "name": "Collage Canvas",
     "category": "Images",
-    "description": "Generate Instagram-style photo collages.",
-    "longDescription": "Build Instagram-style collages in the browser — layout and export in one place, ready to share."
+    "description": "Instagram-style grid collages, right in the browser.",
+    "longDescription": "Drop in photos, arrange an Instagram-style grid, then export — settle the look before you post."
   },
   {
     "id": "4",
@@ -61,8 +61,8 @@
     "lifecycle": "active",
     "name": "UnWatermark",
     "category": "Tools",
-    "description": "Parse a video link and download without watermark when possible.",
-    "longDescription": "Paste a video URL to resolve a downloadable source, preferring watermark-free media when available — handy for archiving or editing."
+    "description": "Paste a share link, resolve a watermark-free download.",
+    "longDescription": "Paste a share URL to get a downloadable source, preferring watermark-free versions when available — handy for archiving or re-editing."
   },
   {
     "id": "5",
@@ -76,8 +76,8 @@
     "createdAt": "2025-03-20",
     "lifecycle": "active",
     "name": "Ask the Cards",
-    "category": "Tools",
-    "description": "Tarot card reading.",
-    "longDescription": "Tarot card reading."
+    "category": "Fun",
+    "description": "Draw a card and see what it says.",
+    "longDescription": "A no-prop three-minute reading: shuffle, draw, interpret — then walk away with one piece of advice worth keeping. Try it and find out."
   }
 ]

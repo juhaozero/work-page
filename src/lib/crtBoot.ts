@@ -27,6 +27,8 @@ export const CRT_TIMING = {
     delayMs: 120,
     /** 首页命令打完 → 精选 */
     afterTypedMs: 400,
+    /** 开机结束后多久才允许跳过首页（避免同一次点按连跳） */
+    skipGuardMs: 380,
   },
   featured: {
     charMs: 100,
@@ -45,17 +47,23 @@ export const CRT_TIMING = {
   },
 } as const;
 
-/** 终端式跟随：区块底边超出视口时平滑下滚（instant / reduced-motion 不滚） */
+/**
+ * 终端打字跟滚：锚点被裁出可视区时才滚（nearest = 刚够露出）。
+ * 调用方负责在 instant/跳过时不调用，避免开场 skip 被拽到中间。
+ */
 export function followTerminalScroll(el: HTMLElement | null): void {
   if (!el || typeof window === 'undefined') return;
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
+  // 双 rAF：等布局/绘制完成后再测可见性，避免刚展开时量到旧位置
   requestAnimationFrame(() => {
-    const pad = 28;
-    const rect = el.getBoundingClientRect();
-    const overflow = rect.bottom - (window.innerHeight - pad);
-    if (overflow <= 4) return;
-    window.scrollBy({ top: overflow, behavior: 'smooth' });
+    requestAnimationFrame(() => {
+      el.scrollIntoView({
+        block: 'nearest',
+        inline: 'nearest',
+        behavior: 'smooth',
+      });
+    });
   });
 }
 
@@ -77,8 +85,11 @@ let catalogIntro: CrtIntroDetail | null = null;
 /** 本页生命周期内只判定一次，避免 mark 后其它组件误判 */
 let playDecision: boolean | null = null;
 
-/** 首访或刷新主页 → 播仪式；同会话内从详情/关于页返回 → 跳过 */
+/** 首访或刷新主页 → 播仪式；同会话内从详情/关于页返回 → 跳过。
+ *  SSR 恒为 false：组件 useState 须以「已展示」水合，再在 client effect 里切入开场。 */
 export function shouldPlayCrtHomeIntro(): boolean {
+  if (typeof window === 'undefined') return false;
+
   if (playDecision !== null) return playDecision;
 
   try {

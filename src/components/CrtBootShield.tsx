@@ -38,6 +38,8 @@ export default function CrtBootShield({
     if (finishedRef.current) return;
     finishedRef.current = true;
     document.documentElement.classList.remove(CRT_BOOT_CLASS);
+    // 解锁 overflow 后钉回顶部，避免被下方已挂载区块带偏滚动位置
+    window.scrollTo(0, 0);
     setDismissed(true);
     dispatchCrtBootDone(nextTyping);
   };
@@ -76,6 +78,7 @@ export default function CrtBootShield({
       if (!canSkipRef.current || finishedRef.current) return;
       setCompleted(lines);
       setActive(lines.length);
+      // 只跳过开机遮罩；首页分区打字继续，需再点一次才跳过
       finish(true);
     };
 

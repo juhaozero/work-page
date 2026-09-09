@@ -62,12 +62,7 @@ const websiteJsonLd = {
 <BaseLayout locale={locale} t={t} path="/" crtBoot jsonLd={[websiteJsonLd, itemListJsonLd]}>
   <ProjectHealthInit projects={projectList} initialReport={report} client:load />
   <main class="flex-1 w-full">
-    <HeroPortal
-      t={t}
-      projectCount={projectList.length}
-      featuredCount={featuredProjects.length}
-      client:load
-    />
+    <HeroPortal t={t} client:load />
 
     <div class="container-main pt-[4.5rem] pb-20 flex flex-col gap-16 sm:gap-20">
       <FeaturedProjects

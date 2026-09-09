@@ -1,9 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Project } from '../types/project';
 import type { Locale } from '../i18n/config';
 import type { UITranslations } from '../i18n/ui';
 import { projectDetailPath } from '../i18n/paths';
-import { projectCoverImage } from '../lib/projectCover';
 import {
   CRT_TIMING,
   dispatchCrtIntroCatalog,
@@ -11,6 +10,7 @@ import {
   shouldPlayCrtHomeIntro,
   subscribeCrtIntroFeatured,
 } from '../lib/crtBoot';
+import { useTypingSkip } from '../lib/useTypingSkip';
 import Typewriter from './Typewriter';
 import ProjectStatus from './ProjectStatus';
 
@@ -23,12 +23,18 @@ interface FeaturedProjectsProps {
 type Phase = 'pending' | 'command' | 'show';
 
 export default function FeaturedProjects({ projects, locale, t }: FeaturedProjectsProps) {
-  const skipIntro = !shouldPlayCrtHomeIntro();
-  const [phase, setPhase] = useState<Phase>(skipIntro ? 'show' : 'pending');
-  const [instant, setInstant] = useState(skipIntro);
-  const sectionRef = useRef<HTMLElement>(null);
+  // 与 SSR 一致先按已展示水合；首访在 effect 切入 pending
+  const [phase, setPhase] = useState<Phase>('show');
+  const [instant, setInstant] = useState(true);
+  const promptRef = useRef<HTMLParagraphElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (shouldPlayCrtHomeIntro()) {
+      setPhase('pending');
+      setInstant(false);
+    }
+
     return subscribeCrtIntroFeatured((detail) => {
       setInstant(detail.instant);
       if (detail.instant) {
@@ -40,9 +46,19 @@ export default function FeaturedProjects({ projects, locale, t }: FeaturedProjec
     });
   }, []);
 
+  // cat 命令打字中：一键跳过 → 列表直接亮起并让目录也立即就绪
+  const skipTyping = useCallback(() => {
+    setInstant(true);
+    setPhase('show');
+    dispatchCrtIntroCatalog(true);
+  }, []);
+  useTypingSkip(phase === 'command', skipTyping);
+
+  // 仅非 instant：打字/逐条亮起时，锚点超出视口才跟滚
   useEffect(() => {
-    if (phase === 'pending' || instant) return;
-    followTerminalScroll(sectionRef.current);
+    if (instant || phase === 'pending') return;
+    const tip = phase === 'command' ? promptRef.current : listRef.current;
+    followTerminalScroll(tip);
   }, [phase, instant]);
 
   useEffect(() => {
@@ -50,7 +66,7 @@ export default function FeaturedProjects({ projects, locale, t }: FeaturedProjec
 
     const ids = projects.map((_, index) =>
       window.setTimeout(
-        () => followTerminalScroll(sectionRef.current),
+        () => followTerminalScroll(listRef.current),
         80 + index * 70,
       ),
     );
@@ -72,14 +88,14 @@ export default function FeaturedProjects({ projects, locale, t }: FeaturedProjec
 
   return (
     <section
-      ref={sectionRef}
-      className="pb-4"
+      className="w-full"
       aria-labelledby="featured-heading"
       aria-busy={phase === 'pending'}
     >
       {phase !== 'pending' && (
         <p
-          className="terminal-prompt mb-6 sm:mb-8 flex flex-wrap items-baseline gap-x-2 gap-y-1"
+          ref={promptRef}
+          className="terminal-prompt mb-4 sm:mb-5 flex flex-wrap items-baseline gap-x-2 gap-y-1"
           style={{ color: 'var(--crt-text-muted)' }}
         >
           <span className="crt-phosphor shrink-0" style={{ color: 'var(--crt-accent)' }}>
@@ -90,97 +106,71 @@ export default function FeaturedProjects({ projects, locale, t }: FeaturedProjec
               {t.crt.featuredCommand}
             </span>
           ) : (
-            <Typewriter
-              text={t.crt.featuredCommand}
-              charMs={CRT_TIMING.featured.charMs}
-              delayMs={CRT_TIMING.featured.delayMs}
-              className="crt-phosphor"
-              style={{ color: 'var(--crt-text)' }}
-              onDone={onCommandDone}
-            />
+            <>
+              <Typewriter
+                text={t.crt.featuredCommand}
+                charMs={CRT_TIMING.featured.charMs}
+                delayMs={CRT_TIMING.featured.delayMs}
+                className="crt-phosphor"
+                style={{ color: 'var(--crt-text)' }}
+                onDone={onCommandDone}
+              />
+              <span
+                className="text-[0.6875rem] shrink-0"
+                style={{ color: 'var(--crt-text-dim)' }}
+                aria-hidden="true"
+              >
+                {t.crt.skipHint}
+              </span>
+            </>
           )}
         </p>
       )}
 
       <div
-        className={phase === 'show' ? 'crt-reveal space-y-3' : 'crt-reveal-pending space-y-3'}
+        ref={listRef}
+        className={phase === 'show' ? 'crt-reveal' : 'crt-reveal-pending'}
         aria-hidden={phase !== 'show'}
       >
-        <h2 id="featured-heading" className="terminal-label">
-          {t.featured.label}
-        </h2>
+        <div className="crt-window crt-window--listing">
+          <h2 id="featured-heading" className="sr-only">
+            {t.featured.label}
+          </h2>
 
-        <ul className="flex flex-col gap-3 list-none m-0 p-0">
-          {projects.map((project, index) => {
-            const cover = projectCoverImage(project);
-            const techPreview = (project.tech ?? []).slice(0, 3).join(' · ');
-
-            return (
-              <li key={project.id}>
+          <ul className="featured-list list-none m-0 p-0">
+            {projects.map((project, index) => (
+              <li
+                key={project.id}
+                className={phase === 'show' && !instant ? 'crt-stagger-item' : undefined}
+                style={
+                  phase === 'show' && !instant
+                    ? { ['--crt-stagger' as string]: String(index) }
+                    : undefined
+                }
+              >
                 <a
                   href={projectDetailPath(locale, project.slug)}
-                  className={[
-                    'featured-card group',
-                    !cover ? 'featured-card--text' : '',
-                    phase === 'show' && !instant ? 'crt-stagger-item' : '',
-                  ]
-                    .filter(Boolean)
-                    .join(' ')}
-                  style={
-                    phase === 'show' && !instant
-                      ? { ['--crt-stagger' as string]: String(index) }
-                      : undefined
-                  }
+                  className="featured-entry group"
                   tabIndex={phase === 'show' ? undefined : -1}
                   aria-label={`${project.name} — ${t.featured.goTo}`}
                 >
-                  {cover ? (
-                    <div className="featured-card-media">
-                      <img
-                        src={cover}
-                        alt=""
-                        width={224}
-                        height={126}
-                        className="w-full h-full object-cover"
-                        loading={index === 0 ? 'eager' : 'lazy'}
-                        decoding="async"
-                      />
-                    </div>
-                  ) : null}
-                  <div className="featured-card-body min-w-0 flex-1">
-                    <h3
-                      className="text-[1.0625rem] sm:text-[1.125rem] font-semibold tracking-tight text-balance"
-                      style={{ color: 'var(--crt-text)' }}
-                    >
-                      {project.name}
-                    </h3>
-                    <p
-                      className="text-sm mt-1.5 line-clamp-2 text-pretty leading-snug"
-                      style={{ color: 'var(--crt-text-muted)' }}
-                    >
-                      {project.description}
-                    </p>
-                    <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1">
-                      {techPreview ? (
-                        <span
-                          className="text-xs truncate max-w-full"
-                          style={{ color: 'var(--crt-text-dim)' }}
-                        >
-                          {techPreview}
-                        </span>
-                      ) : null}
-                      <ProjectStatus
-                        projectId={project.id}
-                        labels={t.status}
-                        className="ml-auto"
-                      />
-                    </div>
+                  <div className="featured-entry-head">
+                    <span className="featured-entry-mark" aria-hidden="true">
+                      *
+                    </span>
+                    <span className="featured-entry-name">{project.name}</span>
+                    <ProjectStatus
+                      projectId={project.id}
+                      labels={t.status}
+                      className="featured-entry-status"
+                    />
                   </div>
+                  <p className="featured-entry-desc">{project.description}</p>
                 </a>
               </li>
-            );
-          })}
-        </ul>
+            ))}
+          </ul>
+        </div>
       </div>
     </section>
   );

@@ -23,10 +23,6 @@ export interface UITranslations {
     blog: string;
     about: string;
   };
-  hero: {
-    projectsTotal: string;
-    featuredCount: string;
-  };
   featured: {
     label: string;
     goTo: string;
@@ -38,6 +34,7 @@ export interface UITranslations {
     emptyTitle: string;
     emptyHint: string;
     columns: {
+      mode: string;
       name: string;
       category: string;
       tech: string;
@@ -108,6 +105,7 @@ export interface UITranslations {
     bootSkip: string;
     featuredCommand: string;
     catalogCommand: string;
+    skipHint: string;
   };
 }
 
@@ -115,7 +113,7 @@ const ui: Record<Locale, UITranslations> = {
   zh: {
     site: {
       seo: {
-        description: '一些零散的项目合集,打开即用。集中展示个人开发的 Web 工具与小项目。',
+        description: '收录我开发的小工具与网页应用：浏览器里打开即用，轻量、克制、无打扰。',
         keywords: ['个人项目', '工具合集', '开源', 'Web 应用', '项目展示'],
         author: 'juhaozero',
       },
@@ -125,16 +123,12 @@ const ui: Record<Locale, UITranslations> = {
       about: '关于',
     },
     portal: {
-      title: '个人小项目索引',
+      title: '',
       avatarAlt: '头像',
       github: 'GitHub',
       blog: '博客',
       email: '电子邮件',
       about: '关于',
-    },
-    hero: {
-      projectsTotal: '共 {count} 个项目',
-      featuredCount: '{count} 个精选',
     },
     featured: {
       label: '精选项目',
@@ -144,9 +138,10 @@ const ui: Record<Locale, UITranslations> = {
       title: '个人作品',
       filterAll: '全部',
       filterAriaLabel: '项目分类筛选',
-      emptyTitle: '未找到匹配的项目',
-      emptyHint: '试试切换其他分类',
+      emptyTitle: 'ls: 没有匹配的条目',
+      emptyHint: '换个 -type 再试',
       columns: {
+        mode: '权限',
         name: '名称',
         category: '分类',
         tech: '技术',
@@ -197,7 +192,7 @@ const ui: Record<Locale, UITranslations> = {
       stackBody:
         'Astro 静态生成 + React 交互岛屿，Tailwind 驱动现代终端窗视觉；中英文由一份 projects.source.json 生成，构建与 CI 会校验数据并写入健康状态。',
       nowTitle: '最近动态',
-      nowItems: ['新增了无水印下载工具'],
+      nowItems: ['上线了「去水印」视频解析工具，翻唱/录屏备份更省心。'],
       backHome: '← 返回首页',
       whoamiCommand: 'whoami',
       metaHost: 'host',
@@ -233,13 +228,14 @@ const ui: Record<Locale, UITranslations> = {
       bootSkip: 'click / esc to skip',
       featuredCommand: 'cat ~/featured.list',
       catalogCommand: 'ls -l ~/projects',
+      skipHint: '· 点按跳过',
     },
   },
   en: {
     site: {
       seo: {
         description:
-          'A collection of small projects — open and use instantly. Showcasing personal Web tools and side projects.',
+          'Small web tools and apps I build — open in the browser, no install. Lightweight and to the point.',
         keywords: ['personal projects', 'tools', 'open source', 'web apps', 'portfolio'],
         author: 'juhaozero',
       },
@@ -256,10 +252,6 @@ const ui: Record<Locale, UITranslations> = {
       email: 'Email',
       about: 'About',
     },
-    hero: {
-      projectsTotal: '{count} projects total',
-      featuredCount: '{count} featured',
-    },
     featured: {
       label: 'Featured',
       goTo: 'Details',
@@ -268,9 +260,10 @@ const ui: Record<Locale, UITranslations> = {
       title: 'Personal works',
       filterAll: 'All',
       filterAriaLabel: 'Project category filter',
-      emptyTitle: 'No matching projects',
-      emptyHint: 'Try another category',
+      emptyTitle: 'ls: no matches found',
+      emptyHint: 'try another -type',
       columns: {
+        mode: 'Mode',
         name: 'Name',
         category: 'Category',
         tech: 'Tech',
@@ -323,7 +316,7 @@ const ui: Record<Locale, UITranslations> = {
       stackBody:
         'Astro SSG with React islands and a modern terminal-window look via Tailwind. zh/en project files are generated from projects.source.json; CI validates data and writes health status.',
       nowTitle: 'Recent notes',
-      nowItems: ['Added a watermark-free video download tool'],
+      nowItems: ['Launched “UnWatermark” — resolve share links into clean downloads.'],
       backHome: '← Back home',
       whoamiCommand: 'whoami',
       metaHost: 'host',
@@ -359,6 +352,7 @@ const ui: Record<Locale, UITranslations> = {
       bootSkip: 'click / esc to skip',
       featuredCommand: 'cat ~/featured.list',
       catalogCommand: 'ls -l ~/projects',
+      skipHint: '· click to skip',
     },
   },
 };

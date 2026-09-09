@@ -6,14 +6,16 @@ interface ProjectCardProps {
   project: Project;
   t: UITranslations;
   detailHref: string;
+  mode?: string;
   staggerIndex?: number;
 }
 
-/** 桌面终端表的一行 */
+/** 桌面：仿 ls -l 一行 */
 export function ProjectTableRow({
   project,
   t,
   detailHref,
+  mode = '-rw-r--r--',
   staggerIndex,
 }: ProjectCardProps) {
   const techPreview = (project.tech ?? []).slice(0, 3).join(' · ') || '—';
@@ -29,20 +31,25 @@ export function ProjectTableRow({
 
   return (
     <tr className={stagger.className} style={stagger.style}>
+      <td className="terminal-td terminal-td--mode">
+        <span className="crt-ls-mode" aria-hidden="true">
+          {mode}
+        </span>
+        <span className="sr-only">{mode}</span>
+      </td>
       <td className="terminal-td">
         <a
           href={detailHref}
-          className="font-medium truncate block min-w-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--crt-accent)]"
-          style={{ color: 'var(--crt-text)' }}
+          className="crt-ls-name truncate block min-w-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--crt-accent)]"
         >
           {project.name}
         </a>
       </td>
       <td className="terminal-td">
-        <span style={{ color: 'var(--crt-text-muted)' }}>{project.category}</span>
+        <span className="crt-ls-meta">{project.category}</span>
       </td>
       <td className="terminal-td hidden md:table-cell">
-        <span className="truncate block max-w-[14rem]" style={{ color: 'var(--crt-text-dim)' }}>
+        <span className="crt-ls-tech truncate block max-w-[14rem]">
           {techPreview}
           {moreTech}
         </span>
@@ -54,20 +61,26 @@ export function ProjectTableRow({
   );
 }
 
-/** 移动端两行：上行名+状态 / 下行分类 */
-export function ProjectMobileRow({ project, t, detailHref }: ProjectCardProps) {
+/** 移动端：权限位 + 名/状态 + 分类 */
+export function ProjectMobileRow({
+  project,
+  t,
+  detailHref,
+  mode = '-rw-r--r--',
+}: ProjectCardProps) {
   return (
     <a
       href={detailHref}
-      className="block py-3 border-b border-[var(--crt-border-dim)] cursor-pointer transition-[background-color,box-shadow] duration-150 hover:bg-[var(--crt-glow)] hover:shadow-[inset_2px_0_0_var(--crt-accent)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--crt-accent)]"
+      className="crt-ls-mobile block focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--crt-accent)]"
     >
-      <div className="flex items-baseline gap-3 min-w-0">
-        <span className="font-medium truncate text-sm" style={{ color: 'var(--crt-text)' }}>
-          {project.name}
+      <div className="flex items-baseline gap-2 min-w-0">
+        <span className="crt-ls-mode shrink-0" aria-hidden="true">
+          {mode}
         </span>
+        <span className="crt-ls-name truncate text-sm min-w-0">{project.name}</span>
         <ProjectStatus projectId={project.id} labels={t.status} className="ml-auto shrink-0" />
       </div>
-      <p className="text-xs mt-1 truncate" style={{ color: 'var(--crt-text-muted)' }}>
+      <p className="crt-ls-meta text-xs mt-1 truncate pl-[calc(10ch+0.5rem)]">
         {project.category}
       </p>
     </a>

@@ -11,20 +11,20 @@
       "zh": {
         "name": "百宝箱",
         "category": "工具",
-        "description": "纯前端浏览器工具箱，一些常用的浏览器工具合集。",
-        "longDescription": "把日常开发与排查里常用的小工具收进同一个纯前端页面：打开即用，无需安装。适合随手测量、转换和调试。"
+        "description": "常用浏览器小工具装进一个页面，打开即用。",
+        "longDescription": "把日常开发与排查里高频用到的小工具收进同一个页面：随手测量、转换、调试，免安装、无多余步骤，需要时打开，用完即走。"
       },
       "en": {
         "name": "Tool Shed",
         "category": "Tools",
-        "description": "A pure frontend browser toolbox with commonly used utilities.",
-        "longDescription": "A single-page collection of everyday browser utilities — open and use instantly, no install required. Handy for quick measuring, converting, and debugging."
+        "description": "Everyday browser utilities in one page — open and go.",
+        "longDescription": "A single page of daily web utilities for quick measuring, converting, and debugging. No install, no sign-up — open, use, close."
       }
     }
   },
   {
     "id": "2",
-    "slug": "p4g-persona-fusion",
+    "slug": "midnight-channel",
     "url": "https://app.juhaozero.com/persona/",
     "featured": false,
     "tech": ["TypeScript", "React"],
@@ -32,16 +32,16 @@
     "lifecycle": "active",
     "i18n": {
       "zh": {
-        "name": "P4G合成图鉴",
+        "name": "午夜频道",
         "category": "游戏",
-        "description": "P4G面具合成查询器，可以查询面具的合成配方。",
-        "longDescription": "面向《女神异闻录4 黄金版》的面具合成查询工具：按目标面具或素材反向查找配方，少翻攻略表。"
+        "description": "按目标或素材反查 P4G 面具合成配方。",
+        "longDescription": "面向《女神异闻录4 黄金版》的面具合成速查：从想要的面具反推素材，或从手上素材找可行组合，覆盖攻略表里最常翻的那几页。"
       },
       "en": {
-        "name": "P4G Fusion Index",
+        "name": "Midnight Channel",
         "category": "Games",
-        "description": "Look up Persona fusion recipes in Persona 4 Golden.",
-        "longDescription": "A Persona 4 Golden fusion helper: search by target Persona or materials and find recipes without digging through guide spreadsheets."
+        "description": "Reverse-search Persona fusion recipes in Persona 4 Golden.",
+        "longDescription": "A Persona 4 Golden helper — start from the Persona you want or the materials you have and get exact fusion routes, no guide spreadsheets required."
       }
     }
   },
@@ -57,14 +57,14 @@
       "zh": {
         "name": "拼贴画布",
         "category": "图片",
-        "description": "Ins拼图生成器，可以生成Ins风格的拼图。",
-        "longDescription": "在浏览器里拼出 Instagram 风格拼图：排版、导出一气呵成，适合分享前快速出图。"
+        "description": "浏览器里的 Instagram 风网格拼图排版。",
+        "longDescription": "拖入几张照片，按 Instagram 风格的网格排好版再导出——发九宫格之前，先把想发的效果定下来。"
       },
       "en": {
         "name": "Collage Canvas",
         "category": "Images",
-        "description": "Generate Instagram-style photo collages.",
-        "longDescription": "Build Instagram-style collages in the browser — layout and export in one place, ready to share."
+        "description": "Instagram-style grid collages, right in the browser.",
+        "longDescription": "Drop in photos, arrange an Instagram-style grid, then export — settle the look before you post."
       }
     }
   },
@@ -80,14 +80,14 @@
       "zh": {
         "name": "去水印",
         "category": "工具",
-        "description": "视频链接解析，一键获取无水印视频下载。",
-        "longDescription": "粘贴视频链接即可解析可下载地址，尽量拿到无水印资源。适合备份与二次剪辑前的素材收集。"
+        "description": "粘贴分享链接，解析无水印的视频下载地址。",
+        "longDescription": "输入视频分享链接，解析出可下载的源地址，尽可能拿到无水印版本——适合备份收藏，或二次剪辑前收集素材。"
       },
       "en": {
         "name": "UnWatermark",
         "category": "Tools",
-        "description": "Parse a video link and download without watermark when possible.",
-        "longDescription": "Paste a video URL to resolve a downloadable source, preferring watermark-free media when available — handy for archiving or editing."
+        "description": "Paste a share link, resolve a watermark-free download.",
+        "longDescription": "Paste a share URL to get a downloadable source, preferring watermark-free versions when available — handy for archiving or re-editing."
       }
     }
   },
@@ -103,14 +103,14 @@
       "zh": {
         "name": "算了吗",
         "category": "娱乐",
-        "description": "塔罗牌占卜，可以占卜塔罗牌的含义。",
-        "longDescription": "塔罗牌占卜，可以占卜塔罗牌的含义，并给出建议。"
+        "description": "抽一张牌，看看牌面想说什么。",
+        "longDescription": "不需要道具的三分钟塔罗：洗牌、抽牌、解义，再附上一句可以带走的建议。灵不灵，算过才知道。"
       },
       "en": {
         "name": "Ask the Cards",
-        "category": "Tools",
-        "description": "Tarot card reading.",
-        "longDescription": "Tarot card reading."
+        "category": "Fun",
+        "description": "Draw a card and see what it says.",
+        "longDescription": "A no-prop three-minute reading: shuffle, draw, interpret — then walk away with one piece of advice worth keeping. Try it and find out."
       }
     }
   }
