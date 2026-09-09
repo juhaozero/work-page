@@ -192,7 +192,7 @@ const ui: Record<Locale, UITranslations> = {
       stackBody:
         'Astro 静态生成 + React 交互岛屿，Tailwind 驱动现代终端窗视觉；中英文由一份 projects.source.json 生成，构建与 CI 会校验数据并写入健康状态。',
       nowTitle: '最近动态',
-      nowItems: ['上线了「去水印」视频解析工具，翻唱/录屏备份更省心。'],
+      nowItems: ['重构整个UI界面'],
       backHome: '← 返回首页',
       whoamiCommand: 'whoami',
       metaHost: 'host',
