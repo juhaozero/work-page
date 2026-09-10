@@ -2,7 +2,7 @@
   {
     "id": "1",
     "slug": "browser-toolbox",
-    "url": "https://app.juhaozero.com/browser/",
+    "url": "https://item.juhaozero.com/browser/",
     "featured": false,
     "tech": [
       "HTML",
@@ -19,7 +19,7 @@
   {
     "id": "2",
     "slug": "midnight-channel",
-    "url": "https://app.juhaozero.com/persona/",
+    "url": "https://item.juhaozero.com/persona/",
     "featured": false,
     "tech": [
       "TypeScript",
@@ -35,7 +35,7 @@
   {
     "id": "3",
     "slug": "ins-collage",
-    "url": "https://app.juhaozero.com/images/",
+    "url": "https://item.juhaozero.com/images/",
     "featured": false,
     "tech": [
       "Canvas",
@@ -51,7 +51,7 @@
   {
     "id": "4",
     "slug": "watermark-video",
-    "url": "https://app.juhaozero.com/watermark/",
+    "url": "https://item.juhaozero.com/watermark/",
     "featured": true,
     "tech": [
       "TypeScript",
@@ -67,7 +67,7 @@
   {
     "id": "5",
     "slug": "tarot-hall",
-    "url": "https://app.juhaozero.com/tarot/",
+    "url": "https://item.juhaozero.com/tarot/",
     "featured": true,
     "tech": [
       "TypeScript",
