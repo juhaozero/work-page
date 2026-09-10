@@ -7,7 +7,7 @@
     "tech": [
       "HTML",
       "CSS",
-      "JavaScript"
+      "TypeScript"
     ],
     "createdAt": "2024-06-01",
     "lifecycle": "active",
@@ -18,19 +18,19 @@
   },
   {
     "id": "2",
-    "slug": "midnight-channel",
-    "url": "https://item.juhaozero.com/persona/",
-    "featured": false,
+    "slug": "linux-quick-reference",
+    "url": "https://item.juhaozero.com/linux/",
+    "featured": true,
     "tech": [
-      "TypeScript",
-      "React"
+      "Vue",
+      "TypeScript"
     ],
-    "createdAt": "2024-08-15",
+    "createdAt": "2024-09-20",
     "lifecycle": "active",
-    "name": "午夜频道",
-    "category": "游戏",
-    "description": "按目标或素材反查 P4G 面具合成配方。",
-    "longDescription": "面向《女神异闻录4 黄金版》的面具合成速查：从想要的面具反推素材，或从手上素材找可行组合，覆盖攻略表里最常翻的那几页。"
+    "name": "Linux 速查手册",
+    "category": "手册",
+    "description": "Linux 命令速查手册。",
+    "longDescription": "一键复制即用的 Linux 命令速查手册。"
   },
   {
     "id": "3",
@@ -39,7 +39,7 @@
     "featured": false,
     "tech": [
       "Canvas",
-      "JavaScript"
+      "TypeScript"
     ],
     "createdAt": "2024-10-01",
     "lifecycle": "active",
@@ -52,10 +52,11 @@
     "id": "4",
     "slug": "watermark-video",
     "url": "https://item.juhaozero.com/watermark/",
-    "featured": true,
+    "featured": false,
     "tech": [
       "TypeScript",
-      "Node"
+      "Node",
+      "Golang"
     ],
     "createdAt": "2025-01-20",
     "lifecycle": "active",
@@ -79,5 +80,21 @@
     "category": "娱乐",
     "description": "抽一张牌，看看牌面想说什么。",
     "longDescription": "不需要道具的三分钟塔罗：洗牌、抽牌、解义，再附上一句可以带走的建议。灵不灵，算过才知道。"
+  },
+  {
+    "id": "6",
+    "slug": "midnight-channel",
+    "url": "https://item.juhaozero.com/persona/",
+    "featured": false,
+    "tech": [
+      "TypeScript",
+      "React"
+    ],
+    "createdAt": "2024-08-15",
+    "lifecycle": "active",
+    "name": "午夜频道",
+    "category": "游戏",
+    "description": "按目标或素材反查 P4G 面具合成配方。",
+    "longDescription": "面向《女神异闻录4 黄金版》的面具合成速查：从想要的面具反推素材，或从手上素材找可行组合，覆盖攻略表里最常翻的那几页。"
   }
 ]

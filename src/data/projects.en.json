@@ -7,7 +7,7 @@
     "tech": [
       "HTML",
       "CSS",
-      "JavaScript"
+      "TypeScript"
     ],
     "createdAt": "2024-06-01",
     "lifecycle": "active",
@@ -18,19 +18,19 @@
   },
   {
     "id": "2",
-    "slug": "midnight-channel",
-    "url": "https://item.juhaozero.com/persona/",
-    "featured": false,
+    "slug": "linux-quick-reference",
+    "url": "https://item.juhaozero.com/linux/",
+    "featured": true,
     "tech": [
-      "TypeScript",
-      "React"
+      "Vue",
+      "TypeScript"
     ],
-    "createdAt": "2024-08-15",
+    "createdAt": "2024-09-20",
     "lifecycle": "active",
-    "name": "Midnight Channel",
-    "category": "Games",
-    "description": "Reverse-search Persona fusion recipes in Persona 4 Golden.",
-    "longDescription": "A Persona 4 Golden helper — start from the Persona you want or the materials you have and get exact fusion routes, no guide spreadsheets required."
+    "name": "Linux Quick Reference",
+    "category": "Reference",
+    "description": "A quick reference for Linux commands — copy and paste.",
+    "longDescription": "A quick reference for Linux commands — copy and paste."
   },
   {
     "id": "3",
@@ -39,7 +39,7 @@
     "featured": false,
     "tech": [
       "Canvas",
-      "JavaScript"
+      "TypeScript"
     ],
     "createdAt": "2024-10-01",
     "lifecycle": "active",
@@ -52,10 +52,11 @@
     "id": "4",
     "slug": "watermark-video",
     "url": "https://item.juhaozero.com/watermark/",
-    "featured": true,
+    "featured": false,
     "tech": [
       "TypeScript",
-      "Node"
+      "Node",
+      "Golang"
     ],
     "createdAt": "2025-01-20",
     "lifecycle": "active",
@@ -79,5 +80,21 @@
     "category": "Fun",
     "description": "Draw a card and see what it says.",
     "longDescription": "A no-prop three-minute reading: shuffle, draw, interpret — then walk away with one piece of advice worth keeping. Try it and find out."
+  },
+  {
+    "id": "6",
+    "slug": "midnight-channel",
+    "url": "https://item.juhaozero.com/persona/",
+    "featured": false,
+    "tech": [
+      "TypeScript",
+      "React"
+    ],
+    "createdAt": "2024-08-15",
+    "lifecycle": "active",
+    "name": "Midnight Channel",
+    "category": "Games",
+    "description": "Reverse-search Persona fusion recipes in Persona 4 Golden.",
+    "longDescription": "A Persona 4 Golden helper — start from the Persona you want or the materials you have and get exact fusion routes, no guide spreadsheets required."
   }
 ]
