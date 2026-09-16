@@ -1,17 +1,21 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import HeroPortal from '../../components/HeroPortal';
-import Footer from '../../components/Footer.astro';
-import FeaturedProjects from '../../components/FeaturedProjects';
-import ProjectCatalog from '../../components/ProjectCatalog';
-import ProjectHealthInit from '../../components/ProjectHealthInit';
-import { locales, getLocaleParam, type Locale, localeHtmlLang } from '../../i18n/config';
-import { getTranslations } from '../../i18n/ui';
-import { getProjects } from '../../i18n/projects';
-import { projectDetailPath } from '../../i18n/paths';
-import site from '../../data/site.json';
-import healthReport from '../../data/status.json';
-import type { HealthReport } from '../../types/project';
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import HeroPortal from "../../components/HeroPortal";
+import Footer from "../../components/Footer.astro";
+import ProjectCatalog from "../../components/ProjectCatalog";
+import ProjectHealthInit from "../../components/ProjectHealthInit";
+import {
+  locales,
+  getLocaleParam,
+  type Locale,
+  localeHtmlLang,
+} from "../../i18n/config";
+import { getTranslations } from "../../i18n/ui";
+import { getProjects } from "../../i18n/projects";
+import { projectDetailPath } from "../../i18n/paths";
+import site from "../../data/site.json";
+import healthReport from "../../data/status.json";
+import type { HealthReport } from "../../types/project";
 
 export function getStaticPaths() {
   return locales.map((locale) => ({
@@ -23,19 +27,18 @@ export function getStaticPaths() {
 const { locale } = Astro.props as { locale: Locale };
 const t = getTranslations(locale);
 const projectList = getProjects(locale);
-const featuredProjects = projectList.filter((p) => p.featured);
 const categories = [...new Set(projectList.map((p) => p.category))];
 const siteUrl = site.url ?? `https://${site.domain}`;
 const report = healthReport as HealthReport;
 
 const itemListJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'ItemList',
+  "@context": "https://schema.org",
+  "@type": "ItemList",
   name: site.title,
   description: t.site.seo.description,
   numberOfItems: projectList.length,
   itemListElement: projectList.map((project, index) => ({
-    '@type': 'ListItem',
+    "@type": "ListItem",
     position: index + 1,
     name: project.name,
     url: new URL(projectDetailPath(locale, project.slug), siteUrl).href,
@@ -44,14 +47,14 @@ const itemListJsonLd = {
 };
 
 const websiteJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'WebSite',
+  "@context": "https://schema.org",
+  "@type": "WebSite",
   name: site.title,
   description: t.site.seo.description,
-  url: new URL(locale === 'zh' ? '/' : `/${locale}/`, siteUrl).href,
+  url: new URL(locale === "zh" ? "/" : `/${locale}/`, siteUrl).href,
   inLanguage: localeHtmlLang[locale],
   author: {
-    '@type': 'Person',
+    "@type": "Person",
     name: t.site.seo.author,
     email: site.email,
     url: site.github,
@@ -59,25 +62,29 @@ const websiteJsonLd = {
 };
 ---
 
-<BaseLayout locale={locale} t={t} path="/" crtBoot jsonLd={[websiteJsonLd, itemListJsonLd]}>
-  <ProjectHealthInit projects={projectList} initialReport={report} client:load />
+<BaseLayout
+  locale={locale}
+  t={t}
+  path="/"
+  crtBoot
+  jsonLd={[websiteJsonLd, itemListJsonLd]}>
+  <ProjectHealthInit
+    projects={projectList}
+    initialReport={report}
+    client:load
+  />
   <main class="flex-1 w-full">
-    <HeroPortal t={t} client:load />
-
-    <div class="container-main pt-[4.5rem] pb-20 flex flex-col gap-16 sm:gap-20">
-      <FeaturedProjects
-        projects={featuredProjects}
-        locale={locale}
-        t={t}
-        client:load
-      />
-      <ProjectCatalog
-        projects={projectList}
-        categories={categories}
-        locale={locale}
-        t={t}
-        client:load
-      />
+    <div class="container-main pt-24 sm:pt-28 pb-20">
+      <div class="max-w-2xl mx-auto flex flex-col gap-14 sm:gap-16">
+        <HeroPortal t={t} client:load />
+        <ProjectCatalog
+          projects={projectList}
+          categories={categories}
+          locale={locale}
+          t={t}
+          client:load
+        />
+      </div>
     </div>
   </main>
 

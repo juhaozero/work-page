@@ -25,25 +25,18 @@ export const CRT_TIMING = {
   home: {
     charMs: 100,
     delayMs: 120,
-    /** 首页命令打完 → 精选 */
+    /** 首页命令打完 → 作品目录 */
     afterTypedMs: 400,
     /** 开机结束后多久才允许跳过首页（避免同一次点按连跳） */
     skipGuardMs: 380,
   },
-  featured: {
-    charMs: 100,
-    delayMs: 120,
-    /** 精选列表亮起后 → 目录：基数 + 每项 */
-    afterShowBaseMs: 280,
-    afterShowPerItemMs: 90,
-  },
   catalog: {
-      charMs: 100,
+    charMs: 100,
     delayMs: 120,
   },
   detail: {
-    charMs: 26, // 详情打字速度
-    delayMs: 120, // 详情打字延迟
+    charMs: 26,
+    delayMs: 120,
   },
 } as const;
 
@@ -67,7 +60,6 @@ export function followTerminalScroll(el: HTMLElement | null): void {
   });
 }
 
-export const CRT_INTRO_FEATURED_EVENT = 'crt-intro:featured';
 export const CRT_INTRO_CATALOG_EVENT = 'crt-intro:catalog';
 
 export type CrtBootDoneDetail = {
@@ -80,7 +72,6 @@ export type CrtIntroDetail = {
 };
 
 let bootResult: CrtBootDoneDetail | null = null;
-let featuredIntro: CrtIntroDetail | null = null;
 let catalogIntro: CrtIntroDetail | null = null;
 /** 本页生命周期内只判定一次，避免 mark 后其它组件误判 */
 let playDecision: boolean | null = null;
@@ -119,7 +110,6 @@ export function markCrtHomeIntroPlayed(): void {
 /** 全页刷新时重置模块门锁（软导航/HMR 保险） */
 export function resetCrtIntroLatches(): void {
   bootResult = null;
-  featuredIntro = null;
   catalogIntro = null;
 }
 
@@ -145,46 +135,6 @@ export function subscribeCrtBootDone(
   return () => window.removeEventListener(CRT_BOOT_EVENT, handler);
 }
 
-function subscribeIntro(
-  cached: CrtIntroDetail | null,
-  eventName: string,
-  setCached: (d: CrtIntroDetail) => void,
-  cb: (detail: CrtIntroDetail) => void,
-): () => void {
-  if (cached) {
-    cb(cached);
-    return () => {};
-  }
-  const handler = (event: Event) => {
-    const detail = (event as CustomEvent<CrtIntroDetail>).detail;
-    setCached(detail);
-    cb(detail);
-  };
-  window.addEventListener(eventName, handler);
-  return () => window.removeEventListener(eventName, handler);
-}
-
-export function dispatchCrtIntroFeatured(instant: boolean): void {
-  const detail = { instant };
-  featuredIntro = detail;
-  window.dispatchEvent(
-    new CustomEvent<CrtIntroDetail>(CRT_INTRO_FEATURED_EVENT, { detail }),
-  );
-}
-
-export function subscribeCrtIntroFeatured(
-  cb: (detail: CrtIntroDetail) => void,
-): () => void {
-  return subscribeIntro(
-    featuredIntro,
-    CRT_INTRO_FEATURED_EVENT,
-    (d) => {
-      featuredIntro = d;
-    },
-    cb,
-  );
-}
-
 export function dispatchCrtIntroCatalog(instant: boolean): void {
   const detail = { instant };
   catalogIntro = detail;
@@ -196,12 +146,15 @@ export function dispatchCrtIntroCatalog(instant: boolean): void {
 export function subscribeCrtIntroCatalog(
   cb: (detail: CrtIntroDetail) => void,
 ): () => void {
-  return subscribeIntro(
-    catalogIntro,
-    CRT_INTRO_CATALOG_EVENT,
-    (d) => {
-      catalogIntro = d;
-    },
-    cb,
-  );
+  if (catalogIntro) {
+    cb(catalogIntro);
+    return () => {};
+  }
+  const handler = (event: Event) => {
+    const detail = (event as CustomEvent<CrtIntroDetail>).detail;
+    catalogIntro = detail;
+    cb(detail);
+  };
+  window.addEventListener(CRT_INTRO_CATALOG_EVENT, handler);
+  return () => window.removeEventListener(CRT_INTRO_CATALOG_EVENT, handler);
 }

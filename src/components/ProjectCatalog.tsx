@@ -3,7 +3,7 @@ import type { Locale } from '../i18n/config';
 import type { UITranslations } from '../i18n/ui';
 import { projectDetailPath } from '../i18n/paths';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ProjectMobileRow, ProjectTableRow } from './ProjectCard';
+import { ProjectIndexRow } from './ProjectCard';
 import {
   CRT_TIMING,
   followTerminalScroll,
@@ -21,15 +21,6 @@ interface ProjectCatalogProps {
 }
 
 type Phase = 'pending' | 'command' | 'show';
-
-/** 伪 ls 权限位：按分类给一点差异，纯装饰 */
-function lsMode(category: string): string {
-  const key = category.toLowerCase();
-  if (key.includes('游戏') || key.includes('game')) return 'drwxr-xr-x';
-  if (key.includes('工具') || key.includes('tool')) return '-rwxr-xr-x';
-  if (key.includes('图片') || key.includes('image') || key.includes('img')) return '-rw-r--r--';
-  return '-rw-r--r--';
-}
 
 export default function ProjectCatalog({
   projects,
@@ -79,7 +70,7 @@ export default function ProjectCatalog({
     return () => ids.forEach((id) => window.clearTimeout(id));
   }, [phase, instant, projects.length]);
 
-  // ls -l 命令打字中：一键跳过 → 窗口直接亮起
+  // ls 命令打字中：一键跳过 → 列表直接亮起
   const skipTyping = useCallback(() => {
     setInstant(true);
     setPhase('show');
@@ -92,7 +83,6 @@ export default function ProjectCatalog({
   );
 
   const allCategories = [filterAll, ...categories];
-  const cols = t.catalog.columns;
   const onCommandDone = () => setPhase('show');
 
   return (
@@ -105,30 +95,20 @@ export default function ProjectCatalog({
         <p
           ref={promptRef}
           className="terminal-prompt mb-4 sm:mb-5 flex flex-wrap items-baseline gap-x-2 gap-y-1"
-          style={{ color: 'var(--crt-text-muted)' }}
         >
-          <span className="crt-phosphor shrink-0" style={{ color: 'var(--crt-accent)' }}>
-            {t.crt.prompt}
-          </span>
+          <span className="terminal-prompt-user shrink-0">{t.crt.prompt}</span>
           {instant || phase === 'show' ? (
-            <span className="crt-phosphor" style={{ color: 'var(--crt-text)' }}>
-              {t.crt.catalogCommand}
-            </span>
+            <span className="terminal-prompt-cmd">{t.crt.catalogCommand}</span>
           ) : (
             <>
               <Typewriter
                 text={t.crt.catalogCommand}
                 charMs={CRT_TIMING.catalog.charMs}
                 delayMs={CRT_TIMING.catalog.delayMs}
-                className="crt-phosphor"
-                style={{ color: 'var(--crt-text)' }}
+                className="terminal-prompt-cmd"
                 onDone={onCommandDone}
               />
-              <span
-                className="text-[0.6875rem] shrink-0"
-                style={{ color: 'var(--crt-text-dim)' }}
-                aria-hidden="true"
-              >
+              <span className="terminal-prompt-hint shrink-0" aria-hidden="true">
                 {t.crt.skipHint}
               </span>
             </>
@@ -141,112 +121,61 @@ export default function ProjectCatalog({
         className={phase === 'show' ? 'crt-reveal' : 'crt-reveal-pending'}
         aria-hidden={phase !== 'show'}
       >
-        <div className="crt-window crt-window--listing">
-          <h2 id="catalog-heading" className="sr-only">
-            {t.catalog.title}
-          </h2>
+        <h2 id="catalog-heading" className="sr-only">
+          {t.catalog.title}
+        </h2>
 
-          {/* 分类：紧凑 type 切换 */}
-          <div className="crt-listing-filter">
-            <span className="crt-listing-filter-flag" aria-hidden="true">
-              type:
-            </span>
-            <nav
-              className="crt-listing-filter-nav"
-              aria-label={t.catalog.filterAriaLabel}
-            >
-              {allCategories.map((category) => {
-                const isActive = active === category;
-                return (
-                  <button
-                    key={category}
-                    type="button"
-                    onClick={() => setActive(category)}
-                    disabled={phase !== 'show'}
-                    className={[
-                      'btn-filter',
-                      'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--crt-accent)]',
-                      isActive ? 'btn-filter-active' : 'btn-filter-inactive',
-                    ].join(' ')}
-                    aria-pressed={isActive}
-                  >
-                    {category}
-                  </button>
-                );
-              })}
-            </nav>
-          </div>
-
-          {/* 目录主体：仿 ls -l */}
-          <div className="crt-listing-body">
-            <div className="sm:hidden">
-              {filtered.map((project, index) => (
-                <div
-                  key={project.id}
-                  className={phase === 'show' && !instant ? 'crt-stagger-item' : undefined}
-                  style={
-                    phase === 'show' && !instant
-                      ? { ['--crt-stagger' as string]: String(index) }
-                      : undefined
-                  }
+        <div className="crt-listing-filter">
+          <span className="crt-listing-filter-flag" aria-hidden="true">
+            type:
+          </span>
+          <nav
+            className="crt-listing-filter-nav"
+            aria-label={t.catalog.filterAriaLabel}
+          >
+            {allCategories.map((category) => {
+              const isActive = active === category;
+              return (
+                <button
+                  key={category}
+                  type="button"
+                  onClick={() => setActive(category)}
+                  disabled={phase !== 'show'}
+                  className={[
+                    'btn-filter',
+                    'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--crt-accent)]',
+                    isActive ? 'btn-filter-active' : 'btn-filter-inactive',
+                  ].join(' ')}
+                  aria-pressed={isActive}
                 >
-                  <ProjectMobileRow
-                    project={project}
-                    t={t}
-                    detailHref={projectDetailPath(locale, project.slug)}
-                    mode={lsMode(project.category)}
-                  />
-                </div>
-              ))}
-            </div>
+                  {category}
+                </button>
+              );
+            })}
+          </nav>
+        </div>
 
-            <div className="hidden sm:block overflow-x-auto">
-              <table className="terminal-table terminal-table--ls">
-                <thead>
-                  <tr>
-                    <th scope="col" className="terminal-th terminal-th--mode">
-                      {cols.mode}
-                    </th>
-                    <th scope="col" className="terminal-th">
-                      {cols.name}
-                    </th>
-                    <th scope="col" className="terminal-th">
-                      {cols.category}
-                    </th>
-                    <th scope="col" className="terminal-th hidden md:table-cell">
-                      {cols.tech}
-                    </th>
-                    <th scope="col" className="terminal-th">
-                      {cols.status}
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filtered.map((project, index) => (
-                    <ProjectTableRow
-                      key={project.id}
-                      project={project}
-                      t={t}
-                      detailHref={projectDetailPath(locale, project.slug)}
-                      mode={lsMode(project.category)}
-                      staggerIndex={phase === 'show' && !instant ? index : undefined}
-                    />
-                  ))}
-                </tbody>
-              </table>
-            </div>
+        <div className="crt-listing-body">
+          {filtered.map((project, index) => (
+            <ProjectIndexRow
+              key={project.id}
+              project={project}
+              detailHref={projectDetailPath(locale, project.slug)}
+              staggerIndex={phase === 'show' && !instant ? index : undefined}
+              tabIndex={phase === 'show' ? undefined : -1}
+            />
+          ))}
 
-            {filtered.length === 0 && (
-              <div className="crt-listing-empty" role="status">
-                <p className="m-0 text-sm" style={{ color: 'var(--crt-text-muted)' }}>
-                  {t.catalog.emptyTitle}
-                </p>
-                <p className="m-0 text-xs mt-2" style={{ color: 'var(--crt-text-dim)' }}>
-                  {t.catalog.emptyHint}
-                </p>
-              </div>
-            )}
-          </div>
+          {filtered.length === 0 && (
+            <div className="crt-listing-empty" role="status">
+              <p className="m-0 text-sm" style={{ color: 'var(--crt-text-muted)' }}>
+                {t.catalog.emptyTitle}
+              </p>
+              <p className="m-0 text-xs mt-2" style={{ color: 'var(--crt-text-dim)' }}>
+                {t.catalog.emptyHint}
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </section>

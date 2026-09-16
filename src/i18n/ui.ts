@@ -23,10 +23,6 @@ export interface UITranslations {
     blog: string;
     about: string;
   };
-  featured: {
-    label: string;
-    goTo: string;
-  };
   catalog: {
     title: string;
     filterAll: string;
@@ -34,7 +30,6 @@ export interface UITranslations {
     emptyTitle: string;
     emptyHint: string;
     columns: {
-      mode: string;
       name: string;
       category: string;
       tech: string;
@@ -103,7 +98,6 @@ export interface UITranslations {
     bootTitle: string;
     bootLines: [string, string, string, string];
     bootSkip: string;
-    featuredCommand: string;
     catalogCommand: string;
     skipHint: string;
   };
@@ -130,18 +124,13 @@ const ui: Record<Locale, UITranslations> = {
       email: '电子邮件',
       about: '关于',
     },
-    featured: {
-      label: '精选项目',
-      goTo: '详情',
-    },
     catalog: {
-      title: '个人作品',
+      title: '作品',
       filterAll: '全部',
       filterAriaLabel: '项目分类筛选',
       emptyTitle: 'ls: 没有匹配的条目',
-      emptyHint: '换个 -type 再试',
+      emptyHint: '换个 type 再试',
       columns: {
-        mode: '权限',
         name: '名称',
         category: '分类',
         tech: '技术',
@@ -225,9 +214,8 @@ const ui: Record<Locale, UITranslations> = {
         '> cd ~/dev…',
         '> ready.',
       ],
-      bootSkip: 'click / esc to skip',
-      featuredCommand: 'cat ~/featured.list',
-      catalogCommand: 'ls -l ~/projects',
+      bootSkip: '点按 / Esc 跳过',
+      catalogCommand: 'ls ~/projects',
       skipHint: '· 点按跳过',
     },
   },
@@ -252,18 +240,13 @@ const ui: Record<Locale, UITranslations> = {
       email: 'Email',
       about: 'About',
     },
-    featured: {
-      label: 'Featured',
-      goTo: 'Details',
-    },
     catalog: {
-      title: 'Personal works',
+      title: 'Works',
       filterAll: 'All',
       filterAriaLabel: 'Project category filter',
       emptyTitle: 'ls: no matches found',
-      emptyHint: 'try another -type',
+      emptyHint: 'try another type',
       columns: {
-        mode: 'Mode',
         name: 'Name',
         category: 'Category',
         tech: 'Tech',
@@ -350,8 +333,7 @@ const ui: Record<Locale, UITranslations> = {
         '> ready.',
       ],
       bootSkip: 'click / esc to skip',
-      featuredCommand: 'cat ~/featured.list',
-      catalogCommand: 'ls -l ~/projects',
+      catalogCommand: 'ls ~/projects',
       skipHint: '· click to skip',
     },
   },

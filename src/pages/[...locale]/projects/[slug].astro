@@ -99,10 +99,11 @@ const techLine =
   project.tech && project.tech.length > 0 ? project.tech.join(" · ") : null;
 const detailCommand = format(t.crt.detailCommand, { slug: project.slug });
 
-const metaRowClass =
-  "flex flex-wrap items-baseline gap-x-4 gap-y-1 sm:gap-x-0 py-3 border-b border-[var(--crt-border-dim)]";
-const metaDtClass =
-  "shrink-0 text-xs sm:w-[8em] sm:pr-4 terminal-label !normal-case !tracking-normal";
+const metaRows = [
+  { label: cols.category, value: project.category },
+  lifecycleLabel ? { label: t.project.lifecycleLabel, value: lifecycleLabel } : null,
+  techLine ? { label: cols.tech, value: techLine } : null,
+].filter(Boolean) as { label: string; value: string }[];
 ---
 
 <BaseLayout
@@ -116,136 +117,127 @@ const metaDtClass =
   <ProjectHealthInit projects={[project]} initialReport={report} client:load />
 
   <main class="flex-1 w-full">
-    <article class="container-main pt-24 sm:pt-28 pb-20 max-w-3xl">
-      <DetailBoot prompt={t.crt.prompt} command={detailCommand} client:load />
+    <article class="container-main pt-24 sm:pt-28 pb-20">
+      <div class="max-w-2xl mx-auto">
+        <DetailBoot prompt={t.crt.prompt} command={detailCommand} client:load />
 
-      <div class="crt-detail-body">
-        <a href={homeHref} class="btn-terminal mb-8">{t.project.backToCatalog}</a>
+        <div class="crt-detail-body">
+          <a
+            href={homeHref}
+            class="text-xs mb-8 inline-block hover:opacity-70 transition-opacity duration-150"
+            style="color: var(--crt-accent);">
+            {t.project.backToCatalog}
+          </a>
 
-        <header class="mb-8">
-          {
-            coverImage && (
-              <div class="mb-6 overflow-hidden border border-[var(--crt-border-dim)] bg-[var(--crt-surface)]">
-                <img
-                  src={coverImage}
-                  alt={coverAlt}
-                  width={1200}
-                  height={630}
-                  class="w-full aspect-[16/9] object-cover"
-                  loading="eager"
-                  decoding="async"
-                />
-              </div>
-            )
-          }
-          <h1 class="text-lg sm:text-xl font-semibold tracking-tight text-balance crt-phosphor">
-            {project.name}
-          </h1>
-          <p
-            class="text-sm mt-2 leading-snug text-pretty"
-            style="color: var(--crt-text-muted);">
-            {project.description}
-          </p>
-          {
-            primaryLink && (
-              <div class="mt-6">
-                <a
-                  href={primaryLink.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="btn-terminal-primary"
-                >
-                  {primaryLink.label}
-                </a>
-              </div>
-            )
-          }
-        </header>
-
-        <dl class="mb-10 border-t border-[var(--crt-border-dim)]">
-          <div class={metaRowClass}>
-            <dt class={metaDtClass}>{cols.category}</dt>
-            <dd class="text-sm" style="color: var(--crt-text-muted);">
-              {project.category}
-            </dd>
-          </div>
-          {
-            lifecycleLabel && (
-              <div class={metaRowClass}>
-                <dt class={metaDtClass}>{t.project.lifecycleLabel}</dt>
-                <dd class="text-sm" style="color: var(--crt-text-muted);">
-                  {lifecycleLabel}
-                </dd>
-              </div>
-            )
-          }
-          {
-            techLine && (
-              <div class={metaRowClass}>
-                <dt class={metaDtClass}>{cols.tech}</dt>
-                <dd class="text-sm" style="color: var(--crt-text-muted);">
-                  {techLine}
-                </dd>
-              </div>
-            )
-          }
-          <div class={metaRowClass}>
-            <dt class={metaDtClass}>{cols.status}</dt>
-            <dd class="text-sm">
-              <ProjectStatus
-                projectId={project.id}
-                labels={t.status}
-                client:load
-              />
-            </dd>
-          </div>
-        </dl>
-
-        {
-          (checkedAtLabel ||
-            reasonLabel ||
-            (health?.error && !health.online)) && (
+          <header class="mb-10">
+            {
+              coverImage && (
+                <div class="mb-6 overflow-hidden border border-[var(--crt-border)] bg-[var(--crt-surface)]">
+                  <img
+                    src={coverImage}
+                    alt={coverAlt}
+                    width={1200}
+                    height={630}
+                    class="w-full aspect-[16/9] object-cover"
+                    loading="eager"
+                    decoding="async"
+                  />
+                </div>
+              )
+            }
+            <h1 class="text-lg sm:text-xl font-semibold tracking-tight text-balance">
+              {project.name}
+            </h1>
             <p
-              class="text-xs mb-8 space-x-3"
-              style="color: var(--crt-text-dim);">
-              {checkedAtLabel && <span>{checkedAtLabel}</span>}
-              {reasonLabel && <span>· {reasonLabel}</span>}
-              {health?.error && !health.online && <span>· {health.error}</span>}
+              class="text-sm mt-2 leading-relaxed text-pretty"
+              style="color: var(--crt-text-muted);">
+              {project.description}
             </p>
-          )
-        }
+            {
+              primaryLink && (
+                <div class="mt-5">
+                  <a
+                    href={primaryLink.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="btn-terminal-primary"
+                  >
+                    {primaryLink.label}
+                  </a>
+                </div>
+              )
+            }
+          </header>
 
-        <section class="mb-10 space-y-3">
-          <h2 class="terminal-label">{t.project.summaryLabel}</h2>
-          <p
-            class="text-sm leading-relaxed text-pretty"
-            style="color: var(--crt-text-muted);">
-            {longCopy}
-          </p>
-        </section>
+          <dl class="mb-10 space-y-2.5">
+            {
+              metaRows.map((row) => (
+                <div class="crt-meta-row">
+                  <dt class="crt-meta-label">{row.label}</dt>
+                  <dd class="crt-meta-value">{row.value}</dd>
+                </div>
+              ))
+            }
+            <div class="crt-meta-row">
+              <dt class="crt-meta-label">{cols.status}</dt>
+              <dd class="crt-meta-value">
+                <ProjectStatus
+                  projectId={project.id}
+                  labels={t.status}
+                  client:load
+                />
+              </dd>
+            </div>
+          </dl>
 
-        {
-          secondaryLinks.length > 0 && (
-            <section>
-              <h2 class="terminal-label mb-0">{t.project.linksLabel}</h2>
-              <ul class="border-t border-[var(--crt-border-dim)] mt-3">
-                {secondaryLinks.map((link) => (
-                  <li class={metaRowClass}>
-                    <a
-                      href={link.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      class="text-sm transition-opacity duration-150 hover:opacity-70 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--crt-accent)]"
-                      style="color: var(--crt-accent);"
-                    >
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </section>
-          )
-        }
+          {
+            (checkedAtLabel ||
+              reasonLabel ||
+              (health?.error && !health.online)) && (
+              <p
+                class="text-xs mb-8 space-x-3"
+                style="color: var(--crt-text-dim);">
+                {checkedAtLabel && <span>{checkedAtLabel}</span>}
+                {reasonLabel && <span>· {reasonLabel}</span>}
+                {health?.error && !health.online && (
+                  <span>· {health.error}</span>
+                )}
+              </p>
+            )
+          }
+
+          <section class="mb-10 space-y-3">
+            <h2 class="terminal-label">{t.project.summaryLabel}</h2>
+            <p
+              class="text-sm leading-relaxed text-pretty"
+              style="color: var(--crt-text-muted);">
+              {longCopy}
+            </p>
+          </section>
+
+          {
+            secondaryLinks.length > 0 && (
+              <section>
+                <h2 class="terminal-label mb-3">{t.project.linksLabel}</h2>
+                <ul class="space-y-2.5">
+                  {secondaryLinks.map((link) => (
+                    <li>
+                      <a
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="text-sm transition-opacity duration-150 hover:opacity-70 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--crt-accent)]"
+                        style="color: var(--crt-accent);"
+                      >
+                        {link.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )
+          }
+        </div>
       </div>
     </article>
   </main>

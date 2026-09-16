@@ -6,7 +6,7 @@ export type HealthStatus = 'checking' | 'online' | 'offline';
 
 export interface HealthSnapshot {
   status: HealthStatus;
-  httpStatus: number | null;
+  httpStatus: number | null;  
   reason: ProjectHealthEntry['reason'] | null;
   checkedAt: string | null;
   error?: string;

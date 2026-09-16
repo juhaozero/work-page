@@ -20,7 +20,7 @@
     "id": "2",
     "slug": "linux-quick-reference",
     "url": "https://item.juhaozero.com/linux/",
-    "featured": true,
+    "featured": false,
     "tech": [
       "Vue",
       "TypeScript"
@@ -69,7 +69,7 @@
     "id": "5",
     "slug": "tarot-hall",
     "url": "https://item.juhaozero.com/tarot/",
-    "featured": true,
+    "featured": false,
     "tech": [
       "TypeScript",
       "React"
