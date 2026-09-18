@@ -32,7 +32,7 @@
     "lifecycle": "active",
     "i18n": {
       "zh": {
-        "name": "Linux 速查手册",
+        "name": "Linux手册",
         "category": "手册",
         "description": "Linux 命令速查手册。",
         "longDescription": "一键复制即用的 Linux 命令速查手册。"
@@ -78,13 +78,13 @@
     "lifecycle": "active",
     "i18n": {
       "zh": {
-        "name": "去水印",
+        "name": "无印良频",
         "category": "工具",
         "description": "粘贴分享链接，解析无水印的视频下载地址。",
         "longDescription": "输入视频分享链接，解析出可下载的源地址，尽可能拿到无水印版本——适合备份收藏，或二次剪辑前收集素材。"
       },
       "en": {
-        "name": "UnWatermark",
+        "name": "No Watermark Video",
         "category": "Tools",
         "description": "Paste a share link, resolve a watermark-free download.",
         "longDescription": "Paste a share URL to get a downloadable source, preferring watermark-free versions when available — handy for archiving or re-editing."
