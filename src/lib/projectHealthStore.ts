@@ -1,5 +1,6 @@
 import { useSyncExternalStore } from 'react';
 import { probeProjectUrl } from './probeProject';
+import { getProbeUrl } from './projectAccess';
 import type { HealthReport, Project, ProjectHealthEntry } from '../types/project';
 
 export type HealthStatus = 'checking' | 'online' | 'offline';
@@ -104,7 +105,18 @@ export function initProjectHealth(
   }
 
   for (const project of projects) {
-    void probeProjectUrl(project.url).then((online) => {
+    const target = getProbeUrl(project);
+    if (!target) {
+      setSnapshot(project.id, {
+        status: 'offline',
+        httpStatus: null,
+        reason: 'unknown',
+        checkedAt: new Date().toISOString(),
+        error: 'no probe url',
+      });
+      continue;
+    }
+    void probeProjectUrl(target).then((online) => {
       setSnapshot(project.id, {
         status: online ? 'online' : 'offline',
         httpStatus: null,

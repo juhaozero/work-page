@@ -1,5 +1,10 @@
 import type { Locale } from './config';
-import type { ProjectLifecycle, ProbeReason } from '../types/project';
+import type {
+  ProjectLifecycle,
+  ProjectKind,
+  ProbeReason,
+  ReleasePlatform,
+} from '../types/project';
 
 export interface SiteTranslations {
   seo: {
@@ -38,11 +43,17 @@ export interface UITranslations {
   };
   project: {
     openLabel: string;
+    downloadLabel: string;
     backToCatalog: string;
     techLabel: string;
     linksLabel: string;
+    releasesLabel: string;
     summaryLabel: string;
     lifecycleLabel: string;
+    kindLabel: string;
+    versionLabel: string;
+    kind: Record<ProjectKind, string>;
+    platforms: Record<ReleasePlatform, string>;
     demo: string;
     docs: string;
     changelog: string;
@@ -55,9 +66,13 @@ export interface UITranslations {
     checking: string;
     online: string;
     offline: string;
+    available: string;
+    unavailable: string;
     ariaChecking: string;
     ariaOnline: string;
     ariaOffline: string;
+    ariaAvailable: string;
+    ariaUnavailable: string;
     checkedAt: string;
     reason: Record<ProbeReason, string>;
   };
@@ -139,11 +154,27 @@ const ui: Record<Locale, UITranslations> = {
     },
     project: {
       openLabel: '打开项目',
+      downloadLabel: '下载最新版',
       backToCatalog: '← 返回目录',
       techLabel: '技术栈',
       linksLabel: '相关链接',
+      releasesLabel: '安装包',
       summaryLabel: '简介',
       lifecycleLabel: '生命周期',
+      kindLabel: '类型',
+      versionLabel: '版本',
+      kind: {
+        web: '网页',
+        package: '安装包',
+      },
+      platforms: {
+        windows: 'Windows',
+        macos: 'macOS',
+        linux: 'Linux',
+        android: 'Android',
+        ios: 'iOS',
+        other: '其他',
+      },
       demo: '演示',
       docs: '文档',
       changelog: '更新日志',
@@ -160,9 +191,13 @@ const ui: Record<Locale, UITranslations> = {
       checking: '◌ 检测中',
       online: '◉ 在线',
       offline: '◯ 离线',
+      available: '◉ 发布可用',
+      unavailable: '◯ 不可用',
       ariaChecking: '服务检测中',
       ariaOnline: '服务在线',
       ariaOffline: '服务离线',
+      ariaAvailable: '安装包可下载',
+      ariaUnavailable: '安装包不可用',
       checkedAt: '最近检测：{time}',
       reason: {
         ok: '可达',
@@ -255,11 +290,27 @@ const ui: Record<Locale, UITranslations> = {
     },
     project: {
       openLabel: 'Open project',
+      downloadLabel: 'Download latest',
       backToCatalog: '← Back to catalog',
       techLabel: 'Tech stack',
       linksLabel: 'Links',
+      releasesLabel: 'Releases',
       summaryLabel: 'Summary',
       lifecycleLabel: 'Lifecycle',
+      kindLabel: 'Type',
+      versionLabel: 'Version',
+      kind: {
+        web: 'Web',
+        package: 'Package',
+      },
+      platforms: {
+        windows: 'Windows',
+        macos: 'macOS',
+        linux: 'Linux',
+        android: 'Android',
+        ios: 'iOS',
+        other: 'Other',
+      },
       demo: 'Demo',
       docs: 'Docs',
       changelog: 'Changelog',
@@ -276,9 +327,13 @@ const ui: Record<Locale, UITranslations> = {
       checking: '◌ Checking',
       online: '◉ Online',
       offline: '◯ Offline',
+      available: '◉ Available',
+      unavailable: '◯ Unavailable',
       ariaChecking: 'Service checking',
       ariaOnline: 'Service online',
       ariaOffline: 'Service offline',
+      ariaAvailable: 'Release available',
+      ariaUnavailable: 'Release unavailable',
       checkedAt: 'Last checked: {time}',
       reason: {
         ok: 'Reachable',

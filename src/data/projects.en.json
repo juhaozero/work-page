@@ -20,7 +20,7 @@
     "id": "2",
     "slug": "linux-quick-reference",
     "url": "https://item.juhaozero.com/linux/",
-    "featured": false,
+    "featured": true,
     "tech": [
       "Vue",
       "TypeScript"

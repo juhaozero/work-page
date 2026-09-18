@@ -16,7 +16,11 @@ const outFiles = {
 const SHARED_KEYS = [
   'id',
   'slug',
+  'kind',
   'url',
+  'downloadUrl',
+  'version',
+  'releases',
   'featured',
   'repo',
   'tech',

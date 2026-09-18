@@ -69,7 +69,12 @@ npm run validate:projects
 npm run generate:projects
 ```
 
-共享字段：`id`、`slug`、`url`（必填）；可选 `featured`、`tech`、`createdAt`、`lifecycle`、`repo`、`demo`、`docs`、`changelog`、`cover`。文案放在 `i18n.zh` / `i18n.en`（`name`、`category`、`description`、`longDescription?`）。
+共享字段：`id`、`slug`（必填）；`kind` 省略视为 `web`。  
+- **web**：必填 `url`  
+- **package**：必填 `downloadUrl` 或非空 `releases[]`（`url` 可选）  
+可选：`featured`、`tech`、`createdAt`、`lifecycle`、`repo`、`demo`、`docs`、`changelog`、`cover`、`version`、`downloadUrl`、`releases`。文案放在 `i18n.zh` / `i18n.en`（`name`、`category`、`description`、`longDescription?`）。
+
+`releases[]` 项：`platform`（`windows` | `macos` | `linux` | `android` | `ios` | `other`）、`filename`、`url`；可选 `label`、`version`、`size`、`sha256`。
 
 ## 功能特性
 

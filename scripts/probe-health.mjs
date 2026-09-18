@@ -56,17 +56,43 @@ async function probe(url) {
   }
 }
 
+/** 与 src/lib/projectAccess.ts getProbeUrl 对齐 */
+function getProbeUrl(project) {
+  const kind = project.kind ?? 'web';
+  if (kind === 'package') {
+    return (
+      project.downloadUrl ||
+      project.releases?.[0]?.url ||
+      project.url ||
+      null
+    );
+  }
+  return project.url || null;
+}
+
 const projects = JSON.parse(readFileSync(projectsPath, 'utf8'));
 const projectsMap = {};
 
-console.log(`Probing ${projects.length} project URLs…`);
+console.log(`Probing ${projects.length} project targets…`);
 
 for (const project of projects) {
-  const result = await probe(project.url);
+  const target = getProbeUrl(project);
+  const kind = project.kind ?? 'web';
+  let result;
+  if (!target) {
+    result = {
+      online: false,
+      httpStatus: null,
+      reason: 'unknown',
+      error: 'no probe url',
+    };
+  } else {
+    result = await probe(target);
+  }
   projectsMap[project.id] = result;
   const mark = result.online ? '✔' : '✘';
   console.log(
-    `  ${mark} ${project.slug ?? project.id} → ${result.reason}` +
+    `  ${mark} [${kind}] ${project.slug ?? project.id} → ${result.reason}` +
       (result.httpStatus != null ? ` (${result.httpStatus})` : '') +
       (result.error ? ` ${result.error}` : ''),
   );

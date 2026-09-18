@@ -13,6 +13,11 @@ import { getTranslations, t as format } from "../../../i18n/ui";
 import { getProjects } from "../../../i18n/projects";
 import { homePath, projectDetailPath } from "../../../i18n/paths";
 import { projectCoverImage, projectOgImage } from "../../../lib/projectCover";
+import {
+  getPrimaryAction,
+  getProjectKind,
+  releasePlatformsLabel,
+} from "../../../lib/projectAccess";
 import DetailBoot from "../../../components/DetailBoot";
 import site from "../../../data/site.json";
 import healthReport from "../../../data/status.json";
@@ -41,23 +46,35 @@ const pageUrl = new URL(projectDetailPath(locale, project.slug), siteUrl).href;
 const ogImage = projectOgImage(project);
 const longCopy = project.longDescription ?? project.description;
 const cols = t.catalog.columns;
+const kind = getProjectKind(project);
+const primaryAction = getPrimaryAction(project);
+const primaryLabel =
+  primaryAction?.action === "download"
+    ? t.project.downloadLabel
+    : t.project.openLabel;
 
-const links = [
-  { href: project.url, label: t.project.openLabel, primary: true as const },
+const secondaryLinks = [
+  project.url && kind === "package"
+    ? { href: project.url, label: t.project.openLabel }
+    : null,
   project.demo && project.demo !== project.url
-    ? { href: project.demo, label: t.project.demo, primary: false as const }
+    ? { href: project.demo, label: t.project.demo }
     : null,
-  project.docs ? { href: project.docs, label: t.project.docs, primary: false as const } : null,
+  project.docs ? { href: project.docs, label: t.project.docs } : null,
   project.changelog
-    ? { href: project.changelog, label: t.project.changelog, primary: false as const }
+    ? { href: project.changelog, label: t.project.changelog }
     : null,
-  project.repo ? { href: project.repo, label: t.project.repo, primary: false as const } : null,
-].filter(Boolean) as { href: string; label: string; primary: boolean }[];
+  project.repo ? { href: project.repo, label: t.project.repo } : null,
+].filter(Boolean) as { href: string; label: string }[];
 
-const primaryLink = links.find((link) => link.primary) ?? links[0];
-const secondaryLinks = links.filter((link) => link !== primaryLink);
+const releases = project.releases ?? [];
 const coverImage = projectCoverImage(project);
 const coverAlt = format(t.project.coverAlt, { name: project.name });
+const osLabel =
+  kind === "package"
+    ? releasePlatformsLabel(releases.map((r) => r.platform))
+    : "Web";
+
 const softwareJsonLd = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
@@ -65,11 +82,16 @@ const softwareJsonLd = {
   description: longCopy,
   url: pageUrl,
   applicationCategory: project.category,
-  operatingSystem: "Web",
+  operatingSystem: osLabel,
   inLanguage: localeHtmlLang[locale],
   image: new URL(ogImage, siteUrl).href,
   ...(project.createdAt ? { dateCreated: project.createdAt } : {}),
+  ...(project.version ? { softwareVersion: project.version } : {}),
   ...(project.tech?.length ? { keywords: project.tech.join(", ") } : {}),
+  ...(primaryAction?.action === "download"
+    ? { downloadUrl: primaryAction.href }
+    : {}),
+  ...(primaryAction?.action === "open" ? { sameAs: primaryAction.href } : {}),
   offers: {
     "@type": "Offer",
     price: "0",
@@ -101,7 +123,13 @@ const detailCommand = format(t.crt.detailCommand, { slug: project.slug });
 
 const metaRows = [
   { label: cols.category, value: project.category },
-  lifecycleLabel ? { label: t.project.lifecycleLabel, value: lifecycleLabel } : null,
+  { label: t.project.kindLabel, value: t.project.kind[kind] },
+  project.version
+    ? { label: t.project.versionLabel, value: project.version }
+    : null,
+  lifecycleLabel
+    ? { label: t.project.lifecycleLabel, value: lifecycleLabel }
+    : null,
   techLine ? { label: cols.tech, value: techLine } : null,
 ].filter(Boolean) as { label: string; value: string }[];
 ---
@@ -154,15 +182,15 @@ const metaRows = [
               {project.description}
             </p>
             {
-              primaryLink && (
+              primaryAction && (
                 <div class="mt-5">
                   <a
-                    href={primaryLink.href}
+                    href={primaryAction.href}
                     target="_blank"
                     rel="noopener noreferrer"
                     class="btn-terminal-primary"
                   >
-                    {primaryLink.label}
+                    {primaryLabel}
                   </a>
                 </div>
               )
@@ -184,6 +212,7 @@ const metaRows = [
                 <ProjectStatus
                   projectId={project.id}
                   labels={t.status}
+                  kind={kind}
                   client:load
                 />
               </dd>
@@ -216,6 +245,54 @@ const metaRows = [
           </section>
 
           {
+            releases.length > 0 && (
+              <section class="mb-10">
+                <h2 class="terminal-label mb-3">{t.project.releasesLabel}</h2>
+                <ul class="space-y-2.5">
+                  {releases.map((release) => {
+                    const platformName =
+                      release.label ?? t.project.platforms[release.platform];
+                    const meta = [
+                      platformName,
+                      release.version,
+                      release.size,
+                    ]
+                      .filter(Boolean)
+                      .join(" · ");
+                    return (
+                      <li class="flex flex-wrap items-baseline gap-x-3 gap-y-1 text-sm">
+                        <a
+                          href={release.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="min-h-[44px] inline-flex items-center transition-opacity duration-150 hover:opacity-70 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--crt-accent)] cursor-pointer"
+                          style="color: var(--crt-accent);"
+                        >
+                          {release.filename}
+                          <span class="ml-2 opacity-70" aria-hidden="true">
+                            ↓
+                          </span>
+                        </a>
+                        {meta && (
+                          <span style="color: var(--crt-text-dim);">{meta}</span>
+                        )}
+                        {release.sha256 && (
+                          <code
+                            class="w-full text-xs break-all"
+                            style="color: var(--crt-text-dim);"
+                          >
+                            sha256:{release.sha256}
+                          </code>
+                        )}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </section>
+            )
+          }
+
+          {
             secondaryLinks.length > 0 && (
               <section>
                 <h2 class="terminal-label mb-3">{t.project.linksLabel}</h2>
@@ -226,7 +303,7 @@ const metaRows = [
                         href={link.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        class="text-sm transition-opacity duration-150 hover:opacity-70 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--crt-accent)]"
+                        class="text-sm transition-opacity duration-150 hover:opacity-70 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--crt-accent)] cursor-pointer"
                         style="color: var(--crt-accent);"
                       >
                         {link.label}
