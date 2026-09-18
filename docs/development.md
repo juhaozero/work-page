@@ -70,7 +70,36 @@ getProjects(locale)
 | `web`（默认） | 打开 → `url` | `url` | links |
 | `package` | 下载最新版 → `downloadUrl` | `downloadUrl` | links |
 
-生命周期 `lifecycle`：`active` | `maintenance` | `archived`（与在线探测状态分离）。社交 OG 图由 `scripts/generate-og.mjs` 写入 `public/og/projects/{slug}.png`，与可选站内 `cover` 分离。
+生命周期 `lifecycle`：`active` | `maintenance` | `archived`（与在线探测状态分离）。社交 OG 图由 `scripts/generate-og.mjs` 写入 `public/og/projects/{slug}.png`，与可选站内 `cover` 分离（见下节）。
+
+### 项目封面 `cover`（仅详情页）
+
+站内截图**只出现在** `/projects/:slug`，首页目录不加缩略图。有 `cover` 才展示；无则保持纯文本详情头。
+
+| 项 | 约定 |
+|----|------|
+| 推荐尺寸 | **1200×630**（约 **16:9**） |
+| 格式 | PNG / WebP / JPG（建议 PNG 或 WebP） |
+| 存放 | `public/covers/{slug}.png`（或 `.webp`） |
+| 字段 | source 里 `"cover": "/covers/{slug}.png"` |
+| 展示 | `aspect-[16/9]` + `object-cover`（细边框、无圆角） |
+
+**截图不够准尺寸时**
+
+1. **页面层（默认）**：CSS 会按 16:9 裁切居中显示，比例偏差大时上下或左右会被切掉。
+2. **资源层（推荐）**：把原图丢进 `public/covers/` 后跑统一脚本，居中裁成 1200×630：
+
+```bash
+# 处理 public/covers/ 下全部图片
+npm run normalize:covers
+
+# 或只处理指定文件
+npm run normalize:covers -- path/to/raw-shot.png
+```
+
+脚本用 `sharp` 的 `fit: cover` + 居中裁切；非 PNG 源会另写同名 `.png`，请把 `cover` 指到规范后的路径。
+
+**与 OG 的区别**：`cover` = 真实产品截图；`/og/projects/{slug}.png` = 构建生成的分享卡，二者不要混用。
 
 ## npm 脚本
 
@@ -80,7 +109,8 @@ getProjects(locale)
 | `npm run generate:projects` | 从 source 生成中英文 JSON |
 | `npm run probe:health` | 构建期探测，写 status.json |
 | `npm run generate:og` | 按项目生成 OG PNG |
-| `npm run prepare:content` | 上述四步串联 |
+| `npm run normalize:covers` | 将 `public/covers/` 统一为 1200×630 |
+| `npm run prepare:content` | validate + generate + probe + og |
 | `npm run build` | `prepare:content` + `astro build` |
 | `npm run dev` | 先 `generate:projects` 再启动开发服 |
 
@@ -165,6 +195,8 @@ getProjects(locale)
 ```
 
 `slug` 需为 kebab-case，且全局唯一。
+
+可选封面：把截图放到 `public/covers/`，在条目加 `"cover": "/covers/{slug}.png"`（尺寸与归一化见上文「项目封面 cover」）。
 
 仅安装包（无网页）示例：
 

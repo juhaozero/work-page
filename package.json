@@ -16,6 +16,7 @@
     "validate:projects": "node scripts/validate-projects.mjs",
     "probe:health": "node scripts/probe-health.mjs",
     "generate:og": "node scripts/generate-og.mjs",
+    "normalize:covers": "node scripts/normalize-covers.mjs",
     "generate:favicon": "node scripts/generate-favicon.mjs"
   },
   "dependencies": {

@@ -43,6 +43,7 @@ npm run preview
 │   ├── validate-projects.mjs       # 源数据校验
 │   ├── probe-health.mjs            # 构建期 URL 探测
 │   ├── generate-og.mjs             # 项目 OG 图（终端窗风格）
+│   ├── normalize-covers.mjs        # 站内封面统一 1200×630
 │   └── generate-favicon.mjs        # favicon 生成（按需）
 ├── src/
 │   ├── data/
@@ -53,6 +54,7 @@ npm run preview
 │   │   └── site.json               # 域名、联系方式、SEO
 │   ├── components/                 # HeroPortal / Catalog / 开机窗等
 │   ├── i18n/ · layouts/ · lib/ · pages/ · styles/ · types/
+├── public/covers/                  # 详情页封面截图（可选）
 ├── public/og/projects/             # 按项目生成的 OG PNG
 ├── .github/workflows/deploy-cos.yml
 └── package.json
@@ -73,6 +75,8 @@ npm run generate:projects
 - **web**：必填 `url`  
 - **package**：必填 `downloadUrl`（`url` 可选）  
 可选：`featured`、`tech`、`createdAt`、`lifecycle`、`repo`、`demo`、`docs`、`changelog`、`cover`、`version`。文案放在 `i18n.zh` / `i18n.en`（`name`、`category`、`description`、`longDescription?`）。
+
+`cover` 仅用于详情页：推荐 **1200×630（16:9）**，文件放 `public/covers/`，例如 `"cover": "/covers/my-tool.png"`。尺寸不齐时可 `npm run normalize:covers` 统一裁切。细则见 [docs/development.md](docs/development.md)。
 
 ## 功能特性
 
