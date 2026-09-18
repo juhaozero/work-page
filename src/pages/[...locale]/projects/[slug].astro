@@ -16,7 +16,6 @@ import { projectCoverImage, projectOgImage } from "../../../lib/projectCover";
 import {
   getPrimaryAction,
   getProjectKind,
-  releasePlatformsLabel,
 } from "../../../lib/projectAccess";
 import DetailBoot from "../../../components/DetailBoot";
 import site from "../../../data/site.json";
@@ -67,13 +66,9 @@ const secondaryLinks = [
   project.repo ? { href: project.repo, label: t.project.repo } : null,
 ].filter(Boolean) as { href: string; label: string }[];
 
-const releases = project.releases ?? [];
 const coverImage = projectCoverImage(project);
 const coverAlt = format(t.project.coverAlt, { name: project.name });
-const osLabel =
-  kind === "package"
-    ? releasePlatformsLabel(releases.map((r) => r.platform))
-    : "Web";
+const osLabel = kind === "package" ? "Any" : "Web";
 
 const softwareJsonLd = {
   "@context": "https://schema.org",
@@ -243,54 +238,6 @@ const metaRows = [
               {longCopy}
             </p>
           </section>
-
-          {
-            releases.length > 0 && (
-              <section class="mb-10">
-                <h2 class="terminal-label mb-3">{t.project.releasesLabel}</h2>
-                <ul class="space-y-2.5">
-                  {releases.map((release) => {
-                    const platformName =
-                      release.label ?? t.project.platforms[release.platform];
-                    const meta = [
-                      platformName,
-                      release.version,
-                      release.size,
-                    ]
-                      .filter(Boolean)
-                      .join(" · ");
-                    return (
-                      <li class="flex flex-wrap items-baseline gap-x-3 gap-y-1 text-sm">
-                        <a
-                          href={release.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          class="min-h-[44px] inline-flex items-center transition-opacity duration-150 hover:opacity-70 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--crt-accent)] cursor-pointer"
-                          style="color: var(--crt-accent);"
-                        >
-                          {release.filename}
-                          <span class="ml-2 opacity-70" aria-hidden="true">
-                            ↓
-                          </span>
-                        </a>
-                        {meta && (
-                          <span style="color: var(--crt-text-dim);">{meta}</span>
-                        )}
-                        {release.sha256 && (
-                          <code
-                            class="w-full text-xs break-all"
-                            style="color: var(--crt-text-dim);"
-                          >
-                            sha256:{release.sha256}
-                          </code>
-                        )}
-                      </li>
-                    );
-                  })}
-                </ul>
-              </section>
-            )
-          }
 
           {
             secondaryLinks.length > 0 && (

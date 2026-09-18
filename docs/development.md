@@ -63,14 +63,12 @@ getProjects(locale)
 | `src/data/site.json` | 域名、联系方式、默认 OG |
 | `src/i18n/ui.ts` | 界面与 About 文案 |
 
-`Project` 主要字段：`id`、`slug`、`name`、`category`、`description`、`longDescription?`、`kind?`（`web` | `package`，默认 `web`）、`url?`（web 必填）、`downloadUrl?`、`version?`、`releases?`、`featured?`、`repo?`、`tech?`、`createdAt?`、`lifecycle?`、`demo?`、`docs?`、`changelog?`、`cover?`。
+`Project` 主要字段：`id`、`slug`、`name`、`category`、`description`、`longDescription?`、`kind?`（`web` | `package`，默认 `web`）、`url?`（web 必填）、`downloadUrl?`（package 必填）、`version?`、`featured?`、`repo?`、`tech?`、`createdAt?`、`lifecycle?`、`demo?`、`docs?`、`changelog?`、`cover?`。
 
 | kind | 主 CTA | 探测目标 | 详情额外区块 |
 |------|--------|----------|--------------|
 | `web`（默认） | 打开 → `url` | `url` | links |
-| `package` | 下载最新版 → `downloadUrl` 或 `releases[0].url` | 同上探测目标 | `## releases` 文件行 + links |
-
-`releases[]`：`platform`、`filename`、`url`；可选 `label`、`version`、`size`、`sha256`（64 位 hex）。
+| `package` | 下载最新版 → `downloadUrl` | `downloadUrl` | links |
 
 生命周期 `lifecycle`：`active` | `maintenance` | `archived`（与在线探测状态分离）。社交 OG 图由 `scripts/generate-og.mjs` 写入 `public/og/projects/{slug}.png`，与可选站内 `cover` 分离。
 
@@ -177,23 +175,6 @@ getProjects(locale)
   "kind": "package",
   "downloadUrl": "https://cdn.example.com/my-app/latest/my-app-setup.exe",
   "version": "1.0.0",
-  "releases": [
-    {
-      "platform": "windows",
-      "filename": "my-app-1.0.0-setup.exe",
-      "url": "https://cdn.example.com/my-app/1.0.0/my-app-setup.exe",
-      "version": "1.0.0",
-      "size": "42 MB",
-      "sha256": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
-    },
-    {
-      "platform": "macos",
-      "filename": "my-app-1.0.0.dmg",
-      "url": "https://cdn.example.com/my-app/1.0.0/my-app.dmg",
-      "version": "1.0.0",
-      "size": "38 MB"
-    }
-  ],
   "tech": ["Rust", "Tauri"],
   "createdAt": "2026-09-01",
   "lifecycle": "active",
@@ -202,13 +183,13 @@ getProjects(locale)
       "name": "我的应用",
       "category": "工具",
       "description": "桌面端安装包分发。",
-      "longDescription": "没有在线网页，只有分平台安装包与校验信息。"
+      "longDescription": "没有在线网页，主按钮直达最新安装包。"
     },
     "en": {
       "name": "My App",
       "category": "Tools",
       "description": "Desktop installer distribution.",
-      "longDescription": "No web app — platform installers and checksums only."
+      "longDescription": "No web app — primary action downloads the latest installer."
     }
   }
 }

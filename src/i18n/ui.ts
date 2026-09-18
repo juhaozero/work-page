@@ -3,7 +3,6 @@ import type {
   ProjectLifecycle,
   ProjectKind,
   ProbeReason,
-  ReleasePlatform,
 } from '../types/project';
 
 export interface SiteTranslations {
@@ -47,13 +46,11 @@ export interface UITranslations {
     backToCatalog: string;
     techLabel: string;
     linksLabel: string;
-    releasesLabel: string;
     summaryLabel: string;
     lifecycleLabel: string;
     kindLabel: string;
     versionLabel: string;
     kind: Record<ProjectKind, string>;
-    platforms: Record<ReleasePlatform, string>;
     demo: string;
     docs: string;
     changelog: string;
@@ -158,7 +155,6 @@ const ui: Record<Locale, UITranslations> = {
       backToCatalog: '← 返回目录',
       techLabel: '技术栈',
       linksLabel: '相关链接',
-      releasesLabel: '安装包',
       summaryLabel: '简介',
       lifecycleLabel: '生命周期',
       kindLabel: '类型',
@@ -166,14 +162,6 @@ const ui: Record<Locale, UITranslations> = {
       kind: {
         web: '网页',
         package: '安装包',
-      },
-      platforms: {
-        windows: 'Windows',
-        macos: 'macOS',
-        linux: 'Linux',
-        android: 'Android',
-        ios: 'iOS',
-        other: '其他',
       },
       demo: '演示',
       docs: '文档',
@@ -294,7 +282,6 @@ const ui: Record<Locale, UITranslations> = {
       backToCatalog: '← Back to catalog',
       techLabel: 'Tech stack',
       linksLabel: 'Links',
-      releasesLabel: 'Releases',
       summaryLabel: 'Summary',
       lifecycleLabel: 'Lifecycle',
       kindLabel: 'Type',
@@ -302,14 +289,6 @@ const ui: Record<Locale, UITranslations> = {
       kind: {
         web: 'Web',
         package: 'Package',
-      },
-      platforms: {
-        windows: 'Windows',
-        macos: 'macOS',
-        linux: 'Linux',
-        android: 'Android',
-        ios: 'iOS',
-        other: 'Other',
       },
       demo: 'Demo',
       docs: 'Docs',

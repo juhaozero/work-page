@@ -11,14 +11,6 @@ const sourcePath = join(root, 'src/data/projects.source.json');
 const LOCALES = ['zh', 'en'];
 const LIFECYCLES = new Set(['active', 'maintenance', 'archived']);
 const KINDS = new Set(['web', 'package']);
-const PLATFORMS = new Set([
-  'windows',
-  'macos',
-  'linux',
-  'android',
-  'ios',
-  'other',
-]);
 const REQUIRED_I18N = ['name', 'category', 'description'];
 
 function isNonEmptyString(value) {
@@ -81,13 +73,8 @@ for (const [index, entry] of source.entries()) {
       fail(`${label}: web projects require "url"`);
     }
   } else if (kind === 'package') {
-    const hasDownload = isNonEmptyString(entry.downloadUrl);
-    const hasReleases =
-      Array.isArray(entry.releases) && entry.releases.length > 0;
-    if (!hasDownload && !hasReleases) {
-      fail(
-        `${label}: package projects require "downloadUrl" or non-empty "releases"`,
-      );
+    if (!isNonEmptyString(entry.downloadUrl)) {
+      fail(`${label}: package projects require "downloadUrl"`);
     }
   }
 
@@ -132,44 +119,6 @@ for (const [index, entry] of source.entries()) {
 
   if (entry.version !== undefined && !isNonEmptyString(entry.version)) {
     fail(`${label}: version must be a non-empty string when set`);
-  }
-
-  if (entry.releases !== undefined) {
-    if (!Array.isArray(entry.releases)) {
-      fail(`${label}: releases must be an array`);
-    } else {
-      for (const [ri, release] of entry.releases.entries()) {
-        const rLabel = `${label}.releases[${ri}]`;
-        if (!PLATFORMS.has(release.platform)) {
-          fail(
-            `${rLabel}: platform must be one of ${[...PLATFORMS].join(', ')}`,
-          );
-        }
-        if (!isNonEmptyString(release.filename)) {
-          fail(`${rLabel}: missing filename`);
-        }
-        if (!isNonEmptyString(release.url) || !isValidUrl(release.url)) {
-          fail(`${rLabel}: invalid or missing url`);
-        }
-        if (release.label !== undefined && !isNonEmptyString(release.label)) {
-          fail(`${rLabel}: label must be a non-empty string when set`);
-        }
-        if (release.version !== undefined && !isNonEmptyString(release.version)) {
-          fail(`${rLabel}: version must be a non-empty string when set`);
-        }
-        if (release.size !== undefined && !isNonEmptyString(release.size)) {
-          fail(`${rLabel}: size must be a non-empty string when set`);
-        }
-        if (release.sha256 !== undefined) {
-          if (
-            typeof release.sha256 !== 'string' ||
-            !/^[a-fA-F0-9]{64}$/.test(release.sha256)
-          ) {
-            fail(`${rLabel}: sha256 must be a 64-char hex string`);
-          }
-        }
-      }
-    }
   }
 
   if (!entry.i18n || typeof entry.i18n !== 'object') {

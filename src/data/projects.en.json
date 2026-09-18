@@ -20,7 +20,7 @@
     "id": "2",
     "slug": "linux-quick-reference",
     "url": "https://item.juhaozero.com/linux/",
-    "featured": true,
+    "featured": false,
     "tech": [
       "Vue",
       "TypeScript"
@@ -96,5 +96,23 @@
     "category": "Games",
     "description": "Reverse-search Persona fusion recipes in Persona 4 Golden.",
     "longDescription": "A Persona 4 Golden helper — start from the Persona you want or the materials you have and get exact fusion routes, no guide spreadsheets required."
+  },
+  {
+    "id": "7",
+    "slug": "look-translate",
+    "kind": "package",
+    "downloadUrl": "https://github.com/juhaozero/look-translate/releases",
+    "version": "0.0.2",
+    "tech": [
+      "TypeScript",
+      "React",
+      "tauri"
+    ],
+    "createdAt": "2025-09-18",
+    "lifecycle": "active",
+    "name": "Look Translate",
+    "category": "Tools",
+    "description": "Windows word translation tool",
+    "longDescription": "A Windows word translation tool, supports multiple translation engines, OCR image translation, and multiple language translation."
   }
 ]

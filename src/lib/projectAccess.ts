@@ -1,4 +1,4 @@
-import type { Project, ProjectKind, ReleasePlatform } from '../types/project';
+import type { Project, ProjectKind } from '../types/project';
 
 /** 解析交付形态；缺省为 web */
 export function getProjectKind(project: Project): ProjectKind {
@@ -8,7 +8,7 @@ export function getProjectKind(project: Project): ProjectKind {
 /**
  * 健康探测目标 URL：
  * - web → url
- * - package → downloadUrl → releases[0].url → url
+ * - package → downloadUrl
  */
 export function getProbeUrl(project: Project): string | null {
   const kind = getProjectKind(project);
@@ -16,12 +16,7 @@ export function getProbeUrl(project: Project): string | null {
     case 'web':
       return project.url ?? null;
     case 'package':
-      return (
-        project.downloadUrl ??
-        project.releases?.[0]?.url ??
-        project.url ??
-        null
-      );
+      return project.downloadUrl ?? null;
     default: {
       const _exhaustive: never = kind;
       return _exhaustive;
@@ -39,44 +34,13 @@ export function getPrimaryAction(project: Project): ProjectPrimaryAction | null 
   switch (kind) {
     case 'web':
       return project.url ? { href: project.url, action: 'open' } : null;
-    case 'package': {
-      const href =
-        project.downloadUrl ?? project.releases?.[0]?.url ?? project.url;
-      return href ? { href, action: 'download' } : null;
-    }
+    case 'package':
+      return project.downloadUrl
+        ? { href: project.downloadUrl, action: 'download' }
+        : null;
     default: {
       const _exhaustive: never = kind;
       return _exhaustive;
     }
   }
-}
-
-/** 从 releases 推导 operatingSystem 文案（JSON-LD 等） */
-export function releasePlatformsLabel(
-  platforms: ReleasePlatform[] | undefined,
-): string {
-  if (!platforms?.length) return 'Any';
-  const unique = [...new Set(platforms)];
-  return unique
-    .map((platform) => {
-      switch (platform) {
-        case 'windows':
-          return 'Windows';
-        case 'macos':
-          return 'macOS';
-        case 'linux':
-          return 'Linux';
-        case 'android':
-          return 'Android';
-        case 'ios':
-          return 'iOS';
-        case 'other':
-          return 'Other';
-        default: {
-          const _exhaustive: never = platform;
-          return _exhaustive;
-        }
-      }
-    })
-    .join(', ');
 }

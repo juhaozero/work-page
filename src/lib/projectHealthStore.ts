@@ -76,11 +76,13 @@ export function initProjectHealth(
         error: fromReport.error,
       });
     } else {
+      // 报告里没有该 id（常见于新增项目后未重跑 probe）→ 不要一直停在检测中
       setSnapshot(project.id, {
-        status: 'checking',
+        status: 'offline',
         httpStatus: null,
-        reason: null,
-        checkedAt: null,
+        reason: 'unknown',
+        checkedAt: initialReport?.checkedAt ?? null,
+        error: 'missing from health report',
       });
     }
   }
@@ -90,7 +92,7 @@ export function initProjectHealth(
   }
 
   if (!liveRefresh) {
-    // 无静态结果时仍尝试拉取 /status.json
+    // 无静态结果时仍尝试拉取 /status.json 补全
     if (!initialReport || Object.keys(initialReport.projects).length === 0) {
       void fetch('/status.json', { cache: 'no-store' })
         .then((res) => (res.ok ? res.json() : null))

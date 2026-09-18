@@ -71,10 +71,8 @@ npm run generate:projects
 
 共享字段：`id`、`slug`（必填）；`kind` 省略视为 `web`。  
 - **web**：必填 `url`  
-- **package**：必填 `downloadUrl` 或非空 `releases[]`（`url` 可选）  
-可选：`featured`、`tech`、`createdAt`、`lifecycle`、`repo`、`demo`、`docs`、`changelog`、`cover`、`version`、`downloadUrl`、`releases`。文案放在 `i18n.zh` / `i18n.en`（`name`、`category`、`description`、`longDescription?`）。
-
-`releases[]` 项：`platform`（`windows` | `macos` | `linux` | `android` | `ios` | `other`）、`filename`、`url`；可选 `label`、`version`、`size`、`sha256`。
+- **package**：必填 `downloadUrl`（`url` 可选）  
+可选：`featured`、`tech`、`createdAt`、`lifecycle`、`repo`、`demo`、`docs`、`changelog`、`cover`、`version`。文案放在 `i18n.zh` / `i18n.en`（`name`、`category`、`description`、`longDescription?`）。
 
 ## 功能特性
 
@@ -83,7 +81,7 @@ npm run generate:projects
 - **About / Now** — `/about` 叙事与近期动态
 - **构建期探测** — 写入 status.json，详情页展示检测时间与原因
 - **SEO** — hreflang、ItemList / SoftwareApplication、按项目 OG
-- **分类筛选 · 精选 · 暗黑模式 · 现代终端窗视觉（开机窗 + 命令行分区）**
+- **分类筛选 · 暗黑模式 · 现代终端窗视觉（开机窗 + 命令行分区）**
 - **部署** — `main` 推送与每日定时构建后同步腾讯云 COS
 
 ## License

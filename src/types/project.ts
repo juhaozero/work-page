@@ -4,29 +4,6 @@ export type ProjectLifecycle = 'active' | 'maintenance' | 'archived';
 /** 交付形态：网页应用 / 安装包分发 */
 export type ProjectKind = 'web' | 'package';
 
-/** 安装包平台 */
-export type ReleasePlatform =
-  | 'windows'
-  | 'macos'
-  | 'linux'
-  | 'android'
-  | 'ios'
-  | 'other';
-
-export interface ProjectRelease {
-  platform: ReleasePlatform;
-  /** 展示用文件名 */
-  filename: string;
-  /** 直链下载地址 */
-  url: string;
-  /** 可选覆盖平台展示名 */
-  label?: string;
-  version?: string;
-  /** 人类可读体积，如 12.4 MB */
-  size?: string;
-  sha256?: string;
-}
-
 export interface Project {
   id: string;
   /** URL 路径段，全局唯一 */
@@ -39,17 +16,15 @@ export interface Project {
   longDescription?: string;
   /**
    * 交付形态。省略时视为 `web`。
-   * `package` 时 `url` 可选，需提供 `downloadUrl` 或 `releases`。
+   * `package` 时 `url` 可选，需提供 `downloadUrl`。
    */
   kind?: ProjectKind;
   /** 主演示 / 访问地址（web 必填；package 可选） */
   url?: string;
-  /** package 主下载直链（最新版）；缺省时取 releases[0].url */
+  /** package 主下载入口（必填） */
   downloadUrl?: string;
   /** 对外展示的最新版本号 */
   version?: string;
-  /** 分平台安装包列表 */
-  releases?: ProjectRelease[];
   featured?: boolean;
   repo?: string;
   tech?: string[];

@@ -60,12 +60,7 @@ async function probe(url) {
 function getProbeUrl(project) {
   const kind = project.kind ?? 'web';
   if (kind === 'package') {
-    return (
-      project.downloadUrl ||
-      project.releases?.[0]?.url ||
-      project.url ||
-      null
-    );
+    return project.downloadUrl || null;
   }
   return project.url || null;
 }

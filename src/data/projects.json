@@ -20,7 +20,7 @@
     "id": "2",
     "slug": "linux-quick-reference",
     "url": "https://item.juhaozero.com/linux/",
-    "featured": true,
+    "featured": false,
     "tech": [
       "Vue",
       "TypeScript"
@@ -69,7 +69,7 @@
     "id": "5",
     "slug": "tarot-hall",
     "url": "https://item.juhaozero.com/tarot/",
-    "featured": true,
+    "featured": false,
     "tech": [
       "TypeScript",
       "React"
@@ -96,5 +96,23 @@
     "category": "游戏",
     "description": "按目标或素材反查 P4G 面具合成配方。",
     "longDescription": "面向《女神异闻录4 黄金版》的面具合成速查：从想要的面具反推素材，或从手上素材找可行组合，覆盖攻略表里最常翻的那几页。"
+  },
+  {
+    "id": "7",
+    "slug": "look-translate",
+    "kind": "package",
+    "downloadUrl": "https://github.com/juhaozero/look-translate/releases",
+    "version": "0.0.2",
+    "tech": [
+      "TypeScript",
+      "React",
+      "tauri"
+    ],
+    "createdAt": "2025-09-18",
+    "lifecycle": "active",
+    "name": "划词翻译小工具",
+    "category": "工具",
+    "description": "Windows 划词翻译小工具",
+    "longDescription": "划词翻译,支持多种翻译引擎,多种语言翻译,OCR识图翻译。"
   }
 ]

@@ -20,7 +20,6 @@ const SHARED_KEYS = [
   'url',
   'downloadUrl',
   'version',
-  'releases',
   'featured',
   'repo',
   'tech',
