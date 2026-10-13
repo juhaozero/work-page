@@ -110,9 +110,27 @@
     ],
     "createdAt": "2025-09-18",
     "lifecycle": "active",
-    "name": "划词翻译小工具",
+    "name": "划词翻译",
     "category": "工具",
-    "description": "Windows 划词翻译小工具",
+    "description": "Windows 划词翻译",
     "longDescription": "划词翻译,支持多种翻译引擎,多种语言翻译,OCR识图翻译。"
+  },
+  {
+    "id": "8",
+    "slug": "search-layout",
+    "kind": "package",
+    "downloadUrl": "https://chromewebstore.google.com/detail/searchlayout-%E6%90%9C%E7%B4%A2%E7%BB%93%E6%9E%9C%E5%B8%83%E5%B1%80/khadplcnjajhmnkanggjjciajmblcfbk",
+    "version": "0.0.3",
+    "repo": "https://github.com/juhaozero/browser-search-plugin",
+    "tech": [
+      "TypeScript",
+      "Chrome Extension"
+    ],
+    "createdAt": "2026-10-09",
+    "lifecycle": "active",
+    "name": "搜索布局",
+    "category": "工具",
+    "description": "谷歌 / 必应搜索结果单列或双列布局，支持自动翻页。",
+    "longDescription": "把桌面版谷歌与必应网页搜索结果排成单列、单列居中或双列卡片，滚到底部自动接下页——不用再来回点页码。点扩展图标即可切换偏好，设置随 Chrome 账号同步。"
   }
 ]

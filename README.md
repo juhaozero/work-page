@@ -2,7 +2,7 @@
 
 现代终端窗风格的个人项目展示站：集中索引作品，支持分类筛选、精选、暗黑模式、中英双语、项目详情与构建期服务探测。
 
-线上地址：https://dev.juhaozero.com
+线上地址：[https://dev.juhaozero.com](https://dev.juhaozero.com)
 
 ## 技术栈
 
@@ -71,10 +71,11 @@ npm run validate:projects
 npm run generate:projects
 ```
 
-共享字段：`id`、`slug`（必填）；`kind` 省略视为 `web`。  
-- **web**：必填 `url`  
+共享字段：`id`、`slug`（必填）；`kind` 省略视为 `web`。
+
+- **web**：必填 `url`
 - **package**：必填 `downloadUrl`（`url` 可选）  
-可选：`featured`、`tech`、`createdAt`、`lifecycle`、`repo`、`demo`、`docs`、`changelog`、`cover`、`version`。文案放在 `i18n.zh` / `i18n.en`（`name`、`category`、`description`、`longDescription?`）。
+  可选：`featured`、`tech`、`createdAt`、`lifecycle`、`repo`、`demo`、`docs`、`changelog`、`cover`、`version`。文案放在 `i18n.zh` / `i18n.en`（`name`、`category`、`description`、`longDescription?`）。
 
 `cover` 仅用于详情页：推荐 **1200×630（16:9）**，文件放 `public/covers/`，例如 `"cover": "/covers/my-tool.png"`。尺寸不齐时可 `npm run normalize:covers` 统一裁切。细则见 [docs/development.md](docs/development.md)。
 
@@ -83,7 +84,7 @@ npm run generate:projects
 - **统一源数据** — 一份 source 生成中英文，CI 校验防漂移
 - **项目详情** — `/projects/:slug`，长描述、技术栈、多链接
 - **About / Now** — `/about` 叙事与近期动态
-- **构建期探测** — 写入 status.json，详情页展示检测时间与原因
+- **构建期探测** — 写入 status.json；自动使用环境变量 / `probe.config.json` / Windows 系统代理
 - **SEO** — hreflang、ItemList / SoftwareApplication、按项目 OG
 - **分类筛选 · 暗黑模式 · 现代终端窗视觉（开机窗 + 命令行分区）**
 - **部署** — `main` 推送与每日定时构建后同步腾讯云 COS

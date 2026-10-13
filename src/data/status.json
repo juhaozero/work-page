@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-09-18T06:27:48.554Z",
+  "checkedAt": "2026-10-13T02:42:34.980Z",
   "projects": {
     "1": {
       "online": true,
@@ -32,6 +32,11 @@
       "reason": "ok"
     },
     "7": {
+      "online": true,
+      "httpStatus": 200,
+      "reason": "ok"
+    },
+    "8": {
       "online": true,
       "httpStatus": 200,
       "reason": "ok"

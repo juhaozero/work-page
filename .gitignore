@@ -17,6 +17,9 @@ pnpm-debug.log*
 .env
 .env.production
 
+# local health-probe proxy (copy from probe.config.example.json)
+probe.config.json
+
 # macOS-specific files
 .DS_Store
 

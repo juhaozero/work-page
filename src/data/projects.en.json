@@ -114,5 +114,23 @@
     "category": "Tools",
     "description": "Windows word translation tool",
     "longDescription": "A Windows word translation tool, supports multiple translation engines, OCR image translation, and multiple language translation."
+  },
+  {
+    "id": "8",
+    "slug": "search-layout",
+    "kind": "package",
+    "downloadUrl": "https://chromewebstore.google.com/detail/searchlayout-%E6%90%9C%E7%B4%A2%E7%BB%93%E6%9E%9C%E5%B8%83%E5%B1%80/khadplcnjajhmnkanggjjciajmblcfbk",
+    "version": "0.0.3",
+    "repo": "https://github.com/juhaozero/browser-search-plugin",
+    "tech": [
+      "TypeScript",
+      "Chrome Extension"
+    ],
+    "createdAt": "2026-10-09",
+    "lifecycle": "active",
+    "name": "SearchLayout",
+    "category": "Tools",
+    "description": "Single- or dual-column Google / Bing results with auto-paging.",
+    "longDescription": "Rearrange desktop Google and Bing web results into single, centered, or dual-column cards, and load the next page as you scroll—no more clicking pagination. Switch layout from the toolbar icon; preferences sync with your Chrome account."
   }
 ]

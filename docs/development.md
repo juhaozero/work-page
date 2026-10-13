@@ -107,7 +107,7 @@ npm run normalize:covers -- path/to/raw-shot.png
 |------|------|
 | `npm run validate:projects` | 校验源数据（必填、唯一、URL、双语） |
 | `npm run generate:projects` | 从 source 生成中英文 JSON |
-| `npm run probe:health` | 构建期探测，写 status.json |
+| `npm run probe:health` | 构建期探测，写 status.json（自动走环境变量 / `probe.config.json` / Windows 系统代理） |
 | `npm run generate:og` | 按项目生成 OG PNG |
 | `npm run normalize:covers` | 将 `public/covers/` 统一为 1200×630 |
 | `npm run prepare:content` | validate + generate + probe + og |
@@ -131,6 +131,12 @@ npm run normalize:covers -- path/to/raw-shot.png
 - 默认使用构建期 `status.json`，避免客户端 CORS 误判
 - 详情页展示最近检测时间、`reason`、HTTP 状态
 - `ProjectHealthInit` 可选 `liveRefresh`（默认 `false`）
+
+`npm run probe:health` 探测外网 URL 时，Node 默认**不走**浏览器系统代理。脚本会按优先级解析代理，并用 `--use-env-proxy` 重跑一次：
+
+1. 环境变量 `HTTPS_PROXY` / `HTTP_PROXY` / `ALL_PROXY`（及小写）
+2. 仓库根目录 `probe.config.json` 的 `proxy`（可复制 `probe.config.example.json`；该文件已 gitignore）
+3. Windows「Internet 设置」用户代理（例如 Clash 写入的 `127.0.0.1:7897`）
 
 相关：`scripts/probe-health.mjs`、`src/lib/projectHealthStore.ts`、`ProjectStatus`。
 
