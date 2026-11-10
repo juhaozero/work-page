@@ -120,7 +120,7 @@
     "slug": "search-layout",
     "kind": "package",
     "downloadUrl": "https://chromewebstore.google.com/detail/searchlayout-%E6%90%9C%E7%B4%A2%E7%BB%93%E6%9E%9C%E5%B8%83%E5%B1%80/khadplcnjajhmnkanggjjciajmblcfbk",
-    "version": "0.0.8",
+    "version": "1.0.0",
     "repo": "https://github.com/juhaozero/browser-search-plugin",
     "tech": [
       "TypeScript",
