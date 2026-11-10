@@ -133,7 +133,7 @@ const ui: Record<Locale, UITranslations> = {
       avatarAlt: '头像',
       github: 'GitHub',
       blog: '博客',
-      email: '电子邮件',
+      email: '邮箱',
       about: '关于',
     },
     catalog: {
@@ -141,7 +141,7 @@ const ui: Record<Locale, UITranslations> = {
       filterAll: '全部',
       filterAriaLabel: '项目分类筛选',
       emptyTitle: 'ls: 没有匹配的条目',
-      emptyHint: '换个 type 再试',
+      emptyHint: '换个分类再试',
       columns: {
         name: '名称',
         category: '分类',
@@ -256,7 +256,7 @@ const ui: Record<Locale, UITranslations> = {
       about: 'About',
     },
     portal: {
-      title: 'Personal tools index',
+      title: 'A collection of tools ready to use.',
       avatarAlt: 'Avatar',
       github: 'GitHub',
       blog: 'Blog',
@@ -268,7 +268,7 @@ const ui: Record<Locale, UITranslations> = {
       filterAll: 'All',
       filterAriaLabel: 'Project category filter',
       emptyTitle: 'ls: no matches found',
-      emptyHint: 'try another type',
+      emptyHint: 'Try another category.',
       columns: {
         name: 'Name',
         category: 'Category',

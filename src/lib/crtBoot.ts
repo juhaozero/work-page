@@ -12,27 +12,27 @@ export const CRT_HOME_PLAYED_KEY = 'crt-home-played';
 export const CRT_TIMING = {
   boot: {
     /** 开机每字 */
-    charMs: 45,
+    charMs: 27,
     /** 第一行开始前（等窗口入场） */
-    firstLineDelayMs: 320,
+    firstLineDelayMs: 160,
     /** 行与行之间 */
-    lineGapMs: 120,
+    lineGapMs: 65,
     /** 最后一行打完后再关遮罩 */
-    endHoldMs: 450,
+    endHoldMs: 180,
     /** 多久后允许跳过 */
     skipGuardMs: 400,
   },
   home: {
-    charMs: 100,
-    delayMs: 120,
+    charMs: 55,
+    delayMs: 60,
     /** 首页命令打完 → 作品目录 */
-    afterTypedMs: 400,
+    afterTypedMs: 150,
     /** 开机结束后多久才允许跳过首页（避免同一次点按连跳） */
-    skipGuardMs: 380,
+    skipGuardMs: 200,
   },
   catalog: {
-    charMs: 100,
-    delayMs: 120,
+    charMs: 45,
+    delayMs: 60,
   },
   detail: {
     charMs: 26,
@@ -80,6 +80,7 @@ let playDecision: boolean | null = null;
  *  SSR 恒为 false：组件 useState 须以「已展示」水合，再在 client effect 里切入开场。 */
 export function shouldPlayCrtHomeIntro(): boolean {
   if (typeof window === 'undefined') return false;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return false;
 
   if (playDecision !== null) return playDecision;
 

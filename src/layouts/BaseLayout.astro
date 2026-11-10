@@ -85,6 +85,8 @@ const jsonLd = jsonLdProp ?? {
 
 const homeHref = homePath(locale);
 const aboutHref = aboutPath(locale);
+const fontStylesheet =
+  "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Sans+Mono:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600&display=swap";
 ---
 
 <!doctype html>
@@ -131,9 +133,14 @@ const aboutHref = aboutPath(locale);
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Sans+Mono:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600&display=swap"
+      href={fontStylesheet}
       rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
     />
+    <noscript>
+      <link href={fontStylesheet} rel="stylesheet" />
+    </noscript>
     <title>{pageTitle}</title>
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
     <script is:inline>
@@ -156,8 +163,6 @@ const aboutHref = aboutPath(locale);
               )
                 return;
               if (localStorage.getItem("theme") === "light") return;
-              var p = location.pathname;
-              if (p !== "/" && p !== "/en" && p !== "/en/") return;
               // 与 src/lib/crtBoot.ts CRT_HOME_PLAYED_KEY 保持一致
               var KEY = "crt-home-played";
               var nav = performance.getEntriesByType("navigation")[0];
@@ -187,17 +192,18 @@ const aboutHref = aboutPath(locale);
       )
     }
     <header
-      class="fixed top-0 left-0 right-0 z-40 border-b border-[var(--crt-border-dim)] bg-[var(--crt-bg)]/90 backdrop-blur-sm"
+      class="site-header fixed top-0 left-0 right-0 z-40 border-b border-[var(--crt-border-dim)] bg-[var(--crt-bg)]/90 backdrop-blur-sm"
       style="padding-top: env(safe-area-inset-top);">
-      <div class="container-main flex items-center justify-between py-3">
-        <div class="flex items-center gap-3 min-w-0">
-          <span class="status-online shrink-0" aria-hidden="true"
-            >{t.nav.online}</span
-          >
+      <div class="container-main flex items-center justify-between py-3 max-[360px]:px-3">
+        <div class="flex items-center gap-3 min-w-0 max-[360px]:gap-2">
+          <span
+            class="size-2 shrink-0 rounded-full bg-[var(--crt-accent)] max-[360px]:hidden"
+            title={t.nav.online}
+            aria-hidden="true"></span>
           <a
             href={homeHref}
             class="truncate max-w-[9rem] sm:max-w-none hover:opacity-70 transition-opacity duration-150"
-            style="color: var(--crt-text-muted);">
+            style="color: var(--crt-text);">
             {site.title}
           </a>
           <a
@@ -207,7 +213,7 @@ const aboutHref = aboutPath(locale);
             {t.nav.about}
           </a>
         </div>
-        <div class="flex items-center gap-2 shrink-0">
+        <div class="flex items-center gap-2 shrink-0 max-[360px]:gap-1">
           <LanguageSwitcher
             locale={locale}
             ariaLabel={t.langSwitcher.ariaLabel}

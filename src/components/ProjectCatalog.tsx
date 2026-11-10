@@ -34,7 +34,6 @@ export default function ProjectCatalog({
   const [phase, setPhase] = useState<Phase>('show');
   const [instant, setInstant] = useState(true);
   const promptRef = useRef<HTMLParagraphElement>(null);
-  const listRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (shouldPlayCrtHomeIntro()) {
@@ -52,23 +51,10 @@ export default function ProjectCatalog({
     });
   }, []);
 
-  // 仅非 instant：打字/列表亮起超出视口才跟滚
+  // 只在命令出现时跟滚一次，目录展开后保持阅读位置。
   useEffect(() => {
-    if (instant || phase === 'pending') return;
-    const tip = phase === 'command' ? promptRef.current : listRef.current;
-    followTerminalScroll(tip);
-  }, [phase, instant]);
-
-  useEffect(() => {
-    if (phase !== 'show' || instant) return;
-    const ids = projects.map((_, index) =>
-      window.setTimeout(
-        () => followTerminalScroll(listRef.current),
-        100 + index * 70,
-      ),
-    );
-    return () => ids.forEach((id) => window.clearTimeout(id));
-  }, [phase, instant, projects.length]);
+    if (phase === 'command') followTerminalScroll(promptRef.current);
+  }, [phase]);
 
   // ls 命令打字中：一键跳过 → 列表直接亮起
   const skipTyping = useCallback(() => {
@@ -94,11 +80,14 @@ export default function ProjectCatalog({
       {phase !== 'pending' && (
         <p
           ref={promptRef}
-          className="terminal-prompt mb-4 sm:mb-5 flex flex-wrap items-baseline gap-x-2 gap-y-1"
+          className="terminal-prompt relative mb-4 sm:mb-5 flex flex-wrap items-baseline gap-x-2 gap-y-1"
         >
-          <span className="terminal-prompt-user shrink-0">{t.crt.prompt}</span>
+          <span className="terminal-prompt-accent shrink-0">{t.crt.prompt}</span>
           {instant || phase === 'show' ? (
-            <span className="terminal-prompt-cmd">{t.crt.catalogCommand}</span>
+            <span className="terminal-prompt-cmd">
+              {t.crt.catalogCommand}{' '}
+              <span className="crt-cursor" aria-hidden="true" />
+            </span>
           ) : (
             <>
               <Typewriter
@@ -108,7 +97,7 @@ export default function ProjectCatalog({
                 className="terminal-prompt-cmd"
                 onDone={onCommandDone}
               />
-              <span className="terminal-prompt-hint shrink-0" aria-hidden="true">
+              <span className="terminal-prompt-hint shrink-0 max-sm:absolute max-sm:top-full max-sm:left-0" aria-hidden="true">
                 {t.crt.skipHint}
               </span>
             </>
@@ -117,43 +106,37 @@ export default function ProjectCatalog({
       )}
 
       <div
-        ref={listRef}
         className={phase === 'show' ? 'crt-reveal' : 'crt-reveal-pending'}
         aria-hidden={phase !== 'show'}
       >
-        <h2 id="catalog-heading" className="sr-only">
+        <h2 id="catalog-heading" className="catalog-title">
           {t.catalog.title}
         </h2>
 
-        <div className="crt-listing-filter">
-          <span className="crt-listing-filter-flag" aria-hidden="true">
-            type:
-          </span>
-          <nav
-            className="crt-listing-filter-nav"
-            aria-label={t.catalog.filterAriaLabel}
-          >
-            {allCategories.map((category) => {
-              const isActive = active === category;
-              return (
-                <button
-                  key={category}
-                  type="button"
-                  onClick={() => setActive(category)}
-                  disabled={phase !== 'show'}
-                  className={[
-                    'btn-filter',
-                    'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--crt-accent)]',
-                    isActive ? 'btn-filter-active' : 'btn-filter-inactive',
-                  ].join(' ')}
-                  aria-pressed={isActive}
-                >
-                  {category}
-                </button>
-              );
-            })}
-          </nav>
-        </div>
+        <nav
+          className="crt-listing-filter-nav"
+          aria-label={t.catalog.filterAriaLabel}
+        >
+          {allCategories.map((category) => {
+            const isActive = active === category;
+            return (
+              <button
+                key={category}
+                type="button"
+                onClick={() => setActive(category)}
+                disabled={phase !== 'show'}
+                className={[
+                  'btn-filter catalog-filter',
+                  'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--crt-accent)]',
+                  isActive ? 'btn-filter-active' : 'btn-filter-inactive',
+                ].join(' ')}
+                aria-pressed={isActive}
+              >
+                {category}
+              </button>
+            );
+          })}
+        </nav>
 
         <div className="crt-listing-body">
           {filtered.map((project, index) => (
@@ -161,7 +144,7 @@ export default function ProjectCatalog({
               key={project.id}
               project={project}
               detailHref={projectDetailPath(locale, project.slug)}
-              staggerIndex={phase === 'show' && !instant ? index : undefined}
+              staggerIndex={phase === 'show' && !instant ? Math.floor(index / 2) : undefined}
               tabIndex={phase === 'show' ? undefined : -1}
             />
           ))}

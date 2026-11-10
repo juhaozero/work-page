@@ -1,4 +1,4 @@
-import { useEffect, useState, type CSSProperties, type ElementType } from 'react';
+import { useEffect, useRef, useState, type CSSProperties, type ElementType } from 'react';
 
 function prefersReducedMotion(): boolean {
   if (typeof window === 'undefined') return false;
@@ -32,36 +32,46 @@ export default function Typewriter({
   const [shown, setShown] = useState('');
   const [done, setDone] = useState(false);
   const [reduce, setReduce] = useState(false);
+  const onDoneRef = useRef(onDone);
 
   useEffect(() => {
-    if (prefersReducedMotion()) {
-      setReduce(true);
+    onDoneRef.current = onDone;
+  }, [onDone]);
+
+  useEffect(() => {
+    const reducedMotion = prefersReducedMotion();
+    setReduce(reducedMotion);
+    if (reducedMotion || !text) {
       setShown(text);
       setDone(true);
-      onDone?.();
+      onDoneRef.current?.();
       return;
     }
 
-    let i = 0;
-    let intervalId = 0;
-    const timeoutId = window.setTimeout(() => {
-      intervalId = window.setInterval(() => {
-        i += 1;
-        setShown(text.slice(0, i));
-        if (i >= text.length) {
-          window.clearInterval(intervalId);
-          setDone(true);
-          onDone?.();
-        }
-      }, charMs);
-    }, delayMs);
+    setShown('');
+    setDone(false);
+    const characters = Array.from(text);
+    const start = performance.now() + delayMs;
+    const step = Math.max(1, charMs);
+    let count = 0;
+    let frame = 0;
 
-    return () => {
-      window.clearTimeout(timeoutId);
-      window.clearInterval(intervalId);
+    const tick = (now: number) => {
+      const next = Math.min(characters.length, Math.max(0, Math.floor((now - start) / step) + 1));
+      if (next !== count) {
+        count = next;
+        setShown(characters.slice(0, count).join(''));
+      }
+      if (count === characters.length) {
+        setDone(true);
+        onDoneRef.current?.();
+        return;
+      }
+      frame = window.requestAnimationFrame(tick);
     };
-    // onDone 故意不入依赖，避免父组件重渲染打断打字
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    frame = window.requestAnimationFrame(tick);
+    return () => window.cancelAnimationFrame(frame);
   }, [text, charMs, delayMs]);
 
   return (

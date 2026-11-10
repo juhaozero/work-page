@@ -25,7 +25,7 @@ export default function CrtBootShield({
   bootLines,
   bootSkip,
 }: CrtBootShieldProps) {
-  const lines = [...bootLines];
+  const lines = bootLines;
   const [dismissed, setDismissed] = useState(false);
   const [typing, setTyping] = useState(false);
   const [active, setActive] = useState(0);
@@ -33,22 +33,24 @@ export default function CrtBootShield({
   const [showSkip, setShowSkip] = useState(false);
   const finishedRef = useRef(false);
   const canSkipRef = useRef(false);
+  const lineTimerRef = useRef(0);
+  const stopListeningRef = useRef<() => void>(() => {});
 
   const finish = (nextTyping: boolean) => {
     if (finishedRef.current) return;
     finishedRef.current = true;
+    window.clearTimeout(lineTimerRef.current);
+    stopListeningRef.current();
     document.documentElement.classList.remove(CRT_BOOT_CLASS);
     // 解锁 overflow 后钉回顶部，避免被下方已挂载区块带偏滚动位置
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: 'instant' });
     setDismissed(true);
     dispatchCrtBootDone(nextTyping);
   };
 
   useEffect(() => {
     const root = document.documentElement;
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    if (!shouldPlayCrtHomeIntro() || reduce) {
+    if (!shouldPlayCrtHomeIntro()) {
       root.classList.remove(CRT_BOOT_CLASS);
       resetCrtIntroLatches();
       finishedRef.current = true;
@@ -76,14 +78,12 @@ export default function CrtBootShield({
 
     const skipNow = () => {
       if (!canSkipRef.current || finishedRef.current) return;
-      setCompleted(lines);
-      setActive(lines.length);
       // 只跳过开机遮罩；首页分区打字继续，需再点一次才跳过
       finish(true);
     };
 
     const onKey = (e: KeyboardEvent) => {
-      if (!canSkipRef.current) return;
+      if (!canSkipRef.current || finishedRef.current) return;
       if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
         skipNow();
@@ -93,10 +93,15 @@ export default function CrtBootShield({
     window.addEventListener('keydown', onKey);
     window.addEventListener('pointerdown', skipNow, true);
 
-    return () => {
+    const stopListening = () => {
       window.clearTimeout(guard);
       window.removeEventListener('keydown', onKey);
       window.removeEventListener('pointerdown', skipNow, true);
+    };
+    stopListeningRef.current = stopListening;
+    return () => {
+      stopListening();
+      window.clearTimeout(lineTimerRef.current);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -109,11 +114,11 @@ export default function CrtBootShield({
 
     if (idx >= lines.length - 1) {
       setActive(lines.length);
-      window.setTimeout(() => finish(true), CRT_TIMING.boot.endHoldMs);
+      lineTimerRef.current = window.setTimeout(() => finish(true), CRT_TIMING.boot.endHoldMs);
       return;
     }
 
-    window.setTimeout(() => {
+    lineTimerRef.current = window.setTimeout(() => {
       if (!finishedRef.current) setActive(idx + 1);
     }, CRT_TIMING.boot.lineGapMs);
   };
@@ -142,6 +147,9 @@ export default function CrtBootShield({
             {completed.map((line, i) => (
               <li key={`done-${i}`}>{line}</li>
             ))}
+            {!typing && (
+              <li><span className="crt-cursor" /></li>
+            )}
             {typingLine && (
               <li key={`active-${active}`}>
                 <Typewriter

@@ -7,7 +7,6 @@ interface ProjectIndexRowProps {
   tabIndex?: number;
 }
 
-/** 作品目录行：左名称、右分类对齐 */
 export function ProjectIndexRow({
   project,
   detailHref,
@@ -17,10 +16,10 @@ export function ProjectIndexRow({
   const stagger =
     typeof staggerIndex === 'number'
       ? {
-          className: 'crt-index-row group crt-stagger-item',
+          className: 'crt-index-row crt-stagger-item',
           style: { ['--crt-stagger' as string]: String(staggerIndex) },
         }
-      : { className: 'crt-index-row group', style: undefined };
+      : { className: 'crt-index-row', style: undefined };
 
   return (
     <a
@@ -29,8 +28,8 @@ export function ProjectIndexRow({
       style={stagger.style}
       tabIndex={tabIndex}
     >
-      <span className="crt-index-row-name">{project.name}</span>
-      <span className="crt-index-row-meta">{project.category}</span>
+      <h3 className="crt-index-row-name">{project.name}</h3>
+      <p className="crt-index-row-description">{project.description}</p>
     </a>
   );
 }
