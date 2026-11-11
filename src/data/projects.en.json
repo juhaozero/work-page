@@ -109,6 +109,7 @@
     "kind": "package",
     "downloadUrl": "https://github.com/juhaozero/look-translate/releases",
     "version": "0.0.8",
+    "repo": "https://github.com/juhaozero/look-translate",
     "tech": [
       "TypeScript",
       "React",
