@@ -13,7 +13,7 @@ interface TypewriterProps {
   delayMs?: number;
   className?: string;
   style?: CSSProperties;
-  /** 打完后是否保留闪烁光标 */
+  /** 打字期间显示静态光标 */
   cursor?: boolean;
   onDone?: () => void;
   as?: ElementType;
@@ -25,13 +25,12 @@ export default function Typewriter({
   delayMs = 200,
   className,
   style,
-  cursor = true,
+  cursor = false,
   onDone,
   as: Tag = 'span',
 }: TypewriterProps) {
   const [shown, setShown] = useState('');
   const [done, setDone] = useState(false);
-  const [reduce, setReduce] = useState(false);
   const onDoneRef = useRef(onDone);
 
   useEffect(() => {
@@ -40,7 +39,6 @@ export default function Typewriter({
 
   useEffect(() => {
     const reducedMotion = prefersReducedMotion();
-    setReduce(reducedMotion);
     if (reducedMotion || !text) {
       setShown(text);
       setDone(true);
@@ -77,11 +75,8 @@ export default function Typewriter({
   return (
     <Tag className={className} style={style} aria-label={text}>
       <span aria-hidden="true">{shown}</span>
-      {cursor && !reduce && (
-        <span
-          className={done ? 'crt-cursor crt-cursor-blink' : 'crt-cursor'}
-          aria-hidden="true"
-        />
+      {cursor && !done && (
+        <span className="crt-cursor" aria-hidden="true" />
       )}
     </Tag>
   );

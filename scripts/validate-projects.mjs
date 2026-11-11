@@ -1,5 +1,9 @@
 /**
  * 校验 projects.source.json：必填字段、id/slug 唯一、URL、双语一致性
+ * 
+ * 用法：
+ *   npm run validate:projects
+ *   node scripts/validate-projects.mjs
  */
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';

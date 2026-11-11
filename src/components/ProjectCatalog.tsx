@@ -3,7 +3,7 @@ import type { Locale } from '../i18n/config';
 import type { UITranslations } from '../i18n/ui';
 import { projectDetailPath } from '../i18n/paths';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ProjectIndexRow } from './ProjectCard';
+import { ProjectCard } from './ProjectCard';
 import {
   CRT_TIMING,
   followTerminalScroll,
@@ -82,12 +82,9 @@ export default function ProjectCatalog({
           ref={promptRef}
           className="terminal-prompt relative mb-4 sm:mb-5 flex flex-wrap items-baseline gap-x-2 gap-y-1"
         >
-          <span className="terminal-prompt-accent shrink-0">{t.crt.prompt}</span>
+          <span className="terminal-prompt-user shrink-0">{t.crt.prompt}</span>
           {instant || phase === 'show' ? (
-            <span className="terminal-prompt-cmd">
-              {t.crt.catalogCommand}{' '}
-              <span className="crt-cursor" aria-hidden="true" />
-            </span>
+            <span className="terminal-prompt-cmd">{t.crt.catalogCommand}</span>
           ) : (
             <>
               <Typewriter
@@ -140,10 +137,11 @@ export default function ProjectCatalog({
 
         <div className="crt-listing-body">
           {filtered.map((project, index) => (
-            <ProjectIndexRow
+            <ProjectCard
               key={project.id}
               project={project}
               detailHref={projectDetailPath(locale, project.slug)}
+              featuredLabel={t.catalog.featured}
               staggerIndex={phase === 'show' && !instant ? Math.floor(index / 2) : undefined}
               tabIndex={phase === 'show' ? undefined : -1}
             />

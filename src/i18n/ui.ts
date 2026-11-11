@@ -20,7 +20,8 @@ export interface UITranslations {
     about: string;
   };
   portal: {
-    title: string;
+    introBody: string;
+    stackLabel: string;
     avatarAlt: string;
     github: string;
     email: string;
@@ -29,6 +30,7 @@ export interface UITranslations {
   };
   catalog: {
     title: string;
+    featured: string;
     filterAll: string;
     filterAriaLabel: string;
     emptyTitle: string;
@@ -47,6 +49,8 @@ export interface UITranslations {
     techLabel: string;
     linksLabel: string;
     summaryLabel: string;
+    metadataLabel: string;
+    previewPlaceholder: string;
     lifecycleLabel: string;
     kindLabel: string;
     versionLabel: string;
@@ -129,7 +133,8 @@ const ui: Record<Locale, UITranslations> = {
       about: '关于',
     },
     portal: {
-      title: '',
+      introBody: '独立开发者，做一些实用的小工具与网页应用。',
+      stackLabel: '技术栈',
       avatarAlt: '头像',
       github: 'GitHub',
       blog: '博客',
@@ -138,6 +143,7 @@ const ui: Record<Locale, UITranslations> = {
     },
     catalog: {
       title: '作品',
+      featured: '推荐',
       filterAll: '全部',
       filterAriaLabel: '项目分类筛选',
       emptyTitle: 'ls: 没有匹配的条目',
@@ -156,6 +162,8 @@ const ui: Record<Locale, UITranslations> = {
       techLabel: '技术栈',
       linksLabel: '相关链接',
       summaryLabel: '简介',
+      metadataLabel: '项目信息',
+      previewPlaceholder: '// 项目截图待补充',
       lifecycleLabel: '生命周期',
       kindLabel: '类型',
       versionLabel: '版本',
@@ -176,11 +184,11 @@ const ui: Record<Locale, UITranslations> = {
       coverAlt: '{name} 封面',
     },
     status: {
-      checking: '◌ 检测中',
-      online: '◉ 在线',
-      offline: '◯ 离线',
-      available: '◉ 发布可用',
-      unavailable: '◯ 不可用',
+      checking: '检测中',
+      online: '在线',
+      offline: '离线',
+      available: '发布可用',
+      unavailable: '不可用',
       ariaChecking: '服务检测中',
       ariaOnline: '服务在线',
       ariaOffline: '服务离线',
@@ -256,7 +264,8 @@ const ui: Record<Locale, UITranslations> = {
       about: 'About',
     },
     portal: {
-      title: 'A collection of tools ready to use.',
+      introBody: 'Indie developer building small, practical web tools.',
+      stackLabel: 'Tech stack',
       avatarAlt: 'Avatar',
       github: 'GitHub',
       blog: 'Blog',
@@ -265,6 +274,7 @@ const ui: Record<Locale, UITranslations> = {
     },
     catalog: {
       title: 'Works',
+      featured: 'Featured',
       filterAll: 'All',
       filterAriaLabel: 'Project category filter',
       emptyTitle: 'ls: no matches found',
@@ -283,6 +293,8 @@ const ui: Record<Locale, UITranslations> = {
       techLabel: 'Tech stack',
       linksLabel: 'Links',
       summaryLabel: 'Summary',
+      metadataLabel: 'Project information',
+      previewPlaceholder: '// Project screenshot pending',
       lifecycleLabel: 'Lifecycle',
       kindLabel: 'Type',
       versionLabel: 'Version',
@@ -303,11 +315,11 @@ const ui: Record<Locale, UITranslations> = {
       coverAlt: 'Cover for {name}',
     },
     status: {
-      checking: '◌ Checking',
-      online: '◉ Online',
-      offline: '◯ Offline',
-      available: '◉ Available',
-      unavailable: '◯ Unavailable',
+      checking: 'Checking',
+      online: 'Online',
+      offline: 'Offline',
+      available: 'Available',
+      unavailable: 'Unavailable',
       ariaChecking: 'Service checking',
       ariaOnline: 'Service online',
       ariaOffline: 'Service offline',

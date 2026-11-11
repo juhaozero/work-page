@@ -2,6 +2,7 @@
   {
     "id": "1",
     "slug": "browser-toolbox",
+    "cover": "/covers/browser-toolbox.png",
     "url": "https://item.juhaozero.com/browser/",
     "featured": false,
     "tech": ["HTML", "CSS", "TypeScript"],
@@ -25,6 +26,7 @@
   {
     "id": "2",
     "slug": "linux-quick-reference",
+    "cover": "/covers/linux-quick-reference.png",
     "url": "https://item.juhaozero.com/linux/",
     "featured": false,
     "tech": ["Vue", "TypeScript"],
@@ -48,6 +50,7 @@
   {
     "id": "3",
     "slug": "ins-collage",
+    "cover": "/covers/ins-collage.png",
     "url": "https://item.juhaozero.com/images/",
     "featured": false,
     "tech": ["Canvas", "TypeScript"],
@@ -72,6 +75,7 @@
     "id": "4",
     "slug": "watermark-video",
     "url": "https://item.juhaozero.com/watermark/",
+    "cover": "/covers/watermark-video.png",
     "featured": false,
     "tech": ["TypeScript", "Node","Golang"],
     "createdAt": "2025-01-20",
@@ -95,6 +99,7 @@
     "id": "5",
     "slug": "tarot-hall",
     "url": "https://item.juhaozero.com/tarot/",
+    "cover": "/covers/tarot-hall.png",
     "featured": false,
     "tech": ["TypeScript", "React"],
     "createdAt": "2025-03-20",
@@ -117,6 +122,7 @@
   {
     "id": "6",
     "slug": "midnight-channel",
+    "cover": "/covers/midnight-channel.png",
     "url": "https://item.juhaozero.com/persona/",
     "featured": false,
     "tech": ["TypeScript", "React"],
@@ -140,7 +146,9 @@
   {
     "id": "7",
     "slug": "look-translate",
+    "cover": "/covers/look-translate.png",
     "downloadUrl": "https://github.com/juhaozero/look-translate/releases",
+    "repo": "https://github.com/juhaozero/look-translate",
     "kind": "package",
     "version": "0.0.8",
     "tech": ["TypeScript", "React","tauri"],
@@ -164,6 +172,7 @@
   {
     "id": "8",
     "slug": "search-layout",
+    "cover": "/covers/search-layout.png",
     "kind": "package",
     "downloadUrl": "https://chromewebstore.google.com/detail/searchlayout-%E6%90%9C%E7%B4%A2%E7%BB%93%E6%9E%9C%E5%B8%83%E5%B1%80/khadplcnjajhmnkanggjjciajmblcfbk",
     "repo": "https://github.com/juhaozero/browser-search-plugin",

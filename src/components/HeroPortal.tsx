@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import type { UITranslations } from '../i18n/ui';
 import site from '../data/site.json';
+import { IconGithub, IconLink, IconMail } from './PortalIcons';
 import Typewriter from './Typewriter';
 import {
   CRT_TIMING,
@@ -17,6 +18,8 @@ interface HeroPortalProps {
 type IntroMode = 'pending' | 'type' | 'instant';
 /** ssr：水合帧；ready 后才向下游派发 intro */
 type IntroGate = 'ssr' | 'ready';
+
+const techStack = ['React', 'Vue', 'TypeScript', , 'Golang'];
 
 export default function HeroPortal({ t }: HeroPortalProps) {
   // 始终以「已展示」水合，与 SSR（shouldPlay=false）一致；开场在 effect 里切入
@@ -70,18 +73,21 @@ export default function HeroPortal({ t }: HeroPortalProps) {
       href: site.github,
       display: githubDisplay,
       external: true,
+      Icon: IconGithub,
     },
     {
       label: t.portal.email,
       href: `mailto:${site.email}`,
       display: site.email,
       external: false,
+      Icon: IconMail,
     },
     {
       label: t.portal.blog,
       href: site.blog ?? '#',
       display: site.blog ?? '',
       external: true,
+      Icon: IconLink,
     },
   ].filter((p) => p.display);
 
@@ -93,13 +99,11 @@ export default function HeroPortal({ t }: HeroPortalProps) {
 
   return (
     <section className="w-full" aria-labelledby="portal-heading">
-      <p className="terminal-prompt relative mb-4 flex flex-wrap items-baseline gap-x-2 gap-y-1">
-        <span className="terminal-prompt-accent shrink-0">{t.crt.prompt}</span>
+      <p className="terminal-prompt relative mb-5 flex flex-wrap items-baseline gap-x-2 gap-y-1 sm:mb-6">
+        <span className="terminal-prompt-user shrink-0">{t.crt.prompt}</span>
         {showBody ? (
           <span className="terminal-prompt-cmd">{t.crt.homeCommand}</span>
-        ) : mode === 'pending' ? (
-          <span className="crt-cursor crt-cursor-blink" aria-hidden="true" />
-        ) : (
+        ) : mode === 'type' && (
           <>
             <Typewriter
               text={t.crt.homeCommand}
@@ -116,33 +120,36 @@ export default function HeroPortal({ t }: HeroPortalProps) {
       </p>
 
       <div
-        className={`${revealClass} flex flex-wrap items-center justify-between gap-x-8 gap-y-4`}
+        className={`${revealClass} grid items-start gap-x-6 gap-y-4 min-[52rem]:grid-cols-[minmax(0,1fr)_auto]`}
         aria-hidden={!showBody}
       >
-        <div className="flex min-w-0 items-center gap-4 sm:gap-6">
-          {site.avatar && (
-            <img
-              src={site.avatar}
-              alt={t.portal.avatarAlt}
-              width={64}
-              height={64}
-              className="size-14 shrink-0 rounded-sm object-cover sm:size-16"
-              style={{ backgroundColor: 'var(--crt-surface)' }}
-              loading="eager"
-              decoding="async"
-            />
-          )}
-          <div className="font-sans">
-            <h1 id="portal-heading" className="text-2xl font-semibold leading-tight sm:text-[1.75rem]">
-              {t.site.seo.author}
-            </h1>
-            <p className="mt-1.5 text-sm leading-relaxed text-[var(--crt-text-muted)] sm:text-base">
-              {t.portal.title}
-            </p>
+        <div className="grid min-w-0 gap-3">
+          <div className="flex items-center gap-3 sm:gap-4">
+            {site.avatar && (
+              <img
+                src={site.avatar}
+                alt={t.portal.avatarAlt}
+                width={64}
+                height={64}
+                className="size-16 shrink-0 rounded-sm object-cover"
+                style={{ backgroundColor: 'var(--crt-surface)' }}
+                loading="eager"
+                decoding="async"
+              />
+            )}
+            <div className="min-w-0">
+              <h1 id="portal-heading" className="hero-name">
+                {t.site.seo.author}
+              </h1>
+              <p className="hero-intro">{t.portal.introBody}</p>
+            </div>
           </div>
+          <ul className="flex flex-wrap gap-1.5" aria-label={t.portal.stackLabel}>
+            {techStack.map((tech) => <li className="tech-tag" key={tech}>{tech}</li>)}
+          </ul>
         </div>
 
-        <ul className="flex flex-wrap items-center gap-x-6 gap-y-1 sm:gap-x-8">
+        <ul className="flex flex-wrap items-center gap-2 min-[52rem]:justify-end">
           {portals.map((item, index) => (
             <li
               key={item.href}
@@ -162,6 +169,7 @@ export default function HeroPortal({ t }: HeroPortalProps) {
                   ? { target: '_blank', rel: 'noopener noreferrer' }
                   : {})}
               >
+                <item.Icon className="shrink-0" />
                 {item.label}
               </a>
             </li>

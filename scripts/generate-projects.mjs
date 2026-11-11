@@ -1,5 +1,9 @@
 /**
  * 从 projects.source.json 生成 projects.json / projects.en.json
+ * 
+ * 用法：
+ *   npm run generate:projects
+ *   node scripts/generate-projects.mjs
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
